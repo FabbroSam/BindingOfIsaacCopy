@@ -58,25 +58,25 @@ void Door::Draw()
 	{
 		if (_pos == DoorPosition::TOP)
 		{
-			_doorUp = new DoorBorder(_scene, RectF(_rect.pos.x, _rect.pos.y + 0.1, _rect.size.x, _rect.size.y), _type, _pos, 1, _angle, _flip);
+			_doorUp = new DoorBorder(_scene, RectF(_rect.pos.x, _rect.pos.y + 0.1, _rect.size.x, _rect.size.y), _type, _pos, 2, _angle, _flip);
 			_doorUpLeft = new DoorPanel(_scene, RectF(_rect.pos.x + 0.2, _rect.pos.y + 0.1, _rect.size.x - 1, _rect.size.y), _type, _pos, PanelPosition::LEFT, 1, _angle, _flip);
 			_doorUpRight = new DoorPanel(_scene, RectF(_rect.pos.x + 0.8, _rect.pos.y + 0.1, _rect.size.x - 1, _rect.size.y), _type, _pos, PanelPosition::RIGHT, 1, _angle, _flip);
 		}
 		else if (_pos == DoorPosition::BOTTOM)
 		{
-			_doorDown = new DoorBorder(_scene, RectF(_rect.pos.x, _rect.pos.y - 0.1, _rect.size.x, _rect.size.y), _type, _pos, 1, _angle, _flip);
+			_doorDown = new DoorBorder(_scene, RectF(_rect.pos.x, _rect.pos.y - 0.1, _rect.size.x, _rect.size.y), _type, _pos, 2, _angle, _flip);
 			_doorDownLeft = new DoorPanel(_scene, RectF(_rect.pos.x + 0.2, _rect.pos.y - 0.1, _rect.size.x - 1, _rect.size.y), _type, _pos, PanelPosition::LEFT, 1, _angle, _flip);
 			_doorDownRight = new DoorPanel(_scene, RectF(_rect.pos.x + 0.8, _rect.pos.y - 0.1, _rect.size.x - 1, _rect.size.y), _type, _pos, PanelPosition::RIGHT, 1, _angle, _flip);
 		}
 		else if (_pos == DoorPosition::RIGHT)
 		{
-			_doorRight = new DoorBorder(_scene, RectF(_rect.pos.x - 0.1, _rect.pos.y, _rect.size.x, _rect.size.y - 0.2), _type, _pos, 1, _angle, _flip);
+			_doorRight = new DoorBorder(_scene, RectF(_rect.pos.x - 0.1, _rect.pos.y, _rect.size.x, _rect.size.y - 0.2), _type, _pos, 2, _angle, _flip);
 			_doorRightLeft = new DoorPanel(_scene, RectF(_rect.pos.x - 0.1, _rect.pos.y + 0.65, 2, 1), _type, _pos, PanelPosition::LEFT, 1, 0, SDL_FLIP_HORIZONTAL);
 			_doorRightRight = new DoorPanel(_scene, RectF(_rect.pos.x - 0.1, _rect.pos.y + 0.14, 2, 1), _type, _pos, PanelPosition::RIGHT, 1, 0, SDL_FLIP_HORIZONTAL);
 		}
 		else if (_pos == DoorPosition::LEFT)
 		{
-			_doorLeft = new DoorBorder(_scene, RectF(_rect.pos.x + 0.1, _rect.pos.y, _rect.size.x, _rect.size.y - 0.2), _type, _pos, 1, _angle, _flip);
+			_doorLeft = new DoorBorder(_scene, RectF(_rect.pos.x + 0.1, _rect.pos.y, _rect.size.x, _rect.size.y - 0.2), _type, _pos, 2, _angle, _flip);
 			_doorLeftLeft = new DoorPanel(_scene, RectF(_rect.pos.x + 0.1, _rect.pos.y + 0.68, 2, 1), _type, _pos, PanelPosition::LEFT, 1);
 			_doorLeftRight = new DoorPanel(_scene, RectF(_rect.pos.x + 0.1, _rect.pos.y + 0.17, 2, 1), _type, _pos, PanelPosition::RIGHT, 1);
 		}	

@@ -239,7 +239,7 @@ void Basement::generateRooms(Scene* world)
 				
 				matrix[newDir.x][newDir.y] = typeRoom[typeRoomIndex];
 				
-				if ((typeRoom[typeRoomIndex] != 3) || (typeRoom[typeRoomIndex] != 4))
+				if (typeRoom[typeRoomIndex] != 3 && typeRoom[typeRoomIndex] != 4)
 					rooms.push_back(newDir);
 
 				typeRoomIndex++;
