@@ -52,6 +52,8 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["menu_shading"] = loadTexture(renderer, "../sprites/menu_shading.png", { 147, 187, 236 });
 	_spriteSheets["menu_overlay"] = loadTexture(renderer, "../sprites/menu_overlay.png", { 147, 187, 236 });
 
+	_spriteSheets["hud_hearts"] = loadTexture(renderer, "../sprites/ui_hearts.png", { 147, 187, 236 });
+
 	std::vector<RectI> vecRect;
 	SDL_Texture* base = loadTextureSequence(renderer, "../image", vecRect, Point(0, 0), Point(52, 52));
 	RectI src(0, 0, 180, 180);
@@ -110,6 +112,8 @@ Sprite* SpriteFactory::get(const std::string& id)
 		return new Sprite(_spriteSheets["door"], RectI(104, 188, 52, 32));
 	else if (id == "door_boss_panel_right_rotation")
 		return new Sprite(_spriteSheets["door"], RectI(104, 156, 52, 32));
+	else if (id == "door_boss_light")
+		return new Sprite(_spriteSheets["door"], RectI(0, 208, 65, 38));
 	else if (id == "controls")
 		return new Sprite(_spriteSheets["controls"], RectI(0, 0, 325, 85));
 	else if (id == "shading")
@@ -242,6 +246,14 @@ Sprite* SpriteFactory::get(const std::string& id)
 		return new TiledSprite(_spriteSheets["treasure"], rects, { 2,2 });
 		}
 	
+	//SPRITES HUD
+	else if (id =="hud_heart_red")
+		return new Sprite(_spriteSheets["hud_hearts"], RectI(0, 0, 16, 16));
+	else if (id == "hud_heart_half_red")
+		return new Sprite(_spriteSheets["hud_hearts"], RectI(16, 0, 16, 16));
+	else if (id == "hud_heart_empty")
+		return new Sprite(_spriteSheets["hud_hearts"], RectI(32, 0, 16, 16));
+
 	//SPRITES MENU
 	else if (id == "menu_background")
 		return new Sprite(_spriteSheets["menu"], RectI(0, 0, 480, 269));

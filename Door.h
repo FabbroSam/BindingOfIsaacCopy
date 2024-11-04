@@ -39,6 +39,8 @@ class agp::Door : public CollidableObject
 		DoorPanel* _doorLeftLeft = nullptr;
 		DoorPanel* _doorLeftRight = nullptr;
 
+		RenderableObject* _doorLight;
+
 	public:
 		Door(Scene* scene, const RectF& rect, RoomType type, DoorPosition pos, float angle = 0, SDL_RendererFlip flip = SDL_FLIP_NONE);
 

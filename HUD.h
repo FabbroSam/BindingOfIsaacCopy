@@ -23,21 +23,12 @@ class agp::HUD : public UIScene
 	protected:
 
 		// raw data
-		int _score;
-		int _coins;
-		int _world;
-		int _level;
-		float _time;
-		int _fps;
+		std::map<RenderableObject*, float> _hearts;
 
 		// rendering
-		RenderableObject* _scoreObj;
-		RenderableObject* _flashingCoinObj;
-		RenderableObject* _coinsObj;
-		RenderableObject* _worldObj;
-		RenderableObject* _levelObj;
-		RenderableObject* _timeObj;
-		RenderableObject* _fpsObj;
+		RenderableObject* _heart1;
+		RenderableObject* _heart2;
+		RenderableObject* _heart3;
 
 	public:
 
