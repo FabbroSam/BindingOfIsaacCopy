@@ -17,8 +17,7 @@ find_package(SDL2_image REQUIRED)
 find_package(SDL2_mixer REQUIRED)
 
 # utils (header-only) library
-get_filename_component(PARENT_DIR ../ ABSOLUTE)
-include_directories(${PARENT_DIR}/utils)
+include_directories(${CMAKE_SOURCE_DIR}/utils)
 
 # create exe and link
 add_executable(${project_name} ${sources})

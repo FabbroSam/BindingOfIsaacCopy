@@ -23,20 +23,27 @@ class agp::HUD : public UIScene
 	protected:
 
 		// raw data
-		std::map<RenderableObject*, float> _hearts;
+		std::vector<RenderableObject*> _hearts;
+		float _totalHearts;
 
 		// rendering
 		RenderableObject* _heart1;
 		RenderableObject* _heart2;
 		RenderableObject* _heart3;
 
-	public:
+		RenderableObject* _coin;
+		RenderableObject* _bomb;
 
 		HUD();
-		virtual ~HUD() {};
+
+	public:
+
+		// singleton
+		static HUD* instance();
 
 		// getters/setters (to be completed)
-		void setFPS(int fps);
+		void setFPS(float fps);
+		void setHearts(float amount);
 
 		// extends update logic (+time management)
 		virtual void update(float timeToSimulate) override;

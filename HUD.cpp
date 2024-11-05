@@ -14,6 +14,12 @@
 
 using namespace agp;
 
+HUD* HUD::instance()
+{
+	static HUD uniqueInstance;
+	return &uniqueInstance;
+}
+
 HUD::HUD()
 	: UIScene(RectF(0, 0, 16, 12))
 {
@@ -23,11 +29,15 @@ HUD::HUD()
 	_heart1 = new RenderableObject(this, RectF(1, 1, 0.7, 0.8), SpriteFactory::instance()->get("hud_heart_red"));
 	_heart2 = new RenderableObject(this, RectF(1.5, 1, 0.7, 0.8), SpriteFactory::instance()->get("hud_heart_half_red"));
 	_heart3 = new RenderableObject(this, RectF(2.0, 1, 0.7, 0.8), SpriteFactory::instance()->get("hud_heart_empty"));
-	_hearts[_heart1] = 1;
-	_hearts[_heart2] = 1;
-	_hearts[_heart3] = 1;
+	_hearts.push_back(_heart1);
+	_hearts.push_back(_heart2);
+	_hearts.push_back(_heart3);
+	_totalHearts = 1.5;
 
-	// setup view (specific for super mario bros)
+	_coin = new RenderableObject(this, RectF(0.25, 2, 0.7, 0.8), SpriteFactory::instance()->get("hud_coin"));
+	_bomb = new RenderableObject(this, RectF(0.25, 2.6, 0.7, 0.8), SpriteFactory::instance()->get("hud_bomb"));
+
+	// setup view 
 	_view = new View(this, _rect);
 	_view->setFixedAspectRatio(Game::instance()->aspectRatio());
 	_view->setRect(RectF(0, 0, 16, 15));
@@ -41,23 +51,31 @@ void HUD::update(float timeToSimulate)
 	if (!_active)
 		return;
 
-	for (const auto& pair : _hearts) { 
+	float tempHearts = _totalHearts;
+	for (const auto& heart : _hearts) {
 
-		if (pair.second == 1.0f) {
-			pair.first->setSprite(SpriteFactory::instance()->get("hud_heart_red"));
+		if (tempHearts >= 1) {
+			heart->setSprite(SpriteFactory::instance()->get("hud_heart_red"));
+			tempHearts -= 1;
 		}
-		else if (pair.second == 0.5f) {
-			pair.first->setSprite(SpriteFactory::instance()->get("hud_heart_half_red"));
+		else if (tempHearts >= 0.5) {
+			heart->setSprite(SpriteFactory::instance()->get("hud_heart_half_red"));
+			tempHearts -= 0.5;
 		}
-		else if (pair.second == 0.0f) {
-			pair.first->setSprite(SpriteFactory::instance()->get("hud_heart_empty"));
-		}
+		else 
+			heart->setSprite(SpriteFactory::instance()->get("hud_heart_empty"));
 	}
 
 
 }
 
-void HUD::setFPS(int fps) 
+void HUD::setHearts(float amount)
 { 
+	// amount può essere negativa o positiva (toglie o aggiunge vita)
+	_totalHearts += amount;
+}
+
+void HUD::setFPS(float fps)
+{
 
 }

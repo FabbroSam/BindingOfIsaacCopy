@@ -42,8 +42,7 @@ void Game::init()
 {
 
 	pushScene(LevelLoader::instance()->load("supermario"));
-	_hud = new HUD();
-	pushScene(_hud);
+	pushScene(HUD::instance());
 	pushScene(Menu::mainMenu());
 }
 

@@ -143,8 +143,23 @@ void Room::Draw()
 		new StaticObject(_scene, rect, spriteLoader->get("empty"));
 
 
-	if (_roomType == RoomType::INITIAL)
+	if (_roomType == RoomType::INITIAL) {
 		new RenderableObject(_scene, RectF(2.25, 4.4, 11.5, 3.2), spriteLoader->get("controls"));
+	}
+	
+	else if (_roomType == RoomType::TREASURE)
+	{	
+		std::cout << "     " << _roomType << std::endl;
+		new RenderableObject(_scene, RectF(x + 5.5, y + 4.0, 1, 1), spriteLoader->get("fireplace_blue"));
+		new RenderableObject(_scene, RectF(x + 5.5, y + 3.5, 1, 1), spriteLoader->get("bluefire"));
+		new RenderableObject(_scene, RectF(x + 9.5, y + 4.0, 1, 1), spriteLoader->get("fireplace_blue"));
+		new RenderableObject(_scene, RectF(x + 9.5, y + 3.5, 1, 1), spriteLoader->get("bluefire"));
+		new RenderableObject(_scene, RectF(x + 5.5, y + 7.0, 1, 1), spriteLoader->get("fireplace_blue"));
+		new RenderableObject(_scene, RectF(x + 5.5, y + 6.5, 1, 1), spriteLoader->get("bluefire"));
+		new RenderableObject(_scene, RectF(x + 9.5, y + 7.0, 1, 1), spriteLoader->get("fireplace_blue"));
+		new RenderableObject(_scene, RectF(x + 9.5, y + 6.5, 1, 1), spriteLoader->get("bluefire"));
+	}
+	
 	else if (_roomType == RoomType::NORMAL)
 	{
 		for (int i = 0; i < 5; i++)
@@ -154,6 +169,8 @@ void Room::Draw()
 			new StaticObject(_scene, RectF(x + pos_x, y + pos_y, 1, 1), spriteLoader->get("rock"));
 		}
 	}
+
+	std::cout << _roomType << std::endl;
 
 	new RenderableObject(_scene, RectF(x, y, 16, 12), spriteLoader->get("shading"));
 }

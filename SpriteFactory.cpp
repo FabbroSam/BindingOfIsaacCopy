@@ -45,6 +45,8 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["shop"] = loadTexture(renderer, "../sprites/basement_shop.png", { 0, 114, 188 });
 	_spriteSheets["treasure"] = loadTexture(renderer, "../sprites/basement_treasure.png", { 0, 114, 188 });
 	_spriteSheets["rocks"] = loadTexture(renderer, "../sprites/basement_rocks.png", { 0, 114, 188 });
+	_spriteSheets["fireplace_blue"] = loadTexture(renderer, "../sprites/basement_fireplace_blue.png", { 147, 187, 236 });
+	_spriteSheets["bluefire"] = loadTexture(renderer, "../sprites/basement_bluefire.png", { 147, 187, 236 });
 	_spriteSheets["controls"] = loadTexture(renderer, "../sprites/basement_controls.png", { 147, 187, 236 });
 	_spriteSheets["shading"] = loadTexture(renderer, "../sprites/basement_shading.png", { 147, 187, 236 });
 
@@ -53,6 +55,8 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["menu_overlay"] = loadTexture(renderer, "../sprites/menu_overlay.png", { 147, 187, 236 });
 
 	_spriteSheets["hud_hearts"] = loadTexture(renderer, "../sprites/ui_hearts.png", { 147, 187, 236 });
+	_spriteSheets["hud_items"] = loadTexture(renderer, "../sprites/ui_items.png", { 147, 187, 236 });
+
 
 	std::vector<RectI> vecRect;
 	SDL_Texture* base = loadTextureSequence(renderer, "../image", vecRect, Point(0, 0), Point(52, 52));
@@ -118,6 +122,23 @@ Sprite* SpriteFactory::get(const std::string& id)
 		return new Sprite(_spriteSheets["controls"], RectI(0, 0, 325, 85));
 	else if (id == "shading")
 		return new Sprite(_spriteSheets["shading"], RectI(0, 0, 442, 286));
+	else if (id == "fireplace_blue")
+	{
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 0, 0, 31, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 1, 0, 31, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 2, 0, 31, 32));
+		return new AnimatedSprite(_spriteSheets["fireplace_blue"], rects, 13);
+	}
+	else if (id == "bluefire")
+	{
+		rects.push_back(moveBy(RectF(0, 0, 51, 51), 0, 0, 47, 51));
+		rects.push_back(moveBy(RectF(0, 0, 51, 51), 1, 0, 47, 51));
+		rects.push_back(moveBy(RectF(0, 0, 51, 51), 2, 0, 47, 51));
+		rects.push_back(moveBy(RectF(0, 0, 51, 51), 3, 0, 47, 51));
+		rects.push_back(moveBy(RectF(0, 0, 51, 51), 4, 0, 47, 51));
+		rects.push_back(moveBy(RectF(0, 0, 51, 51), 0, 1, 47, 51));
+		return new AnimatedSprite(_spriteSheets["bluefire"], rects, 13);
+	}
 	else if (id == "rock") 
 	{
 		int x = rand() % 10 < 6 ? 0 : rand() % 3;
@@ -253,6 +274,10 @@ Sprite* SpriteFactory::get(const std::string& id)
 		return new Sprite(_spriteSheets["hud_hearts"], RectI(16, 0, 16, 16));
 	else if (id == "hud_heart_empty")
 		return new Sprite(_spriteSheets["hud_hearts"], RectI(32, 0, 16, 16));
+	else if (id == "hud_coin")
+		return new Sprite(_spriteSheets["hud_items"], RectI(0, 0, 16, 16));
+	else if (id == "hud_bomb")
+		return new Sprite(_spriteSheets["hud_items"], RectI(0, 16, 16, 16));
 
 	//SPRITES MENU
 	else if (id == "menu_background")
