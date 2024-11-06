@@ -56,7 +56,7 @@ SpriteFactory::SpriteFactory()
 
 	_spriteSheets["hud_hearts"] = loadTexture(renderer, "../sprites/ui_hearts.png", { 147, 187, 236 });
 	_spriteSheets["hud_items"] = loadTexture(renderer, "../sprites/ui_items.png", { 147, 187, 236 });
-
+	_spriteSheets["hud_minimap"] = loadTexture(renderer, "../sprites/ui_minimap.png", { 147, 187, 236 });
 
 	std::vector<RectI> vecRect;
 	SDL_Texture* base = loadTextureSequence(renderer, "../image", vecRect, Point(0, 0), Point(52, 52));
@@ -278,6 +278,18 @@ Sprite* SpriteFactory::get(const std::string& id)
 		return new Sprite(_spriteSheets["hud_items"], RectI(0, 0, 16, 16));
 	else if (id == "hud_bomb")
 		return new Sprite(_spriteSheets["hud_items"], RectI(0, 16, 16, 16));
+	else if (id == "hud_minimap_back")
+		return new Sprite(_spriteSheets["hud_minimap"], RectI(0, 0, 55, 49));
+	else if (id == "hud_minimap_room_select")
+		return new Sprite(_spriteSheets["hud_minimap"], RectI(114, 82, 9, 8));
+	else if (id == "hud_minimap_room")
+		return new Sprite(_spriteSheets["hud_minimap"], RectI(66, 18, 9, 8));
+	else if (id == "hud_minimap_boss")
+		return new Sprite(_spriteSheets["hud_minimap"], RectI(5, 51, 9, 8));
+	else if (id == "hud_minimap_treasure")
+		return new Sprite(_spriteSheets["hud_minimap"], RectI(18, 52, 8, 7));
+	else if (id == "hud_minimap_shop")
+		return new Sprite(_spriteSheets["hud_minimap"], RectI(30, 51, 9, 8));
 
 	//SPRITES MENU
 	else if (id == "menu_background")

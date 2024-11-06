@@ -46,6 +46,7 @@ class agp::RenderableObject : public Object
 		void setBorderColor(const Color& borderColor) { _borderColor = borderColor; }
 		void setVisible(bool visible) { _visible = visible; }
 		void setSprite(Sprite* sprite);
+		void setFocused(bool focused) { _focused = focused; };
 
 		// extends game logic (+animation)
 		virtual void update(float dt) override;

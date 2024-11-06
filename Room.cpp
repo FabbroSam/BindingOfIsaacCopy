@@ -6,6 +6,7 @@
 #include "Door.h"
 #include "Mario.h"
 #include "GameScene.h"
+#include "HUD.h"
 #include <iostream>
 #include <list>
 #include <algorithm>
@@ -149,7 +150,6 @@ void Room::Draw()
 	
 	else if (_roomType == RoomType::TREASURE)
 	{	
-		std::cout << "     " << _roomType << std::endl;
 		new RenderableObject(_scene, RectF(x + 5.5, y + 4.0, 1, 1), spriteLoader->get("fireplace_blue"));
 		new RenderableObject(_scene, RectF(x + 5.5, y + 3.5, 1, 1), spriteLoader->get("bluefire"));
 		new RenderableObject(_scene, RectF(x + 9.5, y + 4.0, 1, 1), spriteLoader->get("fireplace_blue"));
@@ -170,8 +170,6 @@ void Room::Draw()
 		}
 	}
 
-	std::cout << _roomType << std::endl;
-
 	new RenderableObject(_scene, RectF(x, y, 16, 12), spriteLoader->get("shading"));
 }
 
@@ -180,9 +178,9 @@ void Room::Draw()
 void Basement::generateRooms(Scene* world)
 {
 	int typeRoomIndex = 1;
-	int typeRoom[18] = { 1,2,2,3,2,2,4,2,2,5}; // 1 init // 2 normal // 3 treasure // 4 shop // 5 boss
+	int typeRoom[13] = { 1,2,2,3,2,2,4,2,2,5}; // 1 init // 2 normal // 3 treasure // 4 shop // 5 boss
 
-	int SIZE = std::size(typeRoom);
+	int SIZE = 7; //std::size(typeRoom);
 	int START_COORD = static_cast<int>(SIZE/2);
 
 	std::vector<std::vector<int>> matrix(SIZE, std::vector<int>(SIZE, 0));
@@ -218,8 +216,8 @@ void Basement::generateRooms(Scene* world)
 				Vec2D<int> tempDirRoom = dir[i] + room;
 
 				// controlli per evitare direnzioni che portano ad errori nel codice
-				if (!(tempDirRoom.x >= 0 && tempDirRoom.x <= SIZE && tempDirRoom.y >= 0 && tempDirRoom.y <= SIZE))
-					continue;
+				if (!(tempDirRoom.x - 1 >= 0 && tempDirRoom.x + 1 < SIZE && tempDirRoom.y - 1 >= 0 && tempDirRoom.y + 1 < SIZE))
+					break;
 				if (matrix[tempDirRoom.x][tempDirRoom.y] != 0)
 					continue;
 
@@ -253,14 +251,13 @@ void Basement::generateRooms(Scene* world)
 				if (typeRoomIndex > std::size(typeRoom) - 1)
 					break;
 
-				
 				matrix[newDir.x][newDir.y] = typeRoom[typeRoomIndex];
-				
+
 				if (typeRoom[typeRoomIndex] != 3 && typeRoom[typeRoomIndex] != 4)
 					rooms.push_back(newDir);
 
 				typeRoomIndex++;
-				checkAtLeastOneDir++;		
+				checkAtLeastOneDir++;
 			}
 
 			if (typeRoomIndex > std::size(typeRoom) - 1)
@@ -287,6 +284,8 @@ void Basement::generateRooms(Scene* world)
 				RoomType roomTypeLeft = (i >= 0) ? RoomType(matrix[i][j - 1]) : RoomType::EMPTY;
 
 				Room* room = new Room(world, RectF(j - START_COORD, i - START_COORD, 16, 12), roomType, roomTypeUp, roomTypeDown, roomTypeRight, roomTypeLeft);
+
+				HUD::instance()->drawMinimap(RectF(j - START_COORD, i - START_COORD, 1, 1), roomType);
 			}
 		}
 	}

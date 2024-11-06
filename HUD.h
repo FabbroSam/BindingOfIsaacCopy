@@ -10,6 +10,7 @@
 #pragma once
 #include "UIScene.h"
 #include "RenderableObject.h"
+#include "MovableObject.h"
 
 namespace agp
 {
@@ -21,6 +22,8 @@ namespace agp
 class agp::HUD : public UIScene
 {
 	protected:
+
+		std::map<std::string, Sprite*> _sprites;
 
 		// raw data
 		std::vector<RenderableObject*> _hearts;
@@ -34,16 +37,35 @@ class agp::HUD : public UIScene
 		RenderableObject* _coin;
 		RenderableObject* _bomb;
 
+		std::map< std::pair<int, int>, RenderableObject*> _roomsMinimap;
+		MovableObject* _roomSelected;
+		Vec2D<int> _pos;
+
 		HUD();
 
 	public:
-
+		~HUD()
+		{
+			delete _view;
+			delete _heart1;
+			delete _heart2;
+			delete _heart3;
+			delete _coin;
+			delete _bomb;
+			delete _roomSelected;
+			for (auto& room : _roomsMinimap) {
+				delete room.second;
+			}
+		}
 		// singleton
 		static HUD* instance();
 
 		// getters/setters (to be completed)
 		void setFPS(float fps);
 		void setHearts(float amount);
+		void drawMinimap(RectF rect, RoomType roomType);
+		void selectMinimapRoom(float x, float y);
+		void showMinimap();
 
 		// extends update logic (+time management)
 		virtual void update(float timeToSimulate) override;

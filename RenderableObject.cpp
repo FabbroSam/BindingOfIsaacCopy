@@ -77,6 +77,7 @@ void RenderableObject::update(float dt)
 
 	if (_sprite)
 		_sprite->update(dt);
+
 }
 
 void RenderableObject::setSprite(Sprite* sprite) 

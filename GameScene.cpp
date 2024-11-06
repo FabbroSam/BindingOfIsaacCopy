@@ -17,6 +17,7 @@
 #include "Audio.h"
 #include "Mario.h"
 #include "Door.h"
+#include "HUD.h"
 #include <iostream>
 using namespace agp;
 
@@ -126,6 +127,8 @@ void GameScene::update(float timeToSimulate)
 			_view->move({ 0,-12 });
 			_mario->moveBy({ 0,-3.6 });
 		}
+
+		HUD::instance()->selectMinimapRoom(_mario_x,_mario_y);
 	}
 }
 
@@ -167,6 +170,10 @@ void GameScene::event(SDL_Event& evt)
 			_moveView = false;
 		else
 			_moveView = true;
+	}
+	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_L)
+	{
+		HUD::instance()->showMinimap();
 	}
 	else if (evt.type == SDL_MOUSEWHEEL)
 	{

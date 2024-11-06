@@ -11,6 +11,8 @@
 #include "SpriteFactory.h"
 #include "View.h"
 #include "Game.h"
+#include <iostream>
+#include <cmath> 
 
 using namespace agp;
 
@@ -23,24 +25,44 @@ HUD* HUD::instance()
 HUD::HUD()
 	: UIScene(RectF(0, 0, 16, 12))
 {
-	setBackgroundColor(Color(0, 0, 0, 0));
-
-
-	_heart1 = new RenderableObject(this, RectF(1, 1, 0.7, 0.8), SpriteFactory::instance()->get("hud_heart_red"));
-	_heart2 = new RenderableObject(this, RectF(1.5, 1, 0.7, 0.8), SpriteFactory::instance()->get("hud_heart_half_red"));
-	_heart3 = new RenderableObject(this, RectF(2.0, 1, 0.7, 0.8), SpriteFactory::instance()->get("hud_heart_empty"));
-	_hearts.push_back(_heart1);
-	_hearts.push_back(_heart2);
-	_hearts.push_back(_heart3);
-	_totalHearts = 1.5;
-
-	_coin = new RenderableObject(this, RectF(0.25, 2, 0.7, 0.8), SpriteFactory::instance()->get("hud_coin"));
-	_bomb = new RenderableObject(this, RectF(0.25, 2.6, 0.7, 0.8), SpriteFactory::instance()->get("hud_bomb"));
-
 	// setup view 
 	_view = new View(this, _rect);
 	_view->setFixedAspectRatio(Game::instance()->aspectRatio());
-	_view->setRect(RectF(0, 0, 16, 15));
+	_view->setRect(RectF(0, 0, 16, 12));
+
+	setBackgroundColor(Color(0, 0, 0, 0));
+
+	_sprites["heart_red"] = SpriteFactory::instance()->get("hud_heart_red");
+	_sprites["heart_half_red"] = SpriteFactory::instance()->get("hud_heart_half_red");
+	_sprites["heart_empty"] = SpriteFactory::instance()->get("hud_heart_empty");
+	_sprites["coin"] = SpriteFactory::instance()->get("hud_coin");
+	_sprites["bomb"] = SpriteFactory::instance()->get("hud_bomb");
+	_sprites["minimap_back"] = SpriteFactory::instance()->get("hud_minimap_back");
+	_sprites["minimap_room"] = SpriteFactory::instance()->get("hud_minimap_room");
+	_sprites["minimap_boss"] = SpriteFactory::instance()->get("hud_minimap_boss");
+	_sprites["minimap_treasure"] = SpriteFactory::instance()->get("hud_minimap_treasure");
+	_sprites["minimap_shop"] = SpriteFactory::instance()->get("hud_minimap_shop");
+	_sprites["minimap_room_select"] = SpriteFactory::instance()->get("hud_minimap_room_select");
+
+	// HEARTS
+	_heart1 = new RenderableObject(this, RectF(1.0f, 1.0f, 0.7f, 0.8f), _sprites["heart_red"]);
+	_heart2 = new RenderableObject(this, RectF(1.5f, 1.0f, 0.7f, 0.8f), _sprites["heart_half_red"]);
+	_heart3 = new RenderableObject(this, RectF(2.0f, 1.0f, 0.7f, 0.8f), _sprites["heart_empty"]);
+	_hearts.push_back(_heart1);
+	_hearts.push_back(_heart2);
+	_hearts.push_back(_heart3);
+	_totalHearts = 3.0f;
+
+	//// COIN - ITEM
+	_coin = new RenderableObject(this, RectF(0.25f, 2, 0.7f, 0.8f), _sprites["coin"]);
+	_bomb = new RenderableObject(this, RectF(0.25f, 2.6f, 0.7f, 0.8f), _sprites["bomb"]);
+
+	// MINIMAP
+	new RenderableObject(this, RectF(13, 1, 2.5f, 2.5f), _sprites["minimap_back"]);
+	_roomSelected = new MovableObject(this, RectF(0, 0, 2.5f / 7.0f, 2.5f / 7.0f), _sprites["minimap_room_select"], 2);
+	_pos = { -1,-1 };
+
+
 }
 
 // extends update logic (+time management)
@@ -66,7 +88,8 @@ void HUD::update(float timeToSimulate)
 			heart->setSprite(SpriteFactory::instance()->get("hud_heart_empty"));
 	}
 
-
+	_roomSelected->setRect(RectF(_pos.x * 2.5f / 7.0f + 13.0f + 2.5f * 3.0f / 7.0f, _pos.y * 2.5f / 7.0f + 1.0f + 2.5f * 3.0f / 7.0f, 2.5f / 7.0f, 2.5f / 7.0f));
+	_roomsMinimap[{_pos.x, _pos.y}]->setVisible(true);
 }
 
 void HUD::setHearts(float amount)
@@ -79,3 +102,40 @@ void HUD::setFPS(float fps)
 {
 
 }
+
+void HUD::drawMinimap(RectF rect, RoomType roomType)
+{
+	std::cout << rect.pos.x << "  " << "        " << rect.pos.y << " " << std::endl;
+	RenderableObject* temp;
+	if (roomType == RoomType::BOSS)
+		temp = new RenderableObject(this, RectF(rect.pos.x * 2.5f / 7.0f + 13.0f + 2.5f * 3.0f / 7.0f, rect.pos.y * 2.5f / 7.0f + 1.0f + 2.5f * 3.0f / 7.0f, 2.5f / 7.0f, 2.5f / 7.0f), _sprites["minimap_boss"]);
+	else if (roomType == RoomType::TREASURE)
+		temp = new RenderableObject(this, RectF(rect.pos.x * 2.5f / 7.0f + 13.0f + 2.5f * 3.0f / 7.0f, rect.pos.y * 2.5f / 7.0f + 1.0f + 2.5f * 3.0f / 7.0f, 2.5f / 7.0f, 2.5f / 7.0f), _sprites["minimap_treasure"]);
+	else if (roomType == RoomType::SHOP)
+		temp = new RenderableObject(this, RectF(rect.pos.x * 2.5f / 7.0f + 13.0f + 2.5f * 3.0f / 7.0f, rect.pos.y * 2.5f / 7.0f + 1.0f + 2.5f * 3.0f / 7.0f, 2.5f / 7.0f, 2.5f / 7.0f), _sprites["minimap_shop"]);
+	else 
+		temp = new RenderableObject(this, RectF(rect.pos.x * 2.5f / 7.0f + 13.0f + 2.5f * 3.0f / 7.0f, rect.pos.y * 2.5f / 7.0f + 1.0f + 2.5f * 3.0f / 7.0f, 2.5f / 7.0f, 2.5f / 7.0f), _sprites["minimap_room"]);
+	
+	temp->setVisible(false);
+	_roomsMinimap[{rect.pos.x, rect.pos.y}] = temp;
+}
+
+void HUD::selectMinimapRoom(float x, float y)
+{
+	int xx = static_cast<int>(std::floor(x/16));
+	int yy = static_cast<int>(std::floor(y/12));
+	
+	if (Vec2D<int>({ xx,yy }) != _pos)
+	{
+		_pos = Vec2D<int>({ xx,yy });
+	}
+}
+
+void HUD::showMinimap()
+{
+	for (const auto& room : _roomsMinimap)
+	{
+		room.second->setVisible(true);
+	}
+}
+
