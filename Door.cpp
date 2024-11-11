@@ -1,7 +1,7 @@
 #include "Door.h"
 #include "SpriteFactory.h"
 #include "Scene.h"
-#include <iostream>
+#include "Audio.h"
 #include <string>
 #include <list>
 
@@ -118,16 +118,7 @@ void Door::Draw()
 
 void Door::Trigger()
 {
-	if (_state == DoorState::OPEN)
-	{
-		_compenetrable = false;
-		_state = DoorState::ClOSE;
-	}
-	else if (_state == DoorState::ClOSE)
-	{
-		_compenetrable = true;
-		_state = DoorState::OPEN;
-	}
+
 	if (_doorUp)
 		_doorUp->Trigger();
 	else if (_doorDown)
@@ -139,6 +130,11 @@ void Door::Trigger()
 
 	schedule("TriggerPanel", 0.4f, [this]()
 		{
+			if (_state == DoorState::OPEN)
+				Audio::instance()->playSound("door_open");
+			else if (_state == DoorState::ClOSE)
+				Audio::instance()->playSound("door_close");
+
 			if (_doorUp) {
 				_doorUpLeft->Trigger();
 				_doorUpRight->Trigger();
@@ -164,6 +160,17 @@ void Door::Trigger()
 			else if (_doorLight && _state == DoorState::OPEN)
 				_doorLight->setVisible(true);
 		}, 0);
+
+	if (_state == DoorState::OPEN)
+	{
+		_compenetrable = false;
+		_state = DoorState::ClOSE;
+	}
+	else if (_state == DoorState::ClOSE)
+	{
+		_compenetrable = true;
+		_state = DoorState::OPEN;
+	}
 }
 
 void Door::update(float dt)
@@ -406,7 +413,7 @@ void DoorPanel::Trigger()
 {
 
 	if (_state == DoorState::OPEN)
-	{
+	{		
 		_close = true;
 		_visible = true;
 		_state = DoorState::ClOSE;

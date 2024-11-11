@@ -45,9 +45,9 @@ HUD::HUD()
 	_sprites["minimap_room_select"] = SpriteFactory::instance()->get("hud_minimap_room_select");
 
 	// HEARTS
-	_heart1 = new RenderableObject(this, RectF(1.0f, 1.0f, 0.7f, 0.8f), _sprites["heart_red"]);
-	_heart2 = new RenderableObject(this, RectF(1.5f, 1.0f, 0.7f, 0.8f), _sprites["heart_half_red"]);
-	_heart3 = new RenderableObject(this, RectF(2.0f, 1.0f, 0.7f, 0.8f), _sprites["heart_empty"]);
+	_heart1 = new RenderableObject(this, RectF(1.0f, 1.0f, 0.7f, 0.7f), _sprites["heart_red"]);
+	_heart2 = new RenderableObject(this, RectF(1.5f, 1.0f, 0.7f, 0.7f), _sprites["heart_half_red"]);
+	_heart3 = new RenderableObject(this, RectF(2.0f, 1.0f, 0.7f, 0.7f), _sprites["heart_empty"]);
 	_hearts.push_back(_heart1);
 	_hearts.push_back(_heart2);
 	_hearts.push_back(_heart3);

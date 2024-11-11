@@ -29,24 +29,25 @@ Audio::Audio()
 	if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 512))
 		throw Mix_GetError();
 
-	auto soundFiles = getFilesInDirectory("sounds");
+	auto soundFiles = getFilesInDirectory("../sounds");
 	for (auto& f : soundFiles)
 	{
 		std::string name = getFileName(f, false);
+		std::cout << "sound  " << name << std::endl;
 
-		Mix_Chunk* chunk = Mix_LoadWAV(("sounds/" + f).c_str());
+		Mix_Chunk* chunk = Mix_LoadWAV(("../sounds/" + f).c_str());
 		if (!chunk)
 			std::cerr << Mix_GetError() << "\n";
 		else
 			_sounds[name] = chunk;
 	}
 
-	auto musicFiles = getFilesInDirectory("musics");
+	auto musicFiles = getFilesInDirectory("../musics");
 	for (auto& f : musicFiles)
 	{
 		std::string name = getFileName(f, false);
 
-		Mix_Music* music = Mix_LoadMUS(("musics/" + f).c_str());
+		Mix_Music* music = Mix_LoadMUS(("../musics/" + f).c_str());
 		if (!music)
 			std::cerr << Mix_GetError() << "\n";
 		else

@@ -49,6 +49,8 @@ public:
 	void Draw();
 
 	virtual void update(float dt);
+
+	virtual std::string name() override;
 };
 
 

@@ -36,6 +36,7 @@ class agp::View
 
 		float _to_x;
 		float _to_y;
+		Direction _dir;
 
 	public:
 
@@ -52,16 +53,19 @@ class agp::View
 		void setFixedAspectRatio(float ratio) { _aspectRatio = ratio; updateViewport(); }
 		void setX(float x) { _rect.pos.x = x; }
 		void setY(float y) { _rect.pos.y = y; }
+		Direction getDir() { return _dir; }
 
 		// render scene objects within view rect (culling)
 		void render();
 
 		// view transforms
 		void move(const Vec2Df& ds);
+		void moveTransition(Direction dir);
 		void move(float dx, float dy);
 		void scale(float f);
 
 		// update viewport
+		void update(float dt);
 		void updateViewport();
 
 		// mapping to/from scene coords

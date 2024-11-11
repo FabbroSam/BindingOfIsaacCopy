@@ -29,6 +29,7 @@ View::View(Scene* scene, const RectF& rect)
 
 	_to_x = 0;
 	_to_y = 0;
+	_dir = Direction::NONE;
 }
 
 void View::setScene(Scene* scene) 
@@ -41,6 +42,23 @@ void View::move(const Vec2Df& ds)
 {
 	_rect.pos += ds;
 	updateViewport();
+}
+
+void View::moveTransition(Direction dir)
+{
+	if (_dir == Direction::NONE)
+	{
+		if (dir == Direction::RIGHT)
+			_to_x = _rect.pos.x + 16;
+		else if (dir == Direction::LEFT)
+			_to_x = _rect.pos.x - 16;
+		else if (dir == Direction::UP)
+			_to_y = _rect.pos.y - 12;
+		else if	(dir == Direction::DOWN)
+			_to_y = _rect.pos.y + 12;
+		_dir = dir;
+	}
+
 }
 
 void View::move(float dx, float dy)
@@ -76,6 +94,32 @@ void View::render()
 		if(robj)
 			robj->draw(renderer, _scene2view);
 	}
+}
+
+void View::update(float dt)
+{
+	float step = 0.6f; // velocità con cui si sposta la view
+
+	if (_dir != Direction::NONE)
+	{
+		if (_dir == Direction::RIGHT)
+			_rect.pos.x += step;
+		else if (_dir == Direction::LEFT)
+			_rect.pos.x += -step;
+		else if (_dir == Direction::UP)
+			_rect.pos.y += -step;
+		else if (_dir == Direction::DOWN)
+			_rect.pos.y += step;
+	}
+
+	if (_to_x - 2 * step <= _rect.pos.x && _to_x + 2 * step >= _rect.pos.x && _to_y - 2 * step <= +_rect.pos.y && _to_y + 2 * step >= _rect.pos.y)
+	{
+		_rect.pos.x = _to_x;
+		_rect.pos.y = _to_y;
+		_dir = Direction::NONE;
+	}
+
+	updateViewport();
 }
 
 void View::updateViewport()
