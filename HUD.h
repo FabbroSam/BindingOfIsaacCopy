@@ -44,19 +44,7 @@ class agp::HUD : public UIScene
 		HUD();
 
 	public:
-		~HUD()
-		{
-			delete _view;
-			delete _heart1;
-			delete _heart2;
-			delete _heart3;
-			delete _coin;
-			delete _bomb;
-			delete _roomSelected;
-			for (auto& room : _roomsMinimap) {
-				delete room.second;
-			}
-		}
+
 		// singleton
 		static HUD* instance();
 

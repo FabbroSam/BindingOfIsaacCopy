@@ -105,7 +105,6 @@ void HUD::setFPS(float fps)
 
 void HUD::drawMinimap(RectF rect, RoomType roomType)
 {
-	std::cout << rect.pos.x << "  " << "        " << rect.pos.y << " " << std::endl;
 	RenderableObject* temp;
 	if (roomType == RoomType::BOSS)
 		temp = new RenderableObject(this, RectF(rect.pos.x * 2.5f / 7.0f + 13.0f + 2.5f * 3.0f / 7.0f, rect.pos.y * 2.5f / 7.0f + 1.0f + 2.5f * 3.0f / 7.0f, 2.5f / 7.0f, 2.5f / 7.0f), _sprites["minimap_boss"]);

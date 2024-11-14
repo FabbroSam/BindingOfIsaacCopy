@@ -15,12 +15,13 @@
 using namespace agp;
 
 Room::Room(Scene* scene,
-	const RectF& rect, 
+	const RectF& rect,
 	RoomType roomType,
 	RoomType roomTypeUp,
 	RoomType roomTypeDown,
 	RoomType roomTypeRight,
-	RoomType roomTypeLeft, 
+	RoomType roomTypeLeft,
+	std::pair<int, int> coords,
 	int layer) :
 	Object(scene, RectF(rect.pos.x * 16, rect.pos.y * 12, 16, 12), layer)
 {
@@ -32,9 +33,14 @@ Room::Room(Scene* scene,
 	_roomTypeDown = roomTypeDown;
 	_roomTypeRight= roomTypeRight;
 	_roomTypeLeft = roomTypeLeft;
+	_coords = coords;
 	_x = _rect.pos.x;
 	_y = _rect.pos.y;
 	_layer = layer;
+	_doorUp = nullptr;
+	_doorDown = nullptr;
+	_doorRight = nullptr;
+	_doorLeft = nullptr;
 
 	Draw();
 
@@ -110,41 +116,40 @@ void Room::Draw()
 
 	RectF rect = RectF(_x + 7, _y, 2, 2);
 	if (_roomTypeUp == RoomType::BOSS || _roomTypeUp == RoomType::TREASURE )
-		new Door(_scene, rect, _roomTypeUp, DoorPosition::TOP);
+		_doorUp = new Door(_scene, rect, _roomTypeUp, DoorPosition::TOP);
 	else if (_roomTypeUp == RoomType::NORMAL || _roomTypeUp == RoomType::INITIAL || _roomTypeUp == RoomType::SHOP)
-		new Door(_scene, rect, _roomType, DoorPosition::TOP);
+		_doorUp = new Door(_scene, rect, _roomType, DoorPosition::TOP);
 	else if (_roomTypeUp == RoomType::EMPTY)
 		new StaticObject(_scene, rect, spriteLoader->get("empty"));
 
 	rect = RectF(_x + 7, _y + 10, 2, 2);
 	if (_roomTypeDown == RoomType::BOSS || _roomTypeDown == RoomType::TREASURE)
-		new Door(_scene, rect, _roomTypeDown, DoorPosition::BOTTOM, 0, SDL_FLIP_VERTICAL);
+		_doorDown = new Door(_scene, rect, _roomTypeDown, DoorPosition::BOTTOM, 0, SDL_FLIP_VERTICAL);
 	else if (_roomTypeDown == RoomType::NORMAL || _roomTypeDown == RoomType::INITIAL || _roomTypeDown == RoomType::SHOP)
-		new Door(_scene, rect, _roomType, DoorPosition::BOTTOM, 0, SDL_FLIP_VERTICAL);
+		_doorDown = new Door(_scene, rect, _roomType, DoorPosition::BOTTOM, 0, SDL_FLIP_VERTICAL);
 	else if (_roomTypeDown == RoomType::EMPTY)
 		new StaticObject(_scene, rect, spriteLoader->get("empty"));
 
 	rect = RectF(_x + 14, _y + 5 + 0.12, 2, 2);
 	if (_roomTypeRight == RoomType::BOSS || _roomTypeRight == RoomType::TREASURE)
-		new Door(_scene, rect, _roomTypeRight, DoorPosition::RIGHT, 270);
+		_doorRight = new Door(_scene, rect, _roomTypeRight, DoorPosition::RIGHT, 270);
 	else if (_roomTypeRight == RoomType::NORMAL || _roomTypeRight == RoomType::INITIAL || _roomTypeRight == RoomType::SHOP)
-		new Door(_scene, rect, _roomType, DoorPosition::RIGHT, 270);
+		_doorRight = new Door(_scene, rect, _roomType, DoorPosition::RIGHT, 270);
 	else if (_roomTypeRight == RoomType::EMPTY)
 		new StaticObject(_scene, rect, spriteLoader->get("empty"));
 
 	rect = RectF(_x, _y + 5 + 0.12, 2, 2);
 	if (_roomTypeLeft == RoomType::BOSS || _roomTypeLeft == RoomType::TREASURE)
-		new Door(_scene, rect, _roomTypeLeft, DoorPosition::LEFT, 90);
+		_doorLeft = new Door(_scene, rect, _roomTypeLeft, DoorPosition::LEFT, 90);
 	else if (_roomTypeLeft == RoomType::NORMAL || _roomTypeLeft == RoomType::INITIAL || _roomTypeLeft == RoomType::SHOP)
-		new Door(_scene, rect, _roomType, DoorPosition::LEFT, 90);
+		_doorLeft = new Door(_scene, rect, _roomType, DoorPosition::LEFT, 90);
 	else if (_roomTypeLeft == RoomType::EMPTY)
 		new StaticObject(_scene, rect, spriteLoader->get("empty"));
 
-
+	std::cout << _roomType << std::endl;
 	if (_roomType == RoomType::INITIAL) {
 		new RenderableObject(_scene, RectF(2.25, 4.4, 11.5, 3.2), spriteLoader->get("controls"));
-	}
-	
+	}	
 	else if (_roomType == RoomType::TREASURE)
 	{	
 		new CollidableObject(_scene, RectF(_x + 5.5, _y + 4.0, 1, 1), spriteLoader->get("fireplace_blue"));
@@ -155,21 +160,34 @@ void Room::Draw()
 		new RenderableObject(_scene, RectF(_x + 5.5, _y + 6.5, 1, 1), spriteLoader->get("bluefire"));
 		new CollidableObject(_scene, RectF(_x + 9.5, _y + 7.0, 1, 1), spriteLoader->get("fireplace_blue"));
 		new RenderableObject(_scene, RectF(_x + 9.5, _y + 6.5, 1, 1), spriteLoader->get("bluefire"));
-	}
-	
+	}	
 	else if (_roomType == RoomType::NORMAL)
 	{
+		float vec[4][8][2] = {  {{3,1.8},{2,2.8},{2,7.8},{3,8.8},{12,1.8},{12.9,2.8},{12.9,7.8},{12,8.8} },
+							    {{5,4.2},{6,4.2},{7,4.2},{8,4.2},{6,6.5},{7,6.5},{8,6.5},{9,6.5}},
+								{{6.4,4.6},{7.4,4.6},{8.4,4.6},{6.4,5.4},{8.4,5.4},{6.4,6.2},{7.4,6.2},{8.4,6.2}},
+								{{7.4,4.2},{8,4.2},{3.4,4.2},{4,4.2}, {5,6.5},{9,6.5},{11,8.4},{9,6.5}} };
+		int num = rand() % 4;
 		for (int i = 0; i < 8; i++)
 		{
-			int pos_x = rand() % 7 + 3;
-			int pos_y = rand() % 6 + 3;
-			if (pos_x != 7 && pos_x != 8 && pos_y != 5 && pos_y != 6)
-				new StaticObject(_scene, RectF(_x + pos_x, _y + pos_y, 1, 1), spriteLoader->get("rock"));
+			new StaticObject(_scene, RectF(_x + vec[num][i][0],_y + vec[num][i][1], 1.4, 1.2), spriteLoader->get("rock"));
 		}
 	}
 
 	new RenderableObject(_scene, RectF(_x, _y, 16, 12), spriteLoader->get("shading"));
 }
+
+void Room::Trigger()
+{
+	if (_doorUp)
+		_doorUp->Trigger();
+	if (_doorDown)
+		_doorDown->Trigger();
+	if (_doorRight)
+		_doorRight->Trigger();
+	if (_doorLeft)
+		_doorLeft->Trigger();
+}	
 
 std::string Room::name()
 { 
@@ -288,13 +306,15 @@ void Basement::generateRooms(Scene* world)
 			if (matrix[i][j] != 0) {
 				RoomType roomType = RoomType(matrix[i][j]);
 
-				RoomType roomTypeUp = (j >= 0) ? RoomType(matrix[i - 1][j]) : RoomType::EMPTY;
-				RoomType roomTypeDown = (j < SIZE) ? RoomType(matrix[i + 1][j]) : RoomType::EMPTY;
-				RoomType roomTypeRight = (i < SIZE) ? RoomType(matrix[i][j + 1]) : RoomType::EMPTY;
-				RoomType roomTypeLeft = (i >= 0) ? RoomType(matrix[i][j - 1]) : RoomType::EMPTY;
-
-				Room* room = new Room(world, RectF(j - START_COORD, i - START_COORD, 16, 12), roomType, roomTypeUp, roomTypeDown, roomTypeRight, roomTypeLeft);
-
+				RoomType roomTypeUp = (i > 0) ? RoomType(matrix[i - 1][j]) : RoomType::EMPTY;
+				RoomType roomTypeDown = (i < SIZE - 1) ? RoomType(matrix[i + 1][j]) : RoomType::EMPTY;
+				RoomType roomTypeRight = (j < SIZE - 1) ? RoomType(matrix[i][j + 1]) : RoomType::EMPTY;
+				RoomType roomTypeLeft = (j > 0) ? RoomType(matrix[i][j - 1]) : RoomType::EMPTY;
+				
+				Room* room = new Room(world, RectF(j - START_COORD, i - START_COORD, 16, 12), roomType, roomTypeUp, roomTypeDown, roomTypeRight, roomTypeLeft, { j - START_COORD, i - START_COORD });
+				
+				_mapRooms[{j - START_COORD, i - START_COORD}] = room;
+				
 				HUD::instance()->drawMinimap(RectF(j - START_COORD, i - START_COORD, 1, 1), roomType);
 			}
 		}

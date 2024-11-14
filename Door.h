@@ -25,19 +25,19 @@ class agp::Door : public CollidableObject
 		Vec2Df _fixSize;
 		bool _trigger;
 
-		DoorBorder* _doorUp = nullptr;
-		DoorBorder* _doorDown = nullptr;
-		DoorBorder* _doorRight = nullptr;
-		DoorBorder* _doorLeft = nullptr;
+		DoorBorder* _doorUp;
+		DoorBorder* _doorDown;
+		DoorBorder* _doorRight;
+		DoorBorder* _doorLeft;
 
-		DoorPanel* _doorUpLeft = nullptr;
-		DoorPanel* _doorUpRight = nullptr;
-		DoorPanel* _doorDownLeft = nullptr;
-		DoorPanel* _doorDownRight = nullptr;
-		DoorPanel* _doorRightLeft = nullptr;
-		DoorPanel* _doorRightRight = nullptr;
-		DoorPanel* _doorLeftLeft = nullptr;
-		DoorPanel* _doorLeftRight = nullptr;
+		DoorPanel* _doorUpLeft;
+		DoorPanel* _doorUpRight;
+		DoorPanel* _doorDownLeft;
+		DoorPanel* _doorDownRight;
+		DoorPanel* _doorRightLeft;
+		DoorPanel* _doorRightRight;
+		DoorPanel* _doorLeftLeft;
+		DoorPanel* _doorLeftRight;
 
 		RenderableObject* _doorLight;
 

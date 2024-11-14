@@ -7,6 +7,7 @@
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 
+#include <iostream>
 #include "MovableObject.h"
 
 using namespace agp;
@@ -24,18 +25,16 @@ MovableObject::MovableObject(Scene* scene, const RectF& rect, Sprite* sprite, in
 
 void MovableObject::defaultPhysics()
 {
-	_y_vel_max = 6;
+
 	_y_vel_min = 0.3f;
-	_y_acc = 8;		// 13 in running mode
-	_y_dec_rel = 11;
-	_y_dec_skd = 23;
+	_y_vel_max = 10;	
+	_y_acc = 10;	
+	_y_dec_rel = 20;
 
-
-	_x_vel_max = 6;	// 10 in running mode
 	_x_vel_min = 0.3f;
-	_x_acc = 8;		// 13 in running mode
-	_x_dec_rel = 11;
-	_x_dec_skd = 23;
+	_x_vel_max = 10;		
+	_x_acc = 10;
+	_x_dec_rel = 20;
 }
 
 void MovableObject::velClip(float vx, float vy)
@@ -76,49 +75,21 @@ bool MovableObject::skidding() const
 		   (_x_dir == Direction::LEFT  && _vel.x > 0);
 }
 
-bool MovableObject::grounded() const
-{
-	return _vel.y == 0 && _prev_vel.y > 0;
-}
-
-bool MovableObject::falling() const
-{
-	return _vel.y > 0 && _prev_vel.y <= 0;
-}
-
-bool MovableObject::midair() const
-{
-	return _vel.y != 0 || (_vel.y == 0 && _prev_vel.y < 0);
-}
-
 void MovableObject::update(float dt)
 {
 	RenderableObject::update(dt);
 
 	_prev_vel = _vel;
 
-	if (_x_dir == Direction::RIGHT && _vel.x >= 0) {
-		velAdd(Vec2Df(_x_acc * dt, 0));  // Accelera a destra
-	}
-	else if (_x_dir == Direction::LEFT && _vel.x <= 0) {
-		velAdd(Vec2Df(-_x_acc * dt, 0));  // Accelera a sinistra
-	}
-
-	if (_y_dir == Direction::DOWN && _vel.y >= 0) {
-		velAdd(Vec2Df(0, _y_acc * dt));  // Accelera verso il basso
-	}
-	else if (_y_dir == Direction::UP && _vel.y <= 0) {
-		velAdd(Vec2Df(0, -_y_acc * dt));  // Accelera verso l'alto
-	}
-
-
-	if (_x_dir == Direction::NONE) {
-		velAdd(Vec2Df(-_vel.versX() * _x_dec_rel * dt, 0));  // Decelera in orizzontale
-	}
-
-	if (_y_dir == Direction::NONE) {
-		velAdd(Vec2Df(0, -_vel.versY() * _y_dec_rel * dt));  // Decelera in verticale
-	}
+	// apply forces
+	if (_x_dir != Direction::NONE)
+		velAdd(dir2vec(_x_dir) * _x_acc);
+	if (_y_dir != Direction::NONE)
+		velAdd(dir2vec(_y_dir) * _y_acc);
+	if (_x_dir == Direction::NONE)
+		velAdd({ -_vel.versX() * _x_dec_rel * dt, 0 });
+	if (_y_dir == Direction::NONE)
+		velAdd({ 0, -_vel.versY() * _y_dec_rel * dt });
 
 	_rect.pos += _vel * dt;
 }

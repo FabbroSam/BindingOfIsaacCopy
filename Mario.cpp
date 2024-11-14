@@ -12,6 +12,8 @@
 #include "Audio.h"
 #include "AnimatedSprite.h"
 #include "Game.h"
+#include "GameScene.h"
+#include "Door.h"
 
 using namespace agp;
 
@@ -19,6 +21,16 @@ Mario::Mario(Scene* scene, const PointF& pos)
 	: DynamicObject(scene, RectF( pos.x + 1 / 16.0f, pos.y, 1, 1 ), nullptr, 6)
 {
 	_collider.adjust(0.2f, 0.45f, -0.2f, 0);
+
+	_y_vel_min = 0.3f;
+	_y_vel_max = 8;
+	_y_acc = 10;
+	_y_dec_rel = 20;
+
+	_x_vel_min = 0.3f;
+	_x_vel_max = 8;
+	_x_acc = 10;
+	_x_dec_rel = 20;
 
 	_walking = false;
 	_jumping = false;
@@ -41,6 +53,7 @@ Mario::Mario(Scene* scene, const PointF& pos)
 
 void Mario::update(float dt)
 {
+
 	// physics
 	DynamicObject::update(dt);
 
@@ -90,19 +103,7 @@ void Mario::move_y(Direction dir)
 
 void Mario::run(bool on)
 {
-	if (midair())
-		return;
 
-	if (on)
-	{
-		_x_vel_max = 10;
-		_x_acc = 13;
-	}
-	else
-	{
-		_x_vel_max = 6;	
-		_x_acc = 8;
-	}
 }
 
 void Mario::die()
@@ -133,4 +134,13 @@ void Mario::hurt()
 {
 	// TODO: powerdown (e.g. if Mario is big, becomes small)
 	//die();
+}
+
+bool Mario::collision(CollidableObject* with, Direction fromDir)
+{
+	//Door* door = dynamic_cast<Door*>(with);
+	//if (door)
+	//	door->Trigger();
+
+	return true;
 }

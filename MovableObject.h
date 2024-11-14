@@ -62,9 +62,6 @@ class agp::MovableObject : public RenderableObject
 
 		// state queries
 		bool skidding() const;
-		bool grounded() const;
-		bool falling() const;
-		bool midair() const;
 
 		// actions
 		virtual void move_x(Direction dir);

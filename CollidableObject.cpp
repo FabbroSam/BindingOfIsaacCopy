@@ -91,11 +91,6 @@ void CollidableObject::resolveCollisions(float dt)
 			if (!obj.first->compenetrable())
 				velAdd(-cn * cn.dot(_vel * (1 - ct)));
 
-			if (obj.first->name().rfind("Static", 0) == 0) {
-				std::cout << obj.first->name() << std::endl;
-				HUD::instance()->setHearts(-0.5);
-			}
-
 			obj.first->collision(this, normal2dir(cn));
 			collision(obj.first, inverse(normal2dir(cn)));
 

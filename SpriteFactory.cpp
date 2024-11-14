@@ -141,11 +141,11 @@ Sprite* SpriteFactory::get(const std::string& id)
 	}
 	else if (id == "rock") 
 	{
-		int x = rand() % 10 < 6 ? 0 : rand() % 3;
-		int y = rand() % 10 < 6 ? 0 : rand() % 3;
+		int x = rand() % 3;
+		//int y = rand() % 10 < 6 ? 0 : rand() % 3;
 		int srcPosx = 32 * x;
-		int srcPosy = 32 * y;
-		return new Sprite(_spriteSheets["rocks"], RectI(srcPosx, srcPosy, 32, 32));
+		//int srcPosy = 32 * y;
+		return new Sprite(_spriteSheets["rocks"], RectI(srcPosx, 0, 32, 32));
 	}		
 	else if (id == "basement_UpL" || id == "basement_UpR" || id == "basement_DownL" || id == "basement_DownR")
 	{

@@ -44,6 +44,8 @@ class agp::Mario : public DynamicObject
 		// extends game logic (+mario logic)
 		virtual void update(float dt) override;
 
+		virtual bool collision(CollidableObject* with, Direction fromDir) override;
+
 		// player actions
 		virtual void move_x(Direction dir) override;
 		virtual void move_y(Direction dir) override;

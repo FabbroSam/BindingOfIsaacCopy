@@ -16,6 +16,7 @@
 #include "Menu.h"
 #include "Audio.h"
 #include "Mario.h"
+#include "Room.h"
 #include "Door.h"
 #include "HUD.h"
 #include <iostream>
@@ -34,24 +35,27 @@ GameScene::GameScene(const RectF& r, float dt)
 	_s_pressed = false;
 	_run_pressed = false;
 	_collidersVisible = false;
+	_right_pressed = false;
+	_left_pressed = false;
+	_up_pressed = false;
+	_down_pressed = false;
+	// move view free
+	_moveView = false;
+	_moveMario = true;
+
+	_room = nullptr;
+	_mapRooms = nullptr;
 
 	// setup view (specific for super mario bros)
 	_view = new View(this, _rect);
 	_view->setFixedAspectRatio(Game::instance()->aspectRatio());
 	_view->setRect(RectF(0, 0, 16, 12));
 
-	_right_pressed = false;
-	_left_pressed = false;
-	_up_pressed = false;
-	_down_pressed = false;
-
-
-	// move view free
-	_moveView = false;
 }
 
 void GameScene::update(float timeToSimulate)
 {
+
 	Scene::update(timeToSimulate);
 
 	if (!_active)
@@ -87,63 +91,71 @@ void GameScene::update(float timeToSimulate)
 	}
 	else
 	{
+		// is _view moving?
+		if (_view->getDir() != Direction::NONE)
+			return;
+		else {
+			_moveMario = true;
+		}
 
-
-		// move _view with mario position
-		if (_view->getDir() == Direction::NONE)
+		// move Mario
+		if (_moveMario)
 		{
-			float _view_x = _view->rect().pos.x;
-			float _view_y = _view->rect().pos.y;
-			float _mario_x = _mario->rect().pos.x;
-			float _mario_y = _mario->rect().pos.y;
-			if (_mario_x > 13.8f + _view_x || _mario_x < 1.1f + _view_x || _mario_y > 9.5f + _view_y || _mario_y < 0.8f + _view_y)
-			{
-				_mario->setVelX(0);
-				_mario->setVelY(0);
+			if (_d_pressed && !_a_pressed)
+				_mario->move_x(Direction::RIGHT);
+			else if (_a_pressed && !_d_pressed)
+				_mario->move_x(Direction::LEFT);
+			else
 				_mario->move_x(Direction::NONE);
+
+			if (_w_pressed && !_s_pressed)
+				_mario->move_y(Direction::UP);
+			else if (_s_pressed && !_w_pressed)
+				_mario->move_y(Direction::DOWN);
+			else
 				_mario->move_y(Direction::NONE);
-			}
+			_mario->run(_run_pressed);
+		}
+
+		float _view_x = _view->rect().pos.x;
+		float _view_y = _view->rect().pos.y;
+		float _mario_x = _mario->rect().pos.x;
+		float _mario_y = _mario->rect().pos.y;
+
+		if (_mario_x > 13.8f + _view_x || _mario_x < 1.1f + _view_x || _mario_y > 9.5f + _view_y || _mario_y < 0.8f + _view_y)
+		{
+			_moveMario = false;
+			_mario->setVelX(0);
+			_mario->setVelY(0);
+			_mario->move_x(Direction::NONE);
+			_mario->move_y(Direction::NONE);
+
 			if (_mario_x > 13.8f + _view_x)
 			{
 				_view->moveTransition(Direction::RIGHT); //cambiamenti: in view per permettere la transizione della vista tra una stanza e l'altra
 				_mario->moveBy({ 4.3f,0 });
+				setRooms(std::make_pair( 1,0 ));
 			}
 			else if (_mario_x < 1.1f + _view_x)
 			{
 				_view->moveTransition(Direction::LEFT);
 				_mario->moveBy({ -4.2f,0 });
+				setRooms(std::make_pair(-1, 0));
 			}
 			else if (_mario_y > 9.5f + _view_y)
 			{
 				_view->moveTransition(Direction::DOWN);
 				_mario->moveBy({ 0,4.0f });
+				setRooms(std::make_pair(0, 1));
 			}
 			else if (_mario_y < 0.8f + _view_y)
 			{
 				_view->moveTransition(Direction::UP);
 				_mario->moveBy({ 0,-4.2f });
-			}
-			else
-			{
-				// move Mario
-				if (_d_pressed && !_a_pressed)
-					_mario->move_x(Direction::RIGHT);
-				else if (_a_pressed && !_d_pressed)
-					_mario->move_x(Direction::LEFT);
-				else
-					_mario->move_x(Direction::NONE);
-
-				if (_w_pressed && !_s_pressed)
-					_mario->move_y(Direction::UP);
-				else if (_s_pressed && !_w_pressed)
-					_mario->move_y(Direction::DOWN);
-				else
-					_mario->move_y(Direction::NONE);
-				_mario->run(_run_pressed);
-
-				HUD::instance()->selectMinimapRoom(_mario_x, _mario_y);
+				setRooms(std::make_pair(0, -1));
 			}
 		}
+		HUD::instance()->selectMinimapRoom(_mario_x, _mario_y);
 	}
 }
 
@@ -173,19 +185,15 @@ void GameScene::event(SDL_Event& evt)
 	}
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_O)
 	{
-		// Con il tasto "o" vengono cercate tutte le porte nella view e viene attivato il loro trigger
-		for (auto& obj : objects(_view->rect()))
-		{
-			if (obj->name().rfind("Door", 0) == 0)
-			{
-				dynamic_cast<Door*>(obj)->Trigger();
-			}
-		}
+		_room->Trigger();
 	}
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_P)
 	{
 		if (_moveView)
-			_moveView = false;
+		{
+			_view->setRect(_room->rect());
+			_moveView = false;			
+		}
 		else
 			_moveView = true;
 	}

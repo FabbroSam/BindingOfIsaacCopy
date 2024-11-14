@@ -3,7 +3,9 @@
 
 #include <map>
 #include <time.h>
+#include <iostream>
 #include "Object.h"
+#include "Door.h"
 #include "geometryUtils.h"
 #include "HammerBrother.h"
 
@@ -19,13 +21,17 @@ class agp::Room : public Object
 {
 protected:
 
-	int _layer;
 	RoomState _roomState;
 	RoomType _roomType;
 	RoomType _roomTypeUp;
 	RoomType _roomTypeDown;
 	RoomType _roomTypeRight;
 	RoomType _roomTypeLeft;
+	Door* _doorUp;
+	Door* _doorDown;
+	Door* _doorRight;
+	Door* _doorLeft;
+	std::pair<int, int> _coords;
 	int _x;
 	int _y;
 	int _w = 16;
@@ -35,21 +41,25 @@ protected:
 public:
 
 	Room(Scene* scene,
-		const RectF& rect, 
-		RoomType _roomType,
-		RoomType _roomTypeUp,
-		RoomType _roomTypeDown,
-		RoomType _roomTypeRight,
-		RoomType _roomTypeLeft,
+		const RectF& rect,
+		RoomType roomType,
+		RoomType roomTypeUp,
+		RoomType roomTypeDown,
+		RoomType roomTypeRight,
+		RoomType roomTypeLeft,
+		std::pair<int, int> coords,
 		int layer = 0);
 	virtual ~Room() {};
 
 	Room& operator=(const Room& r) = default;
 
+	RoomType type() { return _roomType; }
+	std::pair<int, int> coords() { return _coords; }
+
 	void Draw();
+	void Trigger();
 
 	virtual void update(float dt);
-
 	virtual std::string name() override;
 };
 
@@ -59,13 +69,15 @@ class agp::Basement
 
 protected:
 
-	std::map<agp::Vec2D<int>, agp::Room*> _mapRooms;
+	std::map<std::pair<int, int>, agp::Room*> _mapRooms;
 
 public:
 
-	Basement() { srand(static_cast<unsigned int>(time(0))); };
+	Basement() { srand(static_cast<unsigned int>(time(0))); }
+
+	Room* room(const std::pair<int, int>& coords) { return _mapRooms[coords]; }
 
 	void generateRooms(Scene* world);
-
+	
 
 };

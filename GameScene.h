@@ -9,11 +9,15 @@
 
 #pragma once
 #include "Scene.h"
+#include "Room.h"
+
 
 namespace agp
 {
 	class GameScene;
 	class Mario;
+	class Door;
+	class Basement;
 }
 
 // GameScene (or World) class
@@ -44,6 +48,10 @@ class agp::GameScene : public Scene
 		bool _down_pressed;
 
 		bool _moveView;
+		bool _moveMario;
+
+		Room* _room;
+		Basement* _mapRooms;
 
 	public:
 
@@ -52,6 +60,10 @@ class agp::GameScene : public Scene
 
 		Mario* player() { return _mario; }
 		void setPlayer(Mario* mario) { _mario = mario; }
+		void setMapRooms(Basement* mapRooms) { _mapRooms = mapRooms; }
+		void setRooms(Room* room) { _room = room; }
+		void setRooms(std::pair<int, int> coords) { _room = _mapRooms->room({ _room->coords().first + coords.first, _room->coords().second + coords.second}); }
+		Room* room() { return _room; }
 		bool collidersVisible() { return _collidersVisible; }
 		void toggleColliders() { _collidersVisible = !_collidersVisible; }
 

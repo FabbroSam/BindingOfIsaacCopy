@@ -30,6 +30,7 @@ View::View(Scene* scene, const RectF& rect)
 	_to_x = 0;
 	_to_y = 0;
 	_dir = Direction::NONE;
+	_move_to = false;
 }
 
 void View::setScene(Scene* scene) 
@@ -48,6 +49,7 @@ void View::moveTransition(Direction dir)
 {
 	if (_dir == Direction::NONE)
 	{
+		_move_to = true;
 		if (dir == Direction::RIGHT)
 			_to_x = _rect.pos.x + 16;
 		else if (dir == Direction::LEFT)
@@ -98,25 +100,29 @@ void View::render()
 
 void View::update(float dt)
 {
-	float step = 0.6f; // velocità con cui si sposta la view
+	float step = 0.9f; // velocità con cui si sposta la view
 
-	if (_dir != Direction::NONE)
+	if (_move_to)
 	{
-		if (_dir == Direction::RIGHT)
-			_rect.pos.x += step;
-		else if (_dir == Direction::LEFT)
-			_rect.pos.x += -step;
-		else if (_dir == Direction::UP)
-			_rect.pos.y += -step;
-		else if (_dir == Direction::DOWN)
-			_rect.pos.y += step;
-	}
+		if (_dir != Direction::NONE)
+		{
+			if (_dir == Direction::RIGHT)
+				_rect.pos.x += step;
+			else if (_dir == Direction::LEFT)
+				_rect.pos.x += -step;
+			else if (_dir == Direction::UP)
+				_rect.pos.y += -step;
+			else if (_dir == Direction::DOWN)
+				_rect.pos.y += step;
+		}
 
-	if (_to_x - 2 * step <= _rect.pos.x && _to_x + 2 * step >= _rect.pos.x && _to_y - 2 * step <= +_rect.pos.y && _to_y + 2 * step >= _rect.pos.y)
-	{
-		_rect.pos.x = _to_x;
-		_rect.pos.y = _to_y;
-		_dir = Direction::NONE;
+		if (_to_x - 2 * step <= _rect.pos.x && _to_x + 2 * step >= _rect.pos.x && _to_y - 2 * step <= +_rect.pos.y && _to_y + 2 * step >= _rect.pos.y)
+		{
+			_rect.pos.x = _to_x;
+			_rect.pos.y = _to_y;
+			_dir = Direction::NONE;
+			_move_to = false;
+		}
 	}
 
 	updateViewport();

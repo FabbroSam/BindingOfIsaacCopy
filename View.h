@@ -37,6 +37,7 @@ class agp::View
 		float _to_x;
 		float _to_y;
 		Direction _dir;
+		bool _move_to;
 
 	public:
 

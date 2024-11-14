@@ -70,8 +70,6 @@ void HammerBrother::update(float dt)
 	// animations
 	if(!_dying)
 		_flip = _facingDir == Direction::RIGHT ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-	if (!_throwing && midair())
-		_sprite = _sprites["jump"];
 	else if(_throwing)
 		_sprite = _sprites["throw"];
 	else 

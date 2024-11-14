@@ -44,17 +44,21 @@ GameScene* LevelLoader::load(const std::string& name)
 
 	if (name == "supermario")
 	{
-		GameScene* world = new GameScene(RectF(-50, -50, 50, 50), 1 / 100.0f);
+		GameScene* world = new GameScene(RectF(-50, -50, 50, 50), 1 / 60.0f);
 		world->setBackgroundColor(Color(0, 0, 0));
 
-		Basement* base = new Basement();
-		base->generateRooms(world);
+		Basement* mapRooms = new Basement();
+		mapRooms->generateRooms(world);
+		world->setMapRooms(mapRooms);
+		world->setRooms(mapRooms->room({0,0}));
+
+
 
 		new Mario(world, PointF(3.5, 2.5));
 
 
 		// mario
-		Mario* mario = new Mario(world, PointF(7.5, 5.5));
+		Mario* mario = new Mario(world, PointF(7.5, 5.2));
 		world->setPlayer(mario);
 
 		return world;
