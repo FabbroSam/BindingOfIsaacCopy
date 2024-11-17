@@ -28,6 +28,8 @@ class agp::HUD : public UIScene
 		float _totalHearts;
 
 		// rendering
+		RenderableObject* _FPS;
+
 		RenderableObject* _heart1;
 		RenderableObject* _heart2;
 		RenderableObject* _heart3;

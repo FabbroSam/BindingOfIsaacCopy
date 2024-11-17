@@ -38,5 +38,5 @@ class agp::SpriteFactory
 
 		// creation
 		Sprite* get(const std::string& id);
-		Sprite* getText(std::string text, const Vec2Df& size = { 1,1 }, int fillN = 0, char fillChar = ' ', bool enabled = true);
+		Sprite* getNumber(int num, const Vec2Df& size = { 1,1 });
 };

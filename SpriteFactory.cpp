@@ -64,6 +64,8 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["hud_hearts"] = loadTexture(renderer, "../sprites/ui_hearts.png", { 147, 187, 236 });
 	_spriteSheets["hud_items"] = loadTexture(renderer, "../sprites/ui_items.png", { 147, 187, 236 });
 	_spriteSheets["hud_minimap"] = loadTexture(renderer, "../sprites/ui_minimap.png", { 147, 187, 236 });
+		_spriteSheets["hud_minimap"] = loadTexture(renderer, "../sprites/ui_minimap.png", { 147, 187, 236 });
+
 
 	//UI MONSTER
 	_spriteSheets["ui_boss"] = loadTexture(renderer, "../sprites/ui_boss.png", { 147, 187, 236 });
@@ -72,6 +74,8 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["ui_isaac"] = loadTexture(renderer, "../sprites/ui_isaac.png", { 147, 187, 236 });
 	_spriteSheets["ui_isaacname"] = loadTexture(renderer, "../sprites/ui_isaac_name.png", { 147, 187, 236 });
 	_spriteSheets["ui_vs"] = loadTexture(renderer, "../sprites/ui_vs.png", { 147, 187, 236 });
+	_spriteSheets["ui_number"] = loadTexture(renderer, "../sprites/ui_whitecounter.png", { 147, 187, 236 });
+
 
 	std::vector<RectI> vecRect;
 	SDL_Texture* base = loadTextureSequence(renderer, "../image", vecRect, Point(0, 0), Point(52, 52));
@@ -451,36 +455,23 @@ Sprite* SpriteFactory::get(const std::string& id)
 	}
 }
 
-Sprite* SpriteFactory::getText(std::string text, const Vec2Df& size, int fillN, char fillChar, bool enabled)
+Sprite* SpriteFactory::getNumber(int num, const Vec2Df& size)
 {
-	std::vector< RectI> tiles;
+	std::vector<RectI> tiles;
 
-	if (fillN)
-		while (text.size() != fillN)
-			text = fillChar + text;
+	std::string text = std::to_string(num);
 
-	RectI& number_anchor = enabled ? hud_number : hud_number_disabled;
-	RectI& letter_anchor = enabled ? hud_letter : hud_letter_disabled;
-
-	for (auto& c : text)
-	{
-		if(isdigit(c))
-			tiles.push_back(moveBy(number_anchor, c - '0', 0, 8, 8));
-		else if (isalpha(c))
-			tiles.push_back(moveBy(letter_anchor, toupper(c) - 'A', 0, 8, 8));
-		else if (c == '-')
-			tiles.push_back(moveBy(number_anchor, 10, 0, 8, 8));
-		else if (c == '*')
-			tiles.push_back(moveBy(number_anchor, 11, 0, 8, 8));
-		else if (c == '!')
-			tiles.push_back(moveBy(number_anchor, 12, 0, 8, 8));
-		else if (c == '©')
-			tiles.push_back(moveBy(number_anchor, 13, 0, 8, 8));
-		else if (c == '.')
-			tiles.push_back(moveBy(number_anchor, 14, 0, 8, 8));
-		else
-			tiles.push_back(moveBy(hud_letter, 0, -5, 8, 8));	// empty space
+	for (char c : text) {
+		if (isdigit(c)) {
+			int value = c - '0';
+			int x = value % 3;
+			int y = value / 3;
+			tiles.push_back(moveBy(RectI(0,0,16,16), x , y , 16, 16));
+		}
+		else if (c == '-') {
+			tiles.push_back(moveBy(RectI(0, 0, 16, 16),3, 2, 16, 16));
+		}
 	}
 
-	return new TiledSprite(_spriteSheets["hud"], tiles, size);
+	return new TiledSprite(_spriteSheets["ui_number"], tiles, size);
 }
