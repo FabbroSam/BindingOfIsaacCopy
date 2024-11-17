@@ -40,6 +40,7 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["hud"] = loadTexture(renderer, "../sprites/hud.png", { 147, 187, 236 });
 	_spriteSheets["tiles"] = loadTexture(renderer, "../sprites/stage_tiles.png", { 147, 187, 236 });
 
+	// BASEMENT
 	_spriteSheets["basement"] = loadTexture(renderer, "../sprites/basement.png", { 0, 114, 188 });
 	_spriteSheets["door"] = loadTexture(renderer, "../sprites/basement_door.png", { 0, 255, 255 });
 	_spriteSheets["shop"] = loadTexture(renderer, "../sprites/basement_shop.png", { 0, 114, 188 });
@@ -50,13 +51,27 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["controls"] = loadTexture(renderer, "../sprites/basement_controls.png", { 147, 187, 236 });
 	_spriteSheets["shading"] = loadTexture(renderer, "../sprites/basement_shading.png", { 147, 187, 236 });
 
+	// MENU
+	_spriteSheets["menu_title"] = loadTexture(renderer, "../sprites/titlemenu.png", { 147, 187, 236 });
 	_spriteSheets["menu"] = loadTexture(renderer, "../sprites/menu.png", { 147, 187, 236 });
+	_spriteSheets["menu_emptybg"] = loadTexture(renderer, "../sprites/menu_emptybg.png", { 147, 187, 236 });
 	_spriteSheets["menu_shading"] = loadTexture(renderer, "../sprites/menu_shading.png", { 147, 187, 236 });
 	_spriteSheets["menu_overlay"] = loadTexture(renderer, "../sprites/menu_overlay.png", { 147, 187, 236 });
+	_spriteSheets["menu_options"] = loadTexture(renderer, "../sprites/menu_options.png", { 147, 187, 236 });
+	_spriteSheets["menu_options_dark"] = loadTexture(renderer, "../sprites/menu_options_dark.png", { 147, 187, 236 });
 
+	// UI
 	_spriteSheets["hud_hearts"] = loadTexture(renderer, "../sprites/ui_hearts.png", { 147, 187, 236 });
 	_spriteSheets["hud_items"] = loadTexture(renderer, "../sprites/ui_items.png", { 147, 187, 236 });
 	_spriteSheets["hud_minimap"] = loadTexture(renderer, "../sprites/ui_minimap.png", { 147, 187, 236 });
+
+	//UI MONSTER
+	_spriteSheets["ui_boss"] = loadTexture(renderer, "../sprites/ui_boss.png", { 147, 187, 236 });
+	_spriteSheets["ui_bossname"] = loadTexture(renderer, "../sprites/ui_bossname_dukeofflies.png", { 147, 187, 236 });
+	_spriteSheets["ui_bossspot"] = loadTexture(renderer, "../sprites/ui_bossspot.png", { 147, 187, 236 });
+	_spriteSheets["ui_isaac"] = loadTexture(renderer, "../sprites/ui_isaac.png", { 147, 187, 236 });
+	_spriteSheets["ui_isaacname"] = loadTexture(renderer, "../sprites/ui_isaac_name.png", { 147, 187, 236 });
+	_spriteSheets["ui_vs"] = loadTexture(renderer, "../sprites/ui_vs.png", { 147, 187, 236 });
 
 	std::vector<RectI> vecRect;
 	SDL_Texture* base = loadTextureSequence(renderer, "../image", vecRect, Point(0, 0), Point(52, 52));
@@ -267,7 +282,21 @@ Sprite* SpriteFactory::get(const std::string& id)
 		return new TiledSprite(_spriteSheets["treasure"], rects, { 2,2 });
 		}
 	
-	//SPRITES HUD
+	// UI_MONSTER
+	else if (id == "ui_boss")
+		return new Sprite(_spriteSheets["ui_boss"], RectI(0, 0, 192, 192));
+	else if (id == "ui_bossname")
+		return new Sprite(_spriteSheets["ui_bossname"], RectI(0, 0, 174, 55));
+	else if (id == "ui_bossspot")
+		return new Sprite(_spriteSheets["ui_bossspot"], RectI(0, 0, 260, 70));
+	else if (id == "ui_isaac")
+		return new Sprite(_spriteSheets["ui_isaac"], RectI(0, 0, 112, 78));
+	else if (id == "ui_isaacname")
+		return new Sprite(_spriteSheets["ui_isaacname"], RectI(0, 0, 192, 64));
+	else if (id == "ui_vs")
+		return new Sprite(_spriteSheets["ui_vs"], RectI(0, 0, 128, 64));
+
+	// SPRITES HUD
 	else if (id =="hud_heart_red")
 		return new Sprite(_spriteSheets["hud_hearts"], RectI(0, 0, 16, 16));
 	else if (id == "hud_heart_half_red")
@@ -292,8 +321,20 @@ Sprite* SpriteFactory::get(const std::string& id)
 		return new Sprite(_spriteSheets["hud_minimap"], RectI(30, 51, 9, 8));
 
 	//SPRITES MENU
+	else if (id == "menu_title")
+		return new Sprite(_spriteSheets["menu_title"], RectI(0, 0, 480, 272));
+	else if (id == "menu_title_angel")
+		return new Sprite(_spriteSheets["menu_title"], RectI(0, 272, 479, 105));
+	else if (id == "menu_title_start")
+	{
+		rects.push_back(RectF(9,382,160,158));
+		rects.push_back(RectF(169, 382, 160, 158));
+		return new AnimatedSprite(_spriteSheets["menu_title"], rects, 10);
+	}
 	else if (id == "menu_background")
 		return new Sprite(_spriteSheets["menu"], RectI(0, 0, 480, 269));
+	else if (id == "menu_emptybg")
+		return new Sprite(_spriteSheets["menu_emptybg"], RectI(0, 0, 480, 270));
 	else if (id == "menu_shading")
 		return new Sprite(_spriteSheets["menu_shading"], RectI(0, 0, 256, 150));
 	else if (id == "menu_overlay")
@@ -304,8 +345,56 @@ Sprite* SpriteFactory::get(const std::string& id)
 		return new Sprite(_spriteSheets["menu"], RectI(0, 0, 480, 269));
 	else if (id == "menu_options")
 		return new Sprite(_spriteSheets["menu"], RectI(32, 479, 121, 46));
+	else if (id == "menu_exit")
+		return new Sprite(_spriteSheets["menu"], RectI(32, 434, 121, 46));
 	else if (id == "menu_arrow")
-		return new Sprite(_spriteSheets["menu"], RectI(0, 295, 33, 46));
+		return new Sprite(_spriteSheets["menu"], RectI(1, 296, 31, 44));
+	else if (id == "menu_options_menu")
+		return new Sprite(_spriteSheets["menu_options"], RectI(0, 0, 234, 234));
+	else if (id == "menu_options_menu_dark")
+		return new Sprite(_spriteSheets["menu_options_dark"], RectI(0, 0, 234, 234));
+	else if (id == "menu_options_sfx")
+		return new Sprite(_spriteSheets["menu_options"], RectI(0, 246, 121, 46));
+	else if (id == "menu_options_music")
+		return new Sprite(_spriteSheets["menu_options"], RectI(0, 522, 121, 46));
+	else if (id == "menu_options_reset")
+		return new Sprite(_spriteSheets["menu_options"], RectI(0, 568, 121, 46));
+	else if (id == "menu_options_resume")
+		return new Sprite(_spriteSheets["menu_options"], RectI(0, 614, 121, 46));
+	else if (id == "menu_options_exit")
+		return new Sprite(_spriteSheets["menu_options"], RectI(0, 660, 121, 46));
+	else if (id == "menu_options_10")
+		return new Sprite(_spriteSheets["menu_options"], RectI(121, 246, 121, 46));
+	else if (id == "menu_options_9")
+		return new Sprite(_spriteSheets["menu_options"], RectI(121, 292, 121, 46));
+	else if (id == "menu_options_8")
+		return new Sprite(_spriteSheets["menu_options"], RectI(121, 338, 121, 46));
+	else if (id == "menu_options_7")
+		return new Sprite(_spriteSheets["menu_options"], RectI(121, 384, 121, 46));
+	else if (id == "menu_options_6")
+		return new Sprite(_spriteSheets["menu_options"], RectI(121, 430, 121, 46));
+	else if (id == "menu_options_5")
+		return new Sprite(_spriteSheets["menu_options"], RectI(121, 476, 121, 46));
+	else if (id == "menu_options_4")
+		return new Sprite(_spriteSheets["menu_options"], RectI(121, 522, 121, 46));
+	else if (id == "menu_options_3")
+		return new Sprite(_spriteSheets["menu_options"], RectI(121, 568, 121, 46));
+	else if (id == "menu_options_2")
+		return new Sprite(_spriteSheets["menu_options"], RectI(121, 614, 121, 46));
+	else if (id == "menu_options_1")
+		return new Sprite(_spriteSheets["menu_options"], RectI(121, 660, 121, 46));
+	else if (id == "menu_options_0")
+		return new Sprite(_spriteSheets["menu_options"], RectI(121, 706, 121, 46));
+	else if (id == "menu_options_vsync")
+		return new Sprite(_spriteSheets["menu_options"], RectI(0, 292, 121, 46));
+	else if (id == "menu_options_vsync_on_1")
+		return new Sprite(_spriteSheets["menu_options"], RectI(0, 338, 121, 46));
+	else if (id == "menu_options_vsync_on_2")
+		return new Sprite(_spriteSheets["menu_options"], RectI(0, 384, 121, 46));
+	else if (id == "menu_options_vsync_off_1")
+		return new Sprite(_spriteSheets["menu_options"], RectI(0, 430, 121, 46));
+	else if (id == "menu_options_vsync_off_2")
+		return new Sprite(_spriteSheets["menu_options"], RectI(0, 476, 121, 46));
 
 	// ANDRANNO CANCELLATE
 	else if (id == "wall")

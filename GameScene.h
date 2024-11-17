@@ -50,6 +50,8 @@ class agp::GameScene : public Scene
 		bool _moveView;
 		bool _moveMario;
 
+		bool _vsMonster;
+
 		Room* _room;
 		Basement* _mapRooms;
 

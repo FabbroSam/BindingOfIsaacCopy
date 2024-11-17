@@ -46,7 +46,8 @@ class agp::Door : public CollidableObject
 
 		void Draw();
 
-		void Trigger();
+		void openClose();
+		void offLight();
 
 		virtual void update(float dt) override;
 

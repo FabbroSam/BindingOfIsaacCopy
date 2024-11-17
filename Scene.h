@@ -35,6 +35,8 @@ class agp::Scene
 
 	protected:
 
+		std::string _name;
+
 		ObjectsMap _sortedObjects;	// objects sorted by ascending z-level
 		ObjectsList _newObjects;	// new objects that need to be added
 		ObjectsList _deadObjects;	// dead objects that need to be dealloacted
@@ -62,6 +64,7 @@ class agp::Scene
 		void setActive(bool on) { _active = on; }
 		bool blocking() { return _blocking; }
 		void setBlocking(bool on) { _blocking = on; }
+		std::string name() { return _name; }
 
 		// add/remove objects
 		void newObject(Object* obj);

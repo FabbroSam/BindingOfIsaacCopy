@@ -59,10 +59,11 @@ HUD::HUD()
 
 	// MINIMAP
 	new RenderableObject(this, RectF(13, 1, 2.5f, 2.5f), _sprites["minimap_back"]);
-	_roomSelected = new MovableObject(this, RectF(0, 0, 2.5f / 7.0f, 2.5f / 7.0f), _sprites["minimap_room_select"], 2);
+	_roomSelected = new MovableObject(this, RectF(0, 0, 2.5f / 7.0f, 2.5f / 7.0f), _sprites["minimap_room_select"],1);
+	std::cout << "hud.cpp obj: " << _roomSelected->name() << std::endl;
+
 	_pos = { -1,-1 };
-
-
+	_name = "hud";
 }
 
 // extends update logic (+time management)

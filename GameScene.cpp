@@ -19,6 +19,7 @@
 #include "Room.h"
 #include "Door.h"
 #include "HUD.h"
+#include "UIMonster.h"
 #include <iostream>
 using namespace agp;
 
@@ -39,9 +40,12 @@ GameScene::GameScene(const RectF& r, float dt)
 	_left_pressed = false;
 	_up_pressed = false;
 	_down_pressed = false;
+
 	// move view free
 	_moveView = false;
 	_moveMario = true;
+
+	_vsMonster = true;
 
 	_room = nullptr;
 	_mapRooms = nullptr;
@@ -51,6 +55,7 @@ GameScene::GameScene(const RectF& r, float dt)
 	_view->setFixedAspectRatio(Game::instance()->aspectRatio());
 	_view->setRect(RectF(0, 0, 16, 12));
 
+	_name = "gamescene";
 }
 
 void GameScene::update(float timeToSimulate)
@@ -88,82 +93,98 @@ void GameScene::update(float timeToSimulate)
 			_view->move({ 0,-1 });
 		if (_down_pressed && !_up_pressed)
 			_view->move({ 0,1 });
+		return;
 	}
-	else
+
+
+	// is _viewMoving   or    showMonster?
+	if (_view->getDir() != Direction::NONE || UIMonster::instance()->getShowVS())
+		return;
+	else {
+		_moveMario = true;
+	}
+
+	// move Mario
+	if (_moveMario)
 	{
-		// is _view moving?
-		if (_view->getDir() != Direction::NONE)
-			return;
-		else {
-			_moveMario = true;
-		}
-
-		// move Mario
-		if (_moveMario)
-		{
-			if (_d_pressed && !_a_pressed)
-				_mario->move_x(Direction::RIGHT);
-			else if (_a_pressed && !_d_pressed)
-				_mario->move_x(Direction::LEFT);
-			else
-				_mario->move_x(Direction::NONE);
-
-			if (_w_pressed && !_s_pressed)
-				_mario->move_y(Direction::UP);
-			else if (_s_pressed && !_w_pressed)
-				_mario->move_y(Direction::DOWN);
-			else
-				_mario->move_y(Direction::NONE);
-			_mario->run(_run_pressed);
-		}
-
-		float _view_x = _view->rect().pos.x;
-		float _view_y = _view->rect().pos.y;
-		float _mario_x = _mario->rect().pos.x;
-		float _mario_y = _mario->rect().pos.y;
-
-		if (_mario_x > 13.8f + _view_x || _mario_x < 1.1f + _view_x || _mario_y > 9.5f + _view_y || _mario_y < 0.8f + _view_y)
-		{
-			_moveMario = false;
-			_mario->setVelX(0);
-			_mario->setVelY(0);
+		if (_d_pressed && !_a_pressed)
+			_mario->move_x(Direction::RIGHT);
+		else if (_a_pressed && !_d_pressed)
+			_mario->move_x(Direction::LEFT);
+		else
 			_mario->move_x(Direction::NONE);
-			_mario->move_y(Direction::NONE);
 
-			if (_mario_x > 13.8f + _view_x)
-			{
-				_view->moveTransition(Direction::RIGHT); //cambiamenti: in view per permettere la transizione della vista tra una stanza e l'altra
-				_mario->moveBy({ 4.3f,0 });
-				setRooms(std::make_pair( 1,0 ));
-			}
-			else if (_mario_x < 1.1f + _view_x)
-			{
-				_view->moveTransition(Direction::LEFT);
-				_mario->moveBy({ -4.2f,0 });
-				setRooms(std::make_pair(-1, 0));
-			}
-			else if (_mario_y > 9.5f + _view_y)
-			{
-				_view->moveTransition(Direction::DOWN);
-				_mario->moveBy({ 0,4.0f });
-				setRooms(std::make_pair(0, 1));
-			}
-			else if (_mario_y < 0.8f + _view_y)
-			{
-				_view->moveTransition(Direction::UP);
-				_mario->moveBy({ 0,-4.2f });
-				setRooms(std::make_pair(0, -1));
+		if (_w_pressed && !_s_pressed)
+			_mario->move_y(Direction::UP);
+		else if (_s_pressed && !_w_pressed)
+			_mario->move_y(Direction::DOWN);
+		else
+			_mario->move_y(Direction::NONE);
+		_mario->run(_run_pressed);
+	}
+
+	float _view_x = _view->rect().pos.x;
+	float _view_y = _view->rect().pos.y;
+	float _mario_x = _mario->rect().pos.x;
+	float _mario_y = _mario->rect().pos.y;
+
+	if (_mario_x > 13.8f + _view_x || _mario_x < 1.1f + _view_x || _mario_y > 9.5f + _view_y || _mario_y < 0.8f + _view_y)
+	{
+		_room->openCloseDoor();
+		_moveMario = false;
+		_mario->setVelX(0);
+		_mario->setVelY(0);
+		_mario->move_x(Direction::NONE);
+		_mario->move_y(Direction::NONE);
+
+		if (_mario_x > 13.8f + _view_x)
+		{
+			_view->moveTransition(Direction::RIGHT); //cambiamenti dentro view per permettere la transizione della vista tra una stanza e l'altra
+			_mario->moveBy({ 4.3f,0 });
+			setRooms(std::make_pair( 1,0 ));
+		}
+		else if (_mario_x < 1.1f + _view_x)
+		{
+			_view->moveTransition(Direction::LEFT);
+			_mario->moveBy({ -4.2f,0 });
+			setRooms(std::make_pair(-1, 0));
+		}
+		else if (_mario_y > 9.5f + _view_y)
+		{
+			_view->moveTransition(Direction::DOWN);
+			_mario->moveBy({ 0,4.0f });
+			setRooms(std::make_pair(0, 1));
+		}
+		else if (_mario_y < 0.8f + _view_y)
+		{
+			_view->moveTransition(Direction::UP);
+			_mario->moveBy({ 0,-4.2f });
+			setRooms(std::make_pair(0, -1));
+		}
+
+		if (_room->type() == RoomType::BOSS)
+		{
+			if (_vsMonster)
+			{			
+				UIMonster::instance()->showVS();
+				_vsMonster = false;
+
+				// schedule for show BOSS ???				
+					//_room->openCloseDoor();
+					//_room->offLightDoor();
 			}
 		}
-		HUD::instance()->selectMinimapRoom(_mario_x, _mario_y);
+
 	}
+	HUD::instance()->selectMinimapRoom(_mario_x, _mario_y);
+
 }
 
 void GameScene::event(SDL_Event& evt)
 {
 	Scene::event(evt);
 
-	if (evt.type == SDL_KEYDOWN && (evt.key.keysym.scancode == SDL_SCANCODE_RETURN || evt.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
+	if (evt.type == SDL_KEYDOWN && (evt.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
 		Game::instance()->pushScene(Menu::pauseMenu());
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_H)
 		_mario->die();
@@ -185,7 +206,7 @@ void GameScene::event(SDL_Event& evt)
 	}
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_O)
 	{
-		_room->Trigger();
+		_room->openCloseDoor();
 	}
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_P)
 	{

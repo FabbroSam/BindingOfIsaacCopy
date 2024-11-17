@@ -28,6 +28,9 @@ class agp::Audio
 		std::map< std::string, Mix_Chunk*> _sounds;
 		std::map< std::string, Mix_Music*> _musics;
 
+		int _volumeSfx;
+		int _volumeMusic;
+
 		// constructor inaccesible due to singleton
 		Audio();
 
@@ -35,7 +38,6 @@ class agp::Audio
 
 		// singleton
 		static Audio* instance();
-
 		~Audio();
 
 		// controls
@@ -44,4 +46,12 @@ class agp::Audio
 		void resumeMusic();
 		void pauseMusic();
 		void haltMusic();
+		void setVolumeSfx(int volume);
+		void upVolumeSfx();
+		void downVolumeSfx();
+		const int& volumeSfx() { return _volumeSfx; };
+		void setVolumeMusic(int volume);
+		void upVolumeMusic();
+		void downVolumeMusic();
+		const int& volumeMusic() { return _volumeMusic; };
 };

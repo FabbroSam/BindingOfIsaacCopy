@@ -30,20 +30,27 @@ class agp::MenuItem : public RenderableObject
 		int _index;
 		int _selected;
 		std::string _text;
-		std::function<void()> _task;	// performed when Enter pressed on this item
+		std::function<void(SDL_Scancode)> _task;	// performed when Enter pressed on this item
 		RenderableObject* _menuArrow;
+		RenderableObject* _volume;
+		RenderableObject* _vsync1;
+		RenderableObject* _vsync2;
 	public:
 
-		MenuItem(Menu* container, int index, const std::string& text, std::function<void()> task);
+		MenuItem(Menu* container, int index, int height, const std::string& text, std::function<void(SDL_Scancode)> task, bool notches = false, bool vsync = false);
 		virtual ~MenuItem() {};	
 
 		bool selected() { return _selected; }
-		void setSelected(bool on) { _selected = on; refresh(); }
+		void setSelected(bool on) { _selected = on;}
 		const std::string& text() { return _text; }
-		void setText(const std::string& text) { _text = text; refresh();}
+		void setText(const std::string& text) { _text = text;}
+
+		RenderableObject* volume() { return _volume; }
+		RenderableObject* vsync1() { return _vsync1; }
+		RenderableObject* vsync2() { return _vsync2; }
 		void refresh();
 
-		void run() { _task(); }
+		void run(SDL_Scancode code = SDL_SCANCODE_UNKNOWN) { _task(code); }
 
 		// extends update logic (+selection)
 		virtual void update(float dt) override;
@@ -70,8 +77,9 @@ class agp::Menu : public UIScene
 
 		// getters/setters (to be completed)
 		const RectF& menuRect() { return _menuRect; }
-		MenuItem* addItem(const std::string& text, std::function<void()> task);
+		MenuItem* addItem(const std::string& text, int height, std::function<void(SDL_Scancode)> task, bool notches = false, bool vsync = false);
 		MenuItem* itemAt(int index) { return _items[index]; }
+		
 
 		// extends event handler (+menu selection)
 		virtual void event(SDL_Event& evt) override;
@@ -79,4 +87,5 @@ class agp::Menu : public UIScene
 		// provide main menus
 		static Menu* mainMenu();
 		static Menu* pauseMenu();
+		static Menu* startMenu();
 };

@@ -116,7 +116,7 @@ void Door::Draw()
 
 }
 
-void Door::Trigger()
+void Door::openClose()
 {
 
 	if (_doorUp)
@@ -173,10 +173,15 @@ void Door::Trigger()
 	}
 }
 
+void Door::offLight()
+{
+	if (_doorLight)
+		_doorLight->setVisible(false);
+}
+
 void Door::update(float dt)
 {
 	CollidableObject::update(dt);
-
 }
 
 DoorBorder::DoorBorder(Scene* scene, const RectF& rect, RoomType type, DoorPosition pos, int layer, float angle, SDL_RendererFlip flip)

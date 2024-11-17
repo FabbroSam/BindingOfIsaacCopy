@@ -57,7 +57,8 @@ public:
 	std::pair<int, int> coords() { return _coords; }
 
 	void Draw();
-	void Trigger();
+	void openCloseDoor();
+	void offLightDoor();
 
 	virtual void update(float dt);
 	virtual std::string name() override;

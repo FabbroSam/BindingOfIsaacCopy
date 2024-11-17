@@ -19,6 +19,7 @@
 #include "LevelLoader.h"
 #include "HUD.h"
 #include "Menu.h"
+#include "UIMonster.h"
 #include "Audio.h"
 
 using namespace agp;
@@ -40,10 +41,12 @@ Game::Game()
 
 void Game::init()
 {
-
 	pushScene(LevelLoader::instance()->load("supermario"));
-	pushScene(HUD::instance());
-	pushScene(Menu::mainMenu());
+	_hud = HUD::instance();
+	pushScene(_hud);
+	pushScene(UIMonster::instance());
+	pushScene(Menu::startMenu());
+
 }
 
 void Game::run()
@@ -95,9 +98,16 @@ void Game::processEvents()
 	if (_reset)
 	{
 		_reset = false;
-		for (auto scene : _scenes)
+		std::cout << _scenes.size() << std::endl;
+		for (auto& scene : _scenes)
+		{
+			std::cout << "after delete  " << scene->name() << std::endl;
 			delete scene;
+			std::cout << "after delete" << std::endl;
+		}
 		_scenes.clear();
+		
+		std::cout << "before init" << std::endl;
 		init();
 	}
 }

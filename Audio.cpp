@@ -17,7 +17,6 @@ using namespace agp;
 Audio* Audio::instance()
 {
 	static Audio uniqueInstance;
-
 	return &uniqueInstance;
 }
 
@@ -28,6 +27,12 @@ Audio::Audio()
 
 	if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 512))
 		throw Mix_GetError();
+
+	setVolumeSfx(5);
+	_volumeSfx = 5;
+	setVolumeMusic (5);
+	_volumeMusic = 5;
+
 
 	auto soundFiles = getFilesInDirectory("../sounds");
 	for (auto& f : soundFiles)
@@ -97,8 +102,53 @@ void Audio::pauseMusic()
 	Mix_PauseMusic();
 }
 
-
 void Audio::haltMusic()
 {
 	Mix_HaltMusic();
+}
+
+void Audio::setVolumeSfx(int volume)
+{ 
+	Mix_Volume(-1, volume); 
+}
+
+void Audio::upVolumeSfx()
+{
+	if (_volumeSfx < 10)
+	{
+		_volumeSfx += 1;
+		setVolumeSfx(_volumeSfx * 10);
+	}
+}
+
+void Audio::downVolumeSfx()
+{
+	if (_volumeSfx > 0)
+	{
+		_volumeSfx -= 1;
+		setVolumeSfx(_volumeSfx * 10);
+	}
+}
+
+void Audio::setVolumeMusic(int volume)
+{
+	Mix_VolumeMusic(volume);
+}
+
+void Audio::upVolumeMusic()
+{
+	if (_volumeMusic < 10)
+	{
+		_volumeMusic += 1;
+		setVolumeMusic(_volumeMusic * 10);
+	}
+}
+
+void Audio::downVolumeMusic()
+{
+	if (_volumeMusic > 0)
+	{
+		_volumeMusic -= 1;
+		setVolumeMusic(_volumeMusic * 10);
+	}
 }

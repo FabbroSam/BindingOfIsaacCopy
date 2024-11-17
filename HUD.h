@@ -11,17 +11,15 @@
 #include "UIScene.h"
 #include "RenderableObject.h"
 #include "MovableObject.h"
+#include <iostream>
 
 namespace agp
 {
 	class HUD;
 }
 
-// HUD
-// - implements (as an example) the Super Mario Bros's HUD
 class agp::HUD : public UIScene
 {
-	protected:
 
 		std::map<std::string, Sprite*> _sprites;
 
@@ -45,8 +43,8 @@ class agp::HUD : public UIScene
 
 	public:
 
-		// singleton
 		static HUD* instance();
+		virtual ~HUD() {};
 
 		// getters/setters (to be completed)
 		void setFPS(float fps);

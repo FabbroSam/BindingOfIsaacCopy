@@ -26,7 +26,7 @@ namespace agp
 // - singleton access
 class agp::Game
 { 
-	private:
+	protected:
 
 		// attributes
 		Window* _window;

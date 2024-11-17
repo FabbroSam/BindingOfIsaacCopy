@@ -27,9 +27,12 @@ Scene::Scene(const RectF& r)
 
 Scene::~Scene()
 {
+
 	for (auto& layer : _sortedObjects)
-		for(auto& obj : layer.second)
+		for (auto& obj : layer.second)
 			delete obj;
+
+	std::cout << "Scene distruttore" << std::endl;
 }
 
 void Scene::newObject(Object* obj)

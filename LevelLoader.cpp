@@ -25,8 +25,6 @@
 
 using namespace agp;
 
-
-
 LevelLoader* LevelLoader::instance()
 {
 	static LevelLoader uniqueInstance;

@@ -177,17 +177,29 @@ void Room::Draw()
 	new RenderableObject(_scene, RectF(_x, _y, 16, 12), spriteLoader->get("shading"));
 }
 
-void Room::Trigger()
+void Room::openCloseDoor()
 {
 	if (_doorUp)
-		_doorUp->Trigger();
+		_doorUp->openClose();
 	if (_doorDown)
-		_doorDown->Trigger();
+		_doorDown->openClose();
 	if (_doorRight)
-		_doorRight->Trigger();
+		_doorRight->openClose();
 	if (_doorLeft)
-		_doorLeft->Trigger();
+		_doorLeft->openClose();
 }	
+
+void Room::offLightDoor()
+{
+	if (_doorUp)
+		_doorUp->offLight();
+	if (_doorDown)
+		_doorDown->offLight();
+	if (_doorRight)
+		_doorRight->offLight();
+	if (_doorLeft)
+		_doorLeft->offLight();
+}
 
 std::string Room::name()
 { 
@@ -200,8 +212,6 @@ std::string Room::name()
 	else
 		return strprintf("Room[%d]", _id);
 }
-
-
 
 void Basement::generateRooms(Scene* world)
 {
