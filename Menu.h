@@ -66,6 +66,7 @@ class agp::Menu : public UIScene
 		RectF _menuRect;
 		int _itemSelected;
 		bool _closable;
+		bool _vsyncOn;
 		std::vector< MenuItem* > _items;
 		RenderableObject* _menuBackground;
 

@@ -51,16 +51,21 @@ class agp::Object
 		void setFreezed(bool on) { _freezed = on; }
 		void toggleFreezed() { _freezed = !_freezed; }
 		bool contains(const Vec2Df& p) { return _rect.contains(p); }
+		Scene* scene() const { return _scene; }
 
 		// core game logic (physics, ...)
 		virtual void update(float dt);
 
 		// scheduling
 		virtual void schedule(const std::string& id, float delaySeconds, std::function<void()> action, int loop = 0, bool overwrite = true);
+		virtual void unschedule(const std::string& id);
 
 		// type conversion
 		template <class T>
 		T to() { return dynamic_cast<T>(this); }
+
+		// kill
+		virtual void kill();
 
 		// debugging
 		int id() const { return _id; }

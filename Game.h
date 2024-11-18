@@ -34,7 +34,6 @@ class agp::Game
 		int _scenesToPop;					// for popSceneLater
 		bool _running;
 		bool _reset;
-		HUD* _hud;
 
 		// helper functions
 		void init();

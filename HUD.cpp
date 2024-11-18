@@ -44,31 +44,36 @@ HUD::HUD()
 	_sprites["minimap_shop"] = SpriteFactory::instance()->get("hud_minimap_shop");
 	_sprites["minimap_room_select"] = SpriteFactory::instance()->get("hud_minimap_room_select");
 
+	_bombs = -1;
+	_coins = -1;
+	_halfHearts = -1;
+	_heartsCapacity = 5;
+
 	// _FPS
-	_FPS = new RenderableObject(this, RectF(5, 1.1f, 2.0f, 0.5f), SpriteFactory::instance()->getNumber(0, { 0.4,0.4 }));
+	_fpsText = new RenderableObject(this, RectF(13.0f, 0.5f, 2.0f, 0.5f), SpriteFactory::instance()->getNumber(0, 4));
 
 	// HEARTS
-	_heart1 = new RenderableObject(this, RectF(1.0f, 1.0f, 0.7f, 0.7f), _sprites["heart_red"]);
-	_heart2 = new RenderableObject(this, RectF(1.5f, 1.0f, 0.7f, 0.7f), _sprites["heart_half_red"]);
-	_heart3 = new RenderableObject(this, RectF(2.0f, 1.0f, 0.7f, 0.7f), _sprites["heart_empty"]);
-	_hearts.push_back(_heart1);
-	_hearts.push_back(_heart2);
-	_hearts.push_back(_heart3);
-	_totalHearts = 3.0f;
+	for (int i = 0; i < 5; i++)
+		_heartIcons[i] = new RenderableObject(this, RectF(1.8f + i*0.55f, 0.9f, 0.7f, 0.7f), nullptr);
 
 	//// COIN - ITEM
-	_coin = new RenderableObject(this, RectF(0.25f, 2, 0.7f, 0.8f), _sprites["coin"]);
-	new RenderableObject(this, RectF(1, 2.25f, 0.8f, 0.5f), SpriteFactory::instance()->getNumber(98,{0.4,0.4}));
-	_bomb = new RenderableObject(this, RectF(0.25f, 2.6f, 0.7f, 0.8f), _sprites["bomb"]);
-	new RenderableObject(this, RectF(1, 2.85f, 0.8f, 0.5f), SpriteFactory::instance()->getNumber(50,{ 0.4,0.4 }));
+	new RenderableObject(this, RectF(0.25f, 2.0f, 0.7f, 0.8f), _sprites["coin"]);
+	_coinsText = new RenderableObject(this, RectF(0.9f, 2.25f, 0.8f, 0.5f), nullptr);
+	new RenderableObject(this, RectF(0.25f, 2.6f, 0.7f, 0.8f), _sprites["bomb"]);
+	_bombsText = new RenderableObject(this, RectF(0.9f, 2.85f, 0.8f, 0.5f), nullptr);
 	
 	// MINIMAP
-	new RenderableObject(this, RectF(13, 1, 2.5f, 2.5f), _sprites["minimap_back"]);
+	new RenderableObject(this, RectF(13.0f, 1.0f, 2.5f, 2.5f), _sprites["minimap_back"]);
 	_roomSelected = new MovableObject(this, RectF(0, 0, 2.5f / 7.0f, 2.5f / 7.0f), _sprites["minimap_room_select"],1);
 	std::cout << "hud.cpp obj: " << _roomSelected->name() << std::endl;
 
 	_pos = { -1,-1 };
 	_name = "hud";
+
+	setCoins(0);
+	setBombs(0);
+	setHalfHearts(10);
+
 }
 
 // extends update logic (+time management)
@@ -79,35 +84,64 @@ void HUD::update(float timeToSimulate)
 	if (!_active)
 		return;
 
-	float tempHearts = _totalHearts;
-	for (const auto& heart : _hearts) {
-
-		if (tempHearts >= 1) {
-			heart->setSprite(SpriteFactory::instance()->get("hud_heart_red"));
-			tempHearts -= 1;
-		}
-		else if (tempHearts >= 0.5) {
-			heart->setSprite(SpriteFactory::instance()->get("hud_heart_half_red"));
-			tempHearts -= 0.5;
-		}
-		else 
-			heart->setSprite(SpriteFactory::instance()->get("hud_heart_empty"));
-	}
-
-	_roomSelected->setRect(RectF(_pos.x * 2.5f / 7.0f + 13.0f + 2.5f * 3.0f / 7.0f, _pos.y * 2.5f / 7.0f + 1.0f + 2.5f * 3.0f / 7.0f, 2.5f / 7.0f, 2.5f / 7.0f));
-	_roomsMinimap[{_pos.x, _pos.y}]->setVisible(true);
-
 }
 
-void HUD::setHearts(float amount)
-{ 
-	// amount può essere negativa o positiva (toglie o aggiunge vita)
-	_totalHearts += amount;
+void HUD::refreshHearts()
+{
+	int fullHearts = _halfHearts / 2;
+	int halfHearts = _halfHearts % 2;
+	for (int i = 0; i < 5; i++)
+	{
+		if (i < fullHearts)
+			_heartIcons[i]->setSprite(SpriteFactory::instance()->get("hud_heart_red"));
+		else if (halfHearts && i == fullHearts)
+			_heartIcons[i]->setSprite(SpriteFactory::instance()->get("hud_heart_half_red"));
+		else if (i < _heartsCapacity)
+			_heartIcons[i]->setSprite(SpriteFactory::instance()->get("hud_heart_empty"));
+		else
+			_heartIcons[i]->setSprite(nullptr);
+	}
+}
+
+void HUD::setCoins(int newCoins)
+{
+	if (newCoins == _coins)
+		return;
+
+	_coins = newCoins;
+	_coinsText->setSprite(SpriteFactory::instance()->getNumber(_coins, 2));
+}
+
+void HUD::setBombs(int newBombs)
+{
+	if (newBombs == _bombs)
+		return;
+
+	_bombs = newBombs;
+	_bombsText->setSprite(SpriteFactory::instance()->getNumber(_bombs, 2));
+}
+
+void HUD::setHalfHearts(int newHalfHearts)
+{
+	if (newHalfHearts == _halfHearts)
+		return;
+
+	_halfHearts = newHalfHearts;
+	refreshHearts();
+}
+
+void HUD::setHeartsCapacity(int newCapacity)
+{
+	if (_heartsCapacity == newCapacity)
+		return;
+
+	_heartsCapacity = newCapacity;
+	refreshHearts();
 }
 
 void HUD::setFPS(float fps)
 {
-	_FPS->setSprite(SpriteFactory::instance()->getNumber(fps, { 0.4,0.4 }));
+	_fpsText->setSprite(SpriteFactory::instance()->getNumber(fps, 4));
 }
 
 void HUD::drawMinimap(RectF rect, RoomType roomType)
@@ -134,6 +168,8 @@ void HUD::selectMinimapRoom(float x, float y)
 	if (Vec2D<int>({ xx,yy }) != _pos)
 	{
 		_pos = Vec2D<int>({ xx,yy });
+		_roomSelected->setRect(RectF(_pos.x * 2.5f / 7.0f + 13.0f + 2.5f * 3.0f / 7.0f, _pos.y * 2.5f / 7.0f + 1.0f + 2.5f * 3.0f / 7.0f, 2.5f / 7.0f, 2.5f / 7.0f));
+		_roomsMinimap[{_pos.x, _pos.y}]->setVisible(true);
 	}
 }
 

@@ -20,37 +20,42 @@ namespace agp
 
 class agp::HUD : public UIScene
 {
-
-		std::map<std::string, Sprite*> _sprites;
-
-		// raw data
-		std::vector<RenderableObject*> _hearts;
-		float _totalHearts;
-
-		// rendering
-		RenderableObject* _FPS;
-
-		RenderableObject* _heart1;
-		RenderableObject* _heart2;
-		RenderableObject* _heart3;
-
-		RenderableObject* _coin;
-		RenderableObject* _bomb;
+		int _coins;
+		int _bombs;
+		int _halfHearts;
+		int _heartsCapacity;	
+		RenderableObject* _fpsText;	
+		RenderableObject* _coinsText;
+		RenderableObject* _bombsText;
+		RenderableObject* _heartIcons[5];
 
 		std::map< std::pair<int, int>, RenderableObject*> _roomsMinimap;
 		MovableObject* _roomSelected;
 		Vec2D<int> _pos;
+
+		std::map<std::string, Sprite*> _sprites;
+
+		void refreshHearts();
 
 		HUD();
 
 	public:
 
 		static HUD* instance();
-		virtual ~HUD() {};
+		virtual ~HUD() {
+			for (auto& room : _roomsMinimap)
+				 room.second;
+			_roomsMinimap.clear();
+		};
 
 		// getters/setters (to be completed)
+		void setCoins(int newCoins);
+		void setBombs(int newBombs);
+		void setHalfHearts(int newHalfHearts);
+		void setHeartsCapacity(int newCapacity);
 		void setFPS(float fps);
-		void setHearts(float amount);
+
+		// logic minimap
 		void drawMinimap(RectF rect, RoomType roomType);
 		void selectMinimapRoom(float x, float y);
 		void showMinimap();

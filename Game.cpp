@@ -36,14 +36,12 @@ Game::Game()
 	_running = false;
 	_reset = false;
 	_window = new Window("Super Mario Bros", int(aspectRatio() * 600), 600);
-	_hud = nullptr;
 }
 
 void Game::init()
 {
 	pushScene(LevelLoader::instance()->load("supermario"));
-	_hud = HUD::instance();
-	pushScene(_hud);
+	pushScene(HUD::instance());
 	pushScene(UIMonster::instance());
 	pushScene(Menu::startMenu());
 
@@ -68,7 +66,7 @@ void Game::run()
 		_window->render(_scenes);
 
 		if(fps.update(false))
-			_hud->setFPS(int(round(fps.lastFPS())));
+			HUD::instance()->setFPS(int(round(fps.lastFPS())));
 	}
 
 	destroy();

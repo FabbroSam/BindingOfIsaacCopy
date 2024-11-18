@@ -74,7 +74,7 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["ui_isaac"] = loadTexture(renderer, "../sprites/ui_isaac.png", { 147, 187, 236 });
 	_spriteSheets["ui_isaacname"] = loadTexture(renderer, "../sprites/ui_isaac_name.png", { 147, 187, 236 });
 	_spriteSheets["ui_vs"] = loadTexture(renderer, "../sprites/ui_vs.png", { 147, 187, 236 });
-	_spriteSheets["ui_number"] = loadTexture(renderer, "../sprites/ui_whitecounter.png", { 147, 187, 236 });
+	_spriteSheets["ui_font"] = loadTexture(renderer, "../sprites/ui_font.png", { 147, 187, 236 });
 
 
 	std::vector<RectI> vecRect;
@@ -455,23 +455,21 @@ Sprite* SpriteFactory::get(const std::string& id)
 	}
 }
 
-Sprite* SpriteFactory::getNumber(int num, const Vec2Df& size)
+Sprite* SpriteFactory::getNumber(int n, int fill)
 {
-	std::vector<RectI> tiles;
+	std::vector< RectI> tiles;
 
-	std::string text = std::to_string(num);
+	std::string text = std::to_string(n);
 
-	for (char c : text) {
-		if (isdigit(c)) {
-			int value = c - '0';
-			int x = value % 3;
-			int y = value / 3;
-			tiles.push_back(moveBy(RectI(0,0,16,16), x , y , 16, 16));
-		}
-		else if (c == '-') {
-			tiles.push_back(moveBy(RectI(0, 0, 16, 16),3, 2, 16, 16));
-		}
+	if (fill)
+		while (text.size() != fill)
+			text = '0' + text;
+
+	for (auto& c : text)
+	{
+		if (isdigit(c))
+			tiles.push_back(moveBy(RectI(0,145,9,11), c - '0', 0, 9, 11));
 	}
 
-	return new TiledSprite(_spriteSheets["ui_number"], tiles, size);
+	return new TiledSprite(_spriteSheets["ui_font"], tiles, { 0.4, 0.4 });
 }

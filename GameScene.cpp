@@ -130,12 +130,13 @@ void GameScene::update(float timeToSimulate)
 
 	if (_mario_x > 13.8f + _view_x || _mario_x < 1.1f + _view_x || _mario_y > 9.5f + _view_y || _mario_y < 0.8f + _view_y)
 	{
-		_room->openCloseDoor();
 		_moveMario = false;
 		_mario->setVelX(0);
 		_mario->setVelY(0);
 		_mario->move_x(Direction::NONE);
 		_mario->move_y(Direction::NONE);
+
+		//_room->openCloseDoor();
 
 		if (_mario_x > 13.8f + _view_x)
 		{

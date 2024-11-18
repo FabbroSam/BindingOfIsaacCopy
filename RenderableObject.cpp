@@ -80,10 +80,15 @@ void RenderableObject::update(float dt)
 
 }
 
-void RenderableObject::setSprite(Sprite* sprite) 
-{ 
+void RenderableObject::setSprite(Sprite* sprite, bool deallocateSprite, bool resetOnChange)
+{
 	if (_sprite)
-		delete _sprite;
+	{
+		if (resetOnChange && sprite != _sprite)
+			_sprite->reset();
+		if (deallocateSprite)
+			delete _sprite;
+	}
 
-	_sprite = sprite; 
+	_sprite = sprite;
 }

@@ -40,4 +40,8 @@ class agp::Sprite
 
 		// update method (for logic, animations)
 		virtual void update(float dt) {};
+
+
+		// reset method (for logic, animations)
+		virtual void reset() {};
 };

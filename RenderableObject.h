@@ -45,8 +45,10 @@ class agp::RenderableObject : public Object
 		const Color& color() { return _color; }
 		void setBorderColor(const Color& borderColor) { _borderColor = borderColor; }
 		void setVisible(bool visible) { _visible = visible; }
-		void setSprite(Sprite* sprite);
+		virtual void setSprite(Sprite* sprite, bool deallocateSprite = false, bool resetOnChange = true);
 		void setFocused(bool focused) { _focused = focused; };
+		void setAngularVelocity(float angular) { _angularVelocity = angular; }
+		Sprite* sprite() { return _sprite; }
 
 		// extends game logic (+animation)
 		virtual void update(float dt) override;

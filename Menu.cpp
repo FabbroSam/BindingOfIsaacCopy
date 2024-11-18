@@ -62,21 +62,34 @@ MenuItem::MenuItem(Menu* container, int index, int height, const std::string& te
 	}
 	if (vsync)
 	{
-		_text = "menu_options_vsync_on_1";
+		std::string text2 = "";
+		SDL_RendererInfo info;
+		SDL_GetRendererInfo(Game::instance()->window()->renderer(), &info);
+		bool vsyncOn = info.flags & SDL_RENDERER_PRESENTVSYNC;
+		if (vsyncOn)
+		{
+			_text = "menu_options_vsync_on_1";
+			text2 = "menu_options_vsync_off_2";
+		}
+		else
+		{
+			_text = "menu_options_vsync_on_2";
+			text2 = "menu_options_vsync_off_1";
+		}
 		_vsync1 = new RenderableObject(container,
 			RectF(
 				container->menuRect().left() + 4.0f + 0.1f * index,
 				container->menuRect().top() + 0.3f + 0.5f * index,
 				container->menuRect().size.x,
 				height),
-			SpriteFactory::instance()->get("menu_options_vsync_on_1"));
+			SpriteFactory::instance()->get(_text));
 		_vsync2 = new RenderableObject(container,
 			RectF(
 				container->menuRect().left() + 5.0f + 0.1f * index,
 				container->menuRect().top() + 0.3f + 0.5f * index,
 				container->menuRect().size.x,
 				height),
-			SpriteFactory::instance()->get("menu_options_vsync_off_2"));
+			SpriteFactory::instance()->get(text2));
 	}
 }
 void MenuItem::refresh()
@@ -232,25 +245,21 @@ Menu* Menu::mainMenu()
 				}
 			}, true);
 
-		//SDL_RendererInfo info;
-		//SDL_GetRendererInfo(Game::instance()->window()->renderer(), &info);
-		//bool vsyncOn = info.flags & SDL_RENDERER_PRESENTVSYNC;
 		nestedMenu->addItem("menu_options_vsync", 1.2f, [nestedMenu](SDL_Scancode code)
 			{
-				bool vsyncOn = nestedMenu->itemAt(2)->text() == "menu_options_vsync_on_1";
-				nestedMenu->itemAt(2)->setText(vsyncOn ? "menu_options_vsync_on_1" : "menu_options_vsync_on_2");
+				SDL_RendererInfo info;
+				SDL_GetRendererInfo(Game::instance()->window()->renderer(), &info);
+				bool vsyncOn = info.flags & SDL_RENDERER_PRESENTVSYNC;
 				SDL_RenderSetVSync(Game::instance()->window()->renderer(), !vsyncOn);
-				if (nestedMenu->itemAt(2)->text() == "menu_options_vsync_on_1")
+				if (vsyncOn)
 				{
 					nestedMenu->itemAt(2)->vsync1()->setSprite(SpriteFactory::instance()->get("menu_options_vsync_on_2"));
 					nestedMenu->itemAt(2)->vsync2()->setSprite(SpriteFactory::instance()->get("menu_options_vsync_off_1"));
-					nestedMenu->itemAt(2)->setText("menu_options_vsync_on_2");
 				}
-				else if (nestedMenu->itemAt(2)->text() == "menu_options_vsync_on_2")
+				else
 				{
 					nestedMenu->itemAt(2)->vsync1()->setSprite(SpriteFactory::instance()->get("menu_options_vsync_on_1"));
 					nestedMenu->itemAt(2)->vsync2()->setSprite(SpriteFactory::instance()->get("menu_options_vsync_off_2"));
-					nestedMenu->itemAt(2)->setText("menu_options_vsync_on_1");
 				}
 			}, false, true);
 		Game::instance()->pushScene(nestedMenu);
@@ -306,25 +315,22 @@ Menu* Menu::pauseMenu()
 			}
 		}, true);
 
-	//SDL_RendererInfo info;
-	//SDL_GetRendererInfo(Game::instance()->window()->renderer(), &info);
-	//bool vsyncOn = info.flags & SDL_RENDERER_PRESENTVSYNC;
+
 	menu->addItem("menu_options_vsync", 1.2f, [menu](SDL_Scancode code)
 		{
-			bool vsyncOn = menu->itemAt(4)->text() == "menu_options_vsync_on_1";
-			menu->itemAt(4)->setText(vsyncOn ? "menu_options_vsync_on_1" : "menu_options_vsync_on_2");
+			SDL_RendererInfo info;
+			SDL_GetRendererInfo(Game::instance()->window()->renderer(), &info);
+			bool vsyncOn = info.flags & SDL_RENDERER_PRESENTVSYNC;
 			SDL_RenderSetVSync(Game::instance()->window()->renderer(), !vsyncOn);
-			if (menu->itemAt(4)->text() == "menu_options_vsync_on_1")
+			if (vsyncOn)
 			{
 				menu->itemAt(4)->vsync1()->setSprite(SpriteFactory::instance()->get("menu_options_vsync_on_2"));
 				menu->itemAt(4)->vsync2()->setSprite(SpriteFactory::instance()->get("menu_options_vsync_off_1"));
-				menu->itemAt(4)->setText("menu_options_vsync_on_2");
 			}
-			else if (menu->itemAt(4)->text() == "menu_options_vsync_on_2")
+			else
 			{
 				menu->itemAt(4)->vsync1()->setSprite(SpriteFactory::instance()->get("menu_options_vsync_on_1"));
 				menu->itemAt(4)->vsync2()->setSprite(SpriteFactory::instance()->get("menu_options_vsync_off_2"));
-				menu->itemAt(4)->setText("menu_options_vsync_on_1");
 			}
 		}, false, true);
 

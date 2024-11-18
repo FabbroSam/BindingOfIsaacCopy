@@ -75,6 +75,11 @@ protected:
 public:
 
 	Basement() { srand(static_cast<unsigned int>(time(0))); }
+	~Basement() {
+		for (auto& room : _mapRooms)
+			delete room.second;
+		_mapRooms.clear();
+	};
 
 	Room* room(const std::pair<int, int>& coords) { return _mapRooms[coords]; }
 

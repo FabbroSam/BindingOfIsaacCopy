@@ -67,7 +67,7 @@ void UIMonster::update(float dt)
 
 		_bossspot->moveBy({ -_FPS * dt,0 });
 		_boss->moveBy({ -_FPS * dt,0 });
-
+		_vs->setAngularVelocity(0);
 		_dx += _FPS * dt;
 	}
 	else
@@ -83,6 +83,7 @@ void UIMonster::update(float dt)
 
 		_isaacname->moveBy({ _FPS * dt,0 });
 		_bossname->moveBy({ -_FPS * dt,0 });
+		_vs->setAngularVelocity(-1095);
 
 		_dx += _FPS * dt;
 	}
