@@ -12,8 +12,8 @@
 
 using namespace agp;
 
-FilledSprite::FilledSprite(SDL_Texture* spritesheet, const RectI& rect, Vec2Df tileSize)
-	: Sprite(spritesheet, rect)
+FilledSprite::FilledSprite(SDL_Texture* spritesheet, const RectI& rect, std::string name, Vec2Df tileSize)
+	: Sprite(spritesheet, rect, name)
 {
 	_tileSize = tileSize;
 }

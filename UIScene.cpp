@@ -11,12 +11,14 @@
 #include "Object.h"
 #include "View.h"
 #include "Game.h"
+#include <iostream>
 
 using namespace agp;
 
 UIScene::UIScene(const RectF& r)
 	: Scene(r)
 {
+
 	// setup view (specific for super mario bros)
 	_view = new View(this, _rect);
 	//_view->setFixedAspectRatio(Game::instance()->aspectRatio());

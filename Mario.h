@@ -37,6 +37,7 @@ class agp::Mario : public DynamicObject
 	public:
 
 		Mario(Scene* scene, const PointF& pos);
+		virtual ~Mario() {};
 
 		// getters/setters
 		bool invincible() { return _invincible; }

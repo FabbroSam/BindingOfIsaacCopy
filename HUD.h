@@ -18,8 +18,10 @@ namespace agp
 	class HUD;
 }
 
-class agp::HUD : public UIScene
+class agp::HUD : public Scene
 {
+		bool _event = false;
+
 		int _coins;
 		int _bombs;
 		int _halfHearts;
@@ -37,23 +39,19 @@ class agp::HUD : public UIScene
 
 		void refreshHearts();
 
-		HUD();
-
 	public:
 
-		static HUD* instance();
-		virtual ~HUD() {
-			for (auto& room : _roomsMinimap)
-				 room.second;
-			_roomsMinimap.clear();
-		};
+		HUD();
+		virtual ~HUD() {};
 
+
+		void setEvent() { _event = true; }
 		// getters/setters (to be completed)
 		void setCoins(int newCoins);
 		void setBombs(int newBombs);
 		void setHalfHearts(int newHalfHearts);
 		void setHeartsCapacity(int newCapacity);
-		void setFPS(float fps);
+		void setFPS(int fps);
 
 		// logic minimap
 		void drawMinimap(RectF rect, RoomType roomType);
@@ -62,4 +60,7 @@ class agp::HUD : public UIScene
 
 		// extends update logic (+time management)
 		virtual void update(float timeToSimulate) override;
+
+		// extends event handler (+item selection)
+		virtual void event(SDL_Event& evt) override;
 };

@@ -17,7 +17,7 @@
 
 using namespace agp;
 
-MenuItem::MenuItem(Menu* container, int index, int height, const std::string& text, std::function<void(SDL_Scancode)> task, bool notches, bool vsync)
+MenuItem::MenuItem(Menu* container, int index, float height, const std::string& text, std::function<void(SDL_Scancode)> task, bool notches, bool vsync)
 	: RenderableObject(container,
 		RectF(
 			container->menuRect().left() + 0.8f + 0.1f * index,
@@ -42,7 +42,6 @@ MenuItem::MenuItem(Menu* container, int index, int height, const std::string& te
 		SpriteFactory::instance()->get("menu_arrow"));
 	_menuArrow->setVisible(false);
 
-	std::cout << notches <<  " " << text << std::endl;
 	if (notches)
 	{
 		int volume = 0;
@@ -136,7 +135,7 @@ Menu::Menu(Menu* parent)
 {
 }
 
-MenuItem* Menu::addItem(const std::string& text, int height, std::function<void(SDL_Scancode)> task, bool notches, bool vsync)
+MenuItem* Menu::addItem(const std::string& text, float height, std::function<void(SDL_Scancode)> task, bool notches, bool vsync)
 {
 	MenuItem* item = new MenuItem(this, int(_items.size()), height, text, task, notches, vsync);
 	_items.push_back(item);
@@ -198,7 +197,7 @@ void Menu::event(SDL_Event& evt)
 
 Menu* Menu::mainMenu()
 {
-	Menu* menu = new Menu({ 5.2, 3.2 }, 3.5, 0, false);
+	Menu* menu = new Menu({ 5.2f, 3.2f }, 3.5f, 0, false);
 
 	new RenderableObject(menu, RectF(0, 2, 16, 8), SpriteFactory::instance()->get("menu_background"), -1);
 	new RenderableObject(menu, RectF(0, -8, 16, 10), SpriteFactory::instance()->get("menu_emptybg"), -1);
@@ -214,7 +213,7 @@ Menu* Menu::mainMenu()
 	menu->addItem("menu_options", 1.0f, [menu](SDL_Scancode code)
 	{
 		Menu* nestedMenu = new Menu(menu);
-		new RenderableObject(nestedMenu, RectF(3.4, 1.8, 10.2, 8.4), SpriteFactory::instance()->get("menu_options_menu"), -1);
+		new RenderableObject(nestedMenu, RectF(3.4f, 1.8f, 10.2f, 8.4f), SpriteFactory::instance()->get("menu_options_menu"), -1);
 			
 		nestedMenu->addItem("menu_options_sfx", 1.2f, [nestedMenu](SDL_Scancode code)
 			{
@@ -264,17 +263,17 @@ Menu* Menu::mainMenu()
 			}, false, true);
 		Game::instance()->pushScene(nestedMenu);
 	});
-	menu->addItem("menu_exit", 1.4f, [](SDL_Scancode code) {Game::instance()->quit(); });
+	menu->addItem("menu_exit", 1.2f, [](SDL_Scancode code) {Game::instance()->quit(); });
 
 	return menu;
 }
 
 Menu* Menu::pauseMenu()
 {
-	Menu* menu = new Menu({ 5.2, 3.2 }, 3.5, 0, false);
+	Menu* menu = new Menu({ 5.2f, 3.2f}, 3.5f, 0, false);
 
 	menu->setBackgroundColor({ 0,0,0, 130});
-	new RenderableObject(menu, RectF(3.4, 1.8, 10.2, 8.4), SpriteFactory::instance()->get("menu_options_menu_dark"), -1);
+	new RenderableObject(menu, RectF(3.4f, 1.8f, 10.2f, 8.4f), SpriteFactory::instance()->get("menu_options_menu_dark"), -1);
 
 	menu->addItem("menu_options_resume", 1.0f, [](SDL_Scancode code)
 		{
@@ -342,13 +341,13 @@ Menu* Menu::pauseMenu()
 
 Menu* Menu::startMenu()
 {
-	Menu* menu = new Menu({ 5.2, 3.2 }, 3.5, 0, true);
+	Menu* menu = new Menu({ 5.2f, 3.2f }, 3.5f, 0, true);
 
 	new RenderableObject(menu, RectF(0, 2, 16, 8), SpriteFactory::instance()->get("menu_title"), 1);
 	new RenderableObject(menu, RectF(0, -8, 16, 10), SpriteFactory::instance()->get("menu_emptybg"), 1);
 	new RenderableObject(menu, RectF(0, 10, 16, 10), SpriteFactory::instance()->get("menu_emptybg"), 1);
 	
-	new RenderableObject(menu, RectF(5.3, 4.1, 5, 5), SpriteFactory::instance()->get("menu_title_start"), 1);
+	new RenderableObject(menu, RectF(5.3f, 4.1f, 5, 5), SpriteFactory::instance()->get("menu_title_start"), 1);
 	new RenderableObject(menu, RectF(0, 1, 16, 4), SpriteFactory::instance()->get("menu_title_angel"),1);
 	
 	menu->addItem(" ", 1.0f, [](SDL_Scancode code)

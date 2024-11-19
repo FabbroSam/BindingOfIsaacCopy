@@ -38,7 +38,6 @@ Audio::Audio()
 	for (auto& f : soundFiles)
 	{
 		std::string name = getFileName(f, false);
-		std::cout << "sound  " << name << std::endl;
 
 		Mix_Chunk* chunk = Mix_LoadWAV(("../sounds/" + f).c_str());
 		if (!chunk)

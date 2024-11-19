@@ -11,8 +11,8 @@
 
 using namespace agp;
 
-AnimatedSprite::AnimatedSprite(SDL_Texture* spritesheet, const std::vector<RectI>& frames, float FPS) 
-	: Sprite(spritesheet, frames[0])
+AnimatedSprite::AnimatedSprite(SDL_Texture* spritesheet, const std::vector<RectI>& frames, float FPS, std::string name) 
+	: Sprite(spritesheet, frames[0], name)
 {
 	_frames = frames;
 	_FPS = FPS;

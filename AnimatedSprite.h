@@ -28,7 +28,7 @@ class agp::AnimatedSprite : public Sprite
 
 	public:
 
-		AnimatedSprite(SDL_Texture* spritesheet, const std::vector<RectI>& frames, float FPS);
+		AnimatedSprite(SDL_Texture* spritesheet, const std::vector<RectI>& frames, float FPS, std::string name);
 
 		void setFPS(float fps) { _FPS = fps; }
 

@@ -98,7 +98,7 @@ void GameScene::update(float timeToSimulate)
 
 
 	// is _viewMoving   or    showMonster?
-	if (_view->getDir() != Direction::NONE || UIMonster::instance()->getShowVS())
+	if (_view->getDir() != Direction::NONE || Game::instance()->uiMonster()->show())
 		return;
 	else {
 		_moveMario = true;
@@ -107,6 +107,9 @@ void GameScene::update(float timeToSimulate)
 	// move Mario
 	if (_moveMario)
 	{
+		if (!_mario)
+			return;
+
 		if (_d_pressed && !_a_pressed)
 			_mario->move_x(Direction::RIGHT);
 		else if (_a_pressed && !_d_pressed)
@@ -167,7 +170,7 @@ void GameScene::update(float timeToSimulate)
 		{
 			if (_vsMonster)
 			{			
-				UIMonster::instance()->showVS();
+				Game::instance()->uiMonster()->setActiveUIMonster();
 				_vsMonster = false;
 
 				// schedule for show BOSS ???				
@@ -177,7 +180,7 @@ void GameScene::update(float timeToSimulate)
 		}
 
 	}
-	HUD::instance()->selectMinimapRoom(_mario_x, _mario_y);
+	Game::instance()->hud()->selectMinimapRoom(_mario_x, _mario_y);
 
 }
 
@@ -200,10 +203,23 @@ void GameScene::event(SDL_Event& evt)
 		{
 			for (auto& obj : objects(_view->rect()))
 				if (obj->contains(mousePoint))
+				{
+					std::cout << obj->name() << std::endl;
 					killObject(obj);
+				}
 		}
 		else if (evt.button.button == SDL_BUTTON_LEFT)
-			new RenderableObject(this, RectF(floor(mousePoint.x), floor(mousePoint.y), 1, 1), SpriteFactory::instance()->get("brick"));
+		{
+			for (auto& obj : objects(_view->rect()))
+				if (obj->contains(mousePoint))
+				{
+					std::cout << obj->name() << " " << obj->layer() << std::endl;
+				}
+		}
+	}
+	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_G)
+	{
+		Game::instance()->popSceneLater();
 	}
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_O)
 	{
@@ -221,7 +237,7 @@ void GameScene::event(SDL_Event& evt)
 	}
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_L)
 	{
-		HUD::instance()->showMinimap();
+		Game::instance()->hud()->showMinimap();
 	}
 	else if (evt.type == SDL_MOUSEWHEEL)
 	{

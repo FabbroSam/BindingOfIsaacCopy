@@ -25,7 +25,7 @@ class agp::FilledSprite : public Sprite
 
 	public:
 
-		FilledSprite(SDL_Texture* spritesheet, const RectI& rect, Vec2Df tileSize = { 1,1 });
+		FilledSprite(SDL_Texture* spritesheet, const RectI& rect, std::string name, Vec2Df tileSize = { 1,1 });
 
 		// extends render method (+filled)
 		virtual void render(

@@ -9,7 +9,7 @@
 
 #include "RenderableObject.h"
 #include "Scene.h"
-
+#include <iostream>
 using namespace agp;
 
 RenderableObject::RenderableObject(Scene* scene, const RectF& rect, const Color& color, int layer)

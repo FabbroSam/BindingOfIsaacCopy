@@ -22,6 +22,7 @@
 #include "UIMonster.h"
 #include "Audio.h"
 
+
 using namespace agp;
 
 Game* Game::instance()
@@ -35,14 +36,16 @@ Game::Game()
 	_scenesToPop = 0;
 	_running = false;
 	_reset = false;
-	_window = new Window("Super Mario Bros", int(aspectRatio() * 600), 600);
+	_window = new Window("Binding of Isaac", int(aspectRatio() * 600), 600);
 }
 
 void Game::init()
 {
-	pushScene(LevelLoader::instance()->load("supermario"));
-	pushScene(HUD::instance());
-	pushScene(UIMonster::instance());
+	_hud = new HUD();
+	_uiMonster = new UIMonster();
+	pushScene(LevelLoader::instance()->load("basement"));
+	pushScene(_hud);
+	pushScene(_uiMonster);
 	pushScene(Menu::startMenu());
 
 }
@@ -57,6 +60,7 @@ void Game::run()
 
 	while (_running)
 	{
+
 		processEvents();
 
 		float frameTime = frameTimer.restart();
@@ -66,7 +70,7 @@ void Game::run()
 		_window->render(_scenes);
 
 		if(fps.update(false))
-			HUD::instance()->setFPS(int(round(fps.lastFPS())));
+			_hud->setFPS(int(round(fps.lastFPS())));
 	}
 
 	destroy();
@@ -77,10 +81,12 @@ void Game::destroy()
 	for (auto scene : _scenes)
 		delete scene;
 
+	init();
 	if(_window)
 		delete _window;
 
 	SDL_Quit();
+
 }
 
 void Game::processEvents()
@@ -96,16 +102,13 @@ void Game::processEvents()
 	if (_reset)
 	{
 		_reset = false;
-		std::cout << _scenes.size() << std::endl;
 		for (auto& scene : _scenes)
 		{
-			std::cout << "after delete  " << scene->name() << std::endl;
-			delete scene;
-			std::cout << "after delete" << std::endl;
+			if(scene)
+				delete scene;
 		}
 		_scenes.clear();
 		
-		std::cout << "before init" << std::endl;
 		init();
 	}
 }

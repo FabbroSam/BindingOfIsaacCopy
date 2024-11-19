@@ -9,6 +9,7 @@
 
 #pragma once
 #include "Scene.h"
+#include <iostream>
 
 namespace agp
 {

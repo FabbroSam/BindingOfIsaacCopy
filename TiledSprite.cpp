@@ -13,8 +13,8 @@
 
 using namespace agp;
 
-TiledSprite::TiledSprite(SDL_Texture* spritesheet, const std::vector<RectI>& tiles, Vec2Df tileSize)
-	: Sprite(spritesheet, RectI())
+TiledSprite::TiledSprite(SDL_Texture* spritesheet, const std::vector<RectI>& tiles, std::string name, Vec2Df tileSize)
+	: Sprite(spritesheet, RectI(), name)
 {
 	_tiles = tiles;
 	_tileSize = tileSize;

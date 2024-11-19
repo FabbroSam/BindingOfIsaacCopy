@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <functional>
+#include <iostream>
 
 namespace agp
 {
@@ -37,7 +38,7 @@ class agp::MenuItem : public RenderableObject
 		RenderableObject* _vsync2;
 	public:
 
-		MenuItem(Menu* container, int index, int height, const std::string& text, std::function<void(SDL_Scancode)> task, bool notches = false, bool vsync = false);
+		MenuItem(Menu* container, int index, float height, const std::string& text, std::function<void(SDL_Scancode)> task, bool notches = false, bool vsync = false);
 		virtual ~MenuItem() {};	
 
 		bool selected() { return _selected; }
@@ -60,17 +61,17 @@ class agp::MenuItem : public RenderableObject
 // - implements a simple multiple-choice Menu
 class agp::Menu : public UIScene
 {
-	protected:
+protected:
 
-		Menu* _parent;
-		RectF _menuRect;
-		int _itemSelected;
-		bool _closable;
-		bool _vsyncOn;
-		std::vector< MenuItem* > _items;
-		RenderableObject* _menuBackground;
+	Menu* _parent;
+	RectF _menuRect;
+	int _itemSelected;
+	bool _closable;
+	bool _vsyncOn;
+	std::vector< MenuItem* > _items;
+	RenderableObject* _menuBackground;
 
-	public:
+public:
 
 		Menu(const PointF& position, float width, Menu* parent = 0, bool closable = true);
 		Menu(Menu* parent);
@@ -78,7 +79,7 @@ class agp::Menu : public UIScene
 
 		// getters/setters (to be completed)
 		const RectF& menuRect() { return _menuRect; }
-		MenuItem* addItem(const std::string& text, int height, std::function<void(SDL_Scancode)> task, bool notches = false, bool vsync = false);
+		MenuItem* addItem(const std::string& text, float height, std::function<void(SDL_Scancode)> task, bool notches = false, bool vsync = false);
 		MenuItem* itemAt(int index) { return _items[index]; }
 		
 

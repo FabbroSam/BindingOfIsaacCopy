@@ -43,11 +43,7 @@ class agp::Door : public CollidableObject
 
 	public:
 		Door(Scene* scene, const RectF& rect, RoomType type, DoorPosition pos, float angle = 0, SDL_RendererFlip flip = SDL_FLIP_NONE);
-		virtual ~Door() {
-			for (auto& room : _sprites)
-				delete room.second;
-			_sprites.clear();
-		};
+		virtual ~Door() {};
 
 
 		void Draw();
@@ -78,11 +74,7 @@ protected:
 
 public:
 	DoorBorder(Scene* scene, const RectF& rect, RoomType type, DoorPosition pos, int layer, float angle = 0, SDL_RendererFlip flip = SDL_FLIP_NONE);
-	virtual ~DoorBorder() {
-		for (auto& room : _sprites)
-			delete room.second;
-		_sprites.clear();
-	};
+	virtual ~DoorBorder() {};
 
 	void Trigger();
 

@@ -32,8 +32,8 @@ protected:
 	Door* _doorRight;
 	Door* _doorLeft;
 	std::pair<int, int> _coords;
-	int _x;
-	int _y;
+	float _x;
+	float _y;
 	int _w = 16;
 	int _h = 12;
 

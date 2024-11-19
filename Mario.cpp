@@ -18,7 +18,7 @@
 using namespace agp;
 
 Mario::Mario(Scene* scene, const PointF& pos)
-	: DynamicObject(scene, RectF( pos.x + 1 / 16.0f, pos.y, 1, 1 ), nullptr, 6)
+	: DynamicObject(scene, RectF( pos.x + 1 / 16.0f, pos.y, 1, 1 ), nullptr, 2)
 {
 	_collider.adjust(0.2f, 0.45f, -0.2f, 0);
 
@@ -108,26 +108,7 @@ void Mario::run(bool on)
 
 void Mario::die()
 {
-	if (_dying)
-		return;
 
-	_dying = true;
-	_collidable = false;
-	_vel = { 0,0 };
-	_x_dir = Direction::NONE;
-	_y_dir = _x_dir = Direction::NONE;
-	Audio::instance()->haltMusic();
-	Audio::instance()->playSound("death");
-	Game::instance()->freeze(true);
-
-	schedule("dying", 0.5f, [this]()
-		{
-			schedule("die", 3, [this]()
-				{
-					_dead = true;
-					Game::instance()->gameover();
-				});
-		});
 }
 
 void Mario::hurt()

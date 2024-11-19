@@ -16,15 +16,10 @@
 
 using namespace agp;
 
-HUD* HUD::instance()
-{
-	static HUD uniqueInstance;
-	return &uniqueInstance;
-}
-
 HUD::HUD()
-	: UIScene(RectF(0, 0, 16, 12))
+	: Scene(RectF(0, 0, 16, 12))
 {
+
 	// setup view 
 	_view = new View(this, _rect);
 	_view->setFixedAspectRatio(Game::instance()->aspectRatio());
@@ -56,7 +51,7 @@ HUD::HUD()
 	for (int i = 0; i < 5; i++)
 		_heartIcons[i] = new RenderableObject(this, RectF(1.8f + i*0.55f, 0.9f, 0.7f, 0.7f), nullptr);
 
-	//// COIN - ITEM
+	// COIN - ITEM
 	new RenderableObject(this, RectF(0.25f, 2.0f, 0.7f, 0.8f), _sprites["coin"]);
 	_coinsText = new RenderableObject(this, RectF(0.9f, 2.25f, 0.8f, 0.5f), nullptr);
 	new RenderableObject(this, RectF(0.25f, 2.6f, 0.7f, 0.8f), _sprites["bomb"]);
@@ -65,10 +60,9 @@ HUD::HUD()
 	// MINIMAP
 	new RenderableObject(this, RectF(13.0f, 1.0f, 2.5f, 2.5f), _sprites["minimap_back"]);
 	_roomSelected = new MovableObject(this, RectF(0, 0, 2.5f / 7.0f, 2.5f / 7.0f), _sprites["minimap_room_select"],1);
-	std::cout << "hud.cpp obj: " << _roomSelected->name() << std::endl;
 
 	_pos = { -1,-1 };
-	_name = "hud";
+	_name = "HUD";
 
 	setCoins(0);
 	setBombs(0);
@@ -79,11 +73,7 @@ HUD::HUD()
 // extends update logic (+time management)
 void HUD::update(float timeToSimulate)
 {
-	UIScene::update(timeToSimulate);
-
-	if (!_active)
-		return;
-
+	Scene::update(timeToSimulate);
 }
 
 void HUD::refreshHearts()
@@ -139,25 +129,30 @@ void HUD::setHeartsCapacity(int newCapacity)
 	refreshHearts();
 }
 
-void HUD::setFPS(float fps)
+void HUD::setFPS(int fps)
 {
 	_fpsText->setSprite(SpriteFactory::instance()->getNumber(fps, 4));
 }
 
 void HUD::drawMinimap(RectF rect, RoomType roomType)
 {
-	RenderableObject* temp;
-	if (roomType == RoomType::BOSS)
-		temp = new RenderableObject(this, RectF(rect.pos.x * 2.5f / 7.0f + 13.0f + 2.5f * 3.0f / 7.0f, rect.pos.y * 2.5f / 7.0f + 1.0f + 2.5f * 3.0f / 7.0f, 2.5f / 7.0f, 2.5f / 7.0f), _sprites["minimap_boss"]);
-	else if (roomType == RoomType::TREASURE)
-		temp = new RenderableObject(this, RectF(rect.pos.x * 2.5f / 7.0f + 13.0f + 2.5f * 3.0f / 7.0f, rect.pos.y * 2.5f / 7.0f + 1.0f + 2.5f * 3.0f / 7.0f, 2.5f / 7.0f, 2.5f / 7.0f), _sprites["minimap_treasure"]);
-	else if (roomType == RoomType::SHOP)
-		temp = new RenderableObject(this, RectF(rect.pos.x * 2.5f / 7.0f + 13.0f + 2.5f * 3.0f / 7.0f, rect.pos.y * 2.5f / 7.0f + 1.0f + 2.5f * 3.0f / 7.0f, 2.5f / 7.0f, 2.5f / 7.0f), _sprites["minimap_shop"]);
-	else 
-		temp = new RenderableObject(this, RectF(rect.pos.x * 2.5f / 7.0f + 13.0f + 2.5f * 3.0f / 7.0f, rect.pos.y * 2.5f / 7.0f + 1.0f + 2.5f * 3.0f / 7.0f, 2.5f / 7.0f, 2.5f / 7.0f), _sprites["minimap_room"]);
-	
+	RectF rectTransformed(
+		rect.pos.x * 2.5f / 7.0f + 13.0f + 2.5f * 3.0f / 7.0f,
+		rect.pos.y * 2.5f / 7.0f + 1.0f + 2.5f * 3.0f / 7.0f,
+		2.5f / 7.0f,
+		2.5f / 7.0f
+	);
+
+	const std::string& sprite =
+		(roomType == RoomType::BOSS) ? "minimap_boss" :
+		(roomType == RoomType::TREASURE) ? "minimap_treasure" :
+		(roomType == RoomType::SHOP) ? "minimap_shop" :
+		"minimap_room";
+
+	RenderableObject* temp = new RenderableObject(this, rectTransformed, _sprites[sprite]);
+
 	temp->setVisible(false);
-	_roomsMinimap[{rect.pos.x, rect.pos.y}] = temp;
+	_roomsMinimap[{int(rect.pos.x), int(rect.pos.y)}] = temp;
 }
 
 void HUD::selectMinimapRoom(float x, float y)
@@ -168,16 +163,46 @@ void HUD::selectMinimapRoom(float x, float y)
 	if (Vec2D<int>({ xx,yy }) != _pos)
 	{
 		_pos = Vec2D<int>({ xx,yy });
-		_roomSelected->setRect(RectF(_pos.x * 2.5f / 7.0f + 13.0f + 2.5f * 3.0f / 7.0f, _pos.y * 2.5f / 7.0f + 1.0f + 2.5f * 3.0f / 7.0f, 2.5f / 7.0f, 2.5f / 7.0f));
-		_roomsMinimap[{_pos.x, _pos.y}]->setVisible(true);
+		if (_roomSelected)
+			_roomSelected->setRect(RectF(_pos.x * 2.5f / 7.0f + 13.0f + 2.5f * 3.0f / 7.0f, _pos.y * 2.5f / 7.0f + 1.0f + 2.5f * 3.0f / 7.0f, 2.5f / 7.0f, 2.5f / 7.0f));
+
+		if (_roomsMinimap[{_pos.x, _pos.y}])
+			_roomsMinimap[{_pos.x, _pos.y}]->setVisible(true);
 	}
 }
 
 void HUD::showMinimap()
 {
 	for (const auto& room : _roomsMinimap)
-	{
-		room.second->setVisible(true);
-	}
+		if(room.second)
+			room.second->setVisible(true);
 }
 
+void HUD::event(SDL_Event& evt)
+{
+	Scene::event(evt);
+
+	if (evt.type == SDL_MOUSEBUTTONDOWN)
+	{
+		PointF mousePoint(float(evt.button.x), float(evt.button.y));
+		mousePoint = _view->mapToScene(mousePoint);
+
+		if (evt.button.button == SDL_BUTTON_RIGHT)
+		{
+			for (auto& obj : objects(_view->rect()))
+				if (obj->contains(mousePoint))
+				{
+					std::cout << obj->name() << std::endl;
+					killObject(obj);
+				}
+		}
+		else if (evt.button.button == SDL_BUTTON_LEFT)
+		{
+			for (auto& obj : objects(_view->rect()))
+				if (obj->contains(mousePoint))
+				{
+					std::cout << obj->name() << " " << obj->layer() << std::endl;
+				}
+		}
+	}
+}

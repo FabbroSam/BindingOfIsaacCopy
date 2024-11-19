@@ -11,6 +11,7 @@
 #include "graphicsUtils.h"
 #include "Object.h"
 #include "Sprite.h"
+#include <iostream>
 
 namespace agp
 {

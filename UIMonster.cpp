@@ -8,9 +8,12 @@
 
 using namespace agp;
 
+
+
 UIMonster::UIMonster()
-	: UIScene(RectF(0, 0, 16, 12))
+	: Scene(RectF(0, 0, 16, 12))
 {
+
 	// setup view 
 	_view = new View(this, _rect);
 	_view->setFixedAspectRatio(Game::instance()->aspectRatio());
@@ -23,17 +26,16 @@ UIMonster::UIMonster()
 	_sprites["isaacname"] = SpriteFactory::instance()->get("ui_isaacname");
 	_sprites["vs"] = SpriteFactory::instance()->get("ui_vs");
 
-	_show = false;
-	_FPS = 15;
+	_FPS = 0;
 	_dx = 0;
 
-	_isaacspot = new MovableObject(this, RectF(1 - 8, 8, 6, 1.7), _sprites["bossspot"], 9);
-	_isaac = new MovableObject(this, RectF(1.9 - 8, 6.2, 4, 3), _sprites["isaac"], 9);
-	_bossspot = new MovableObject(this, RectF(7 + 8, 8, 9, 2.5), _sprites["bossspot"], 9);
-	_boss = new MovableObject(this, RectF(7.5 + 8, 2.5, 8, 7.5), _sprites["boss"], 9);
-	_isaacname = new MovableObject(this, RectF(1 - 6, 1.3, 6, 2), _sprites["isaacname"], 9);
-	_vs = new MovableObject(this, RectF(6.3, 1.3, 3.4, 2), _sprites["vs"], 9);
-	_bossname = new MovableObject(this, RectF(9.5 + 6, 1.3, 6, 2), _sprites["bossname"], 9);
+	_isaacspot = new MovableObject(this, RectF(1 - 8, 8, 6, 1.7f), _sprites["bossspot"], 9);
+	_isaac = new MovableObject(this, RectF(1.9f - 8, 6.2f, 4, 3), _sprites["isaac"], 9);
+	_bossspot = new MovableObject(this, RectF(7 + 8, 8, 9, 2.5f), _sprites["bossspot"], 9);
+	_boss = new MovableObject(this, RectF(7.5f + 8, 2.5f, 8, 7.5f), _sprites["boss"], 9);
+	_isaacname = new MovableObject(this, RectF(1 - 6, 1.3f, 6, 2), _sprites["isaacname"], 9);
+	_vs = new MovableObject(this, RectF(6.3f, 1.3f, 3.4f, 2), _sprites["vs"], 9);
+	_bossname = new MovableObject(this, RectF(9.5f + 6, 1.3f, 6, 2), _sprites["bossname"], 9);
 
 	_isaacname->setVisible(false);
 	_isaac->setVisible(false);
@@ -43,25 +45,31 @@ UIMonster::UIMonster()
 	_vs->setVisible(false);
 	_bossname->setVisible(false);
 
+	_show = false;
+
+}
+
+UIMonster* UIMonster::UIMonsterBoss()
+{
+	UIMonster* uiMonster = new UIMonster();
+	return uiMonster;
 }
 
 void UIMonster::update(float dt)
 {
-	UIScene::update(dt);
+	Scene::update(dt);
 
 	if (!_show)
 		return;
 
-	std::cout << _dx << std::endl;
-	
-	if (_dx > 14.6)
+	if (_dx > 14.6f)
 	{
-		showVS();
+		setActiveUIMonster();
 		return;
 	}
 	else if (_dx > 13)
 	{
-		_FPS = 1.001;
+		_FPS = 1.001f;
 		_isaacspot->moveBy({ _FPS * dt,0 });
 		_isaac->moveBy({ _FPS * dt,0 });
 
@@ -89,11 +97,12 @@ void UIMonster::update(float dt)
 	}
 }
 
-void UIMonster::showVS()
+void UIMonster::setActiveUIMonster()
 {
 	if (_show)
 	{
 		_show = false;
+		_active = false;
 		setBackgroundColor({ 0,0,0,0 });
 		_isaacspot->setVisible(false);
 		_isaac->setVisible(false);
@@ -106,6 +115,7 @@ void UIMonster::showVS()
 	else
 	{
 		_show = true;
+		_active = true;
 		setBackgroundColor({ 0,0,0 });
 		_isaacspot->setVisible(true);
 		_isaac->setVisible(true);

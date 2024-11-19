@@ -12,10 +12,11 @@
 
 using namespace agp;
 
-Sprite::Sprite(SDL_Texture* spritesheet, const RectI& rect, SDL_RendererFlip flip)
+Sprite::Sprite(SDL_Texture* spritesheet, const RectI& rect, std::string name, SDL_RendererFlip flip)
 {
 	_spritesheet = spritesheet;
 	_rect = rect;
+	_name = name;
 
 }
 

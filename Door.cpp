@@ -11,6 +11,7 @@ using namespace agp;
 Door::Door(Scene* scene, const RectF& rect, RoomType type, DoorPosition pos, float angle, SDL_RendererFlip flip)
 	: CollidableObject(scene, rect, nullptr)
 {
+
 	_scene = scene;
 	_angle = angle;
 	_flip = flip;
@@ -59,58 +60,58 @@ void Door::Draw()
 	{
 		if (_pos == DoorPosition::TOP)
 		{
-			_doorUp = new DoorBorder(_scene, RectF(_rect.pos.x, _rect.pos.y + 0.1, _rect.size.x, _rect.size.y), _type, _pos, 2, _angle, _flip);
-			_doorUpLeft = new DoorPanel(_scene, RectF(_rect.pos.x + 0.2, _rect.pos.y + 0.1, _rect.size.x - 1, _rect.size.y), _type, _pos, PanelPosition::LEFT, 1, _angle, _flip);
-			_doorUpRight = new DoorPanel(_scene, RectF(_rect.pos.x + 0.8, _rect.pos.y + 0.1, _rect.size.x - 1, _rect.size.y), _type, _pos, PanelPosition::RIGHT, 1, _angle, _flip);
-			_doorLight = new RenderableObject(_scene, RectF(_rect.pos.x + 0.2, _rect.pos.y + 2, 1.5, 1), _sprites["boss_light"], 5, _angle, _flip);
+			_doorUp = new DoorBorder(_scene, RectF(_rect.pos.x, _rect.pos.y + 0.1f, _rect.size.x, _rect.size.y), _type, _pos, 2, _angle, _flip);
+			_doorUpLeft = new DoorPanel(_scene, RectF(_rect.pos.x + 0.2f, _rect.pos.y + 0.1f, _rect.size.x - 1, _rect.size.y), _type, _pos, PanelPosition::LEFT, 1, _angle, _flip);
+			_doorUpRight = new DoorPanel(_scene, RectF(_rect.pos.x + 0.8f, _rect.pos.y + 0.1f, _rect.size.x - 1, _rect.size.y), _type, _pos, PanelPosition::RIGHT, 1, _angle, _flip);
+			_doorLight = new RenderableObject(_scene, RectF(_rect.pos.x + 0.2f, _rect.pos.y + 2, 1.5f, 1), _sprites["boss_light"], 5, _angle, _flip);
 		}
 		else if (_pos == DoorPosition::BOTTOM)
 		{
-			_doorDown = new DoorBorder(_scene, RectF(_rect.pos.x, _rect.pos.y - 0.1, _rect.size.x, _rect.size.y), _type, _pos, 2, _angle, _flip);
-			_doorDownLeft = new DoorPanel(_scene, RectF(_rect.pos.x + 0.2, _rect.pos.y - 0.1, _rect.size.x - 1, _rect.size.y), _type, _pos, PanelPosition::LEFT, 1, _angle, _flip);
-			_doorDownRight = new DoorPanel(_scene, RectF(_rect.pos.x + 0.8, _rect.pos.y - 0.1, _rect.size.x - 1, _rect.size.y), _type, _pos, PanelPosition::RIGHT, 1, _angle, _flip);
-			_doorLight = new RenderableObject(_scene, RectF(_rect.pos.x + 0.23, _rect.pos.y - 1, 1.5, 1), _sprites["boss_light"], 5, _angle, _flip);
+			_doorDown = new DoorBorder(_scene, RectF(_rect.pos.x, _rect.pos.y - 0.1f, _rect.size.x, _rect.size.y), _type, _pos, 2, _angle, _flip);
+			_doorDownLeft = new DoorPanel(_scene, RectF(_rect.pos.x + 0.2f, _rect.pos.y - 0.1f, _rect.size.x - 1, _rect.size.y), _type, _pos, PanelPosition::LEFT, 1, _angle, _flip);
+			_doorDownRight = new DoorPanel(_scene, RectF(_rect.pos.x + 0.8f, _rect.pos.y - 0.1f, _rect.size.x - 1, _rect.size.y), _type, _pos, PanelPosition::RIGHT, 1, _angle, _flip);
+			_doorLight = new RenderableObject(_scene, RectF(_rect.pos.x + 0.23f, _rect.pos.y - 1, 1.5f, 1), _sprites["boss_light"], 5, _angle, _flip);
 		}
 		else if (_pos == DoorPosition::RIGHT)
 		{
-			_doorRight = new DoorBorder(_scene, RectF(_rect.pos.x - 0.1, _rect.pos.y, _rect.size.x, _rect.size.y - 0.2), _type, _pos, 2, _angle, _flip);
-			_doorRightLeft = new DoorPanel(_scene, RectF(_rect.pos.x - 0.1, _rect.pos.y + 0.65, 2, 1), _type, _pos, PanelPosition::LEFT, 1, 0, SDL_FLIP_HORIZONTAL);
-			_doorRightRight = new DoorPanel(_scene, RectF(_rect.pos.x - 0.1, _rect.pos.y + 0.14, 2, 1), _type, _pos, PanelPosition::RIGHT, 1, 0, SDL_FLIP_HORIZONTAL);
-			_doorLight = new RenderableObject(_scene, RectF(_rect.pos.x - 1.3, _rect.pos.y + 0.4, 1.5, 1), _sprites["boss_light"], 5, _angle, _flip);
+			_doorRight = new DoorBorder(_scene, RectF(_rect.pos.x - 0.1f, _rect.pos.y, _rect.size.x, _rect.size.y - 0.2f), _type, _pos, 2, _angle, _flip);
+			_doorRightLeft = new DoorPanel(_scene, RectF(_rect.pos.x - 0.1f, _rect.pos.y + 0.65f, 2, 1), _type, _pos, PanelPosition::LEFT, 1, 0, SDL_FLIP_HORIZONTAL);
+			_doorRightRight = new DoorPanel(_scene, RectF(_rect.pos.x - 0.1f, _rect.pos.y + 0.14f, 2, 1), _type, _pos, PanelPosition::RIGHT, 1, 0, SDL_FLIP_HORIZONTAL);
+			_doorLight = new RenderableObject(_scene, RectF(_rect.pos.x - 1.3f, _rect.pos.y + 0.4f, 1.5f, 1), _sprites["boss_light"], 5, _angle, _flip);
 		}
 		else if (_pos == DoorPosition::LEFT)
 		{
-			_doorLeft = new DoorBorder(_scene, RectF(_rect.pos.x + 0.1, _rect.pos.y, _rect.size.x, _rect.size.y - 0.2), _type, _pos, 2, _angle, _flip);
-			_doorLeftLeft = new DoorPanel(_scene, RectF(_rect.pos.x + 0.1, _rect.pos.y + 0.68, 2, 1), _type, _pos, PanelPosition::LEFT, 1);
-			_doorLeftRight = new DoorPanel(_scene, RectF(_rect.pos.x + 0.1, _rect.pos.y + 0.17, 2, 1), _type, _pos, PanelPosition::RIGHT, 1);
-			_doorLight = new RenderableObject(_scene, RectF(_rect.pos.x +1.8, _rect.pos.y + 0.45, 1.5, 1), _sprites["boss_light"], 5, _angle, _flip);
+			_doorLeft = new DoorBorder(_scene, RectF(_rect.pos.x + 0.1f, _rect.pos.y, _rect.size.x, _rect.size.y - 0.2f), _type, _pos, 2, _angle, _flip);
+			_doorLeftLeft = new DoorPanel(_scene, RectF(_rect.pos.x + 0.1f, _rect.pos.y + 0.68f, 2, 1), _type, _pos, PanelPosition::LEFT, 1);
+			_doorLeftRight = new DoorPanel(_scene, RectF(_rect.pos.x + 0.1f, _rect.pos.y + 0.17f, 2, 1), _type, _pos, PanelPosition::RIGHT, 1);
+			_doorLight = new RenderableObject(_scene, RectF(_rect.pos.x +1.8f, _rect.pos.y + 0.45f, 1.5f, 1), _sprites["boss_light"], 5, _angle, _flip);
 		}	
 	}
 	else
 	{
 		if (_pos == DoorPosition::TOP)
 		{
-			_doorUp = new DoorBorder(_scene, RectF(_rect.pos.x, _rect.pos.y + 0.1, _rect.size.x, _rect.size.y), _type, _pos, 2, _angle, _flip);
-			_doorUpLeft = new DoorPanel(_scene, RectF(_rect.pos.x - 0.1, _rect.pos.y + 0.1, _rect.size.x - 0.5, _rect.size.y), _type, _pos, PanelPosition::LEFT, 1, _angle, _flip);
-			_doorUpRight = new DoorPanel(_scene, RectF(_rect.pos.x + 0.66, _rect.pos.y + 0.1, _rect.size.x - 0.5, _rect.size.y), _type, _pos, PanelPosition::RIGHT, 1, _angle, _flip);
+			_doorUp = new DoorBorder(_scene, RectF(_rect.pos.x, _rect.pos.y + 0.1f, _rect.size.x, _rect.size.y), _type, _pos, 2, _angle, _flip);
+			_doorUpLeft = new DoorPanel(_scene, RectF(_rect.pos.x - 0.1f, _rect.pos.y + 0.1f, _rect.size.x - 0.5f, _rect.size.y), _type, _pos, PanelPosition::LEFT, 1, _angle, _flip);
+			_doorUpRight = new DoorPanel(_scene, RectF(_rect.pos.x + 0.66f, _rect.pos.y + 0.1f, _rect.size.x - 0.5f, _rect.size.y), _type, _pos, PanelPosition::RIGHT, 1, _angle, _flip);
 		}
 		else if (_pos == DoorPosition::BOTTOM)
 		{
-			_doorDown = new DoorBorder(_scene, RectF(_rect.pos.x, _rect.pos.y - 0.1, _rect.size.x, _rect.size.y), _type, _pos, 2, _angle, _flip);
-			_doorDownLeft = new DoorPanel(_scene, RectF(_rect.pos.x - 0.1, _rect.pos.y - 0.1, _rect.size.x - 0.5, _rect.size.y + 0.1), _type, _pos, PanelPosition::LEFT, 1, _angle, _flip);
-			_doorDownRight = new DoorPanel(_scene, RectF(_rect.pos.x + 0.66, _rect.pos.y - 0.1, _rect.size.x - 0.5, _rect.size.y + 0.1), _type, _pos, PanelPosition::RIGHT, 1, _angle, _flip);
+			_doorDown = new DoorBorder(_scene, RectF(_rect.pos.x, _rect.pos.y - 0.1f, _rect.size.x, _rect.size.y), _type, _pos, 2, _angle, _flip);
+			_doorDownLeft = new DoorPanel(_scene, RectF(_rect.pos.x - 0.1f, _rect.pos.y - 0.1f, _rect.size.x - 0.5f, _rect.size.y + 0.1f), _type, _pos, PanelPosition::LEFT, 1, _angle, _flip);
+			_doorDownRight = new DoorPanel(_scene, RectF(_rect.pos.x + 0.66f, _rect.pos.y - 0.1f, _rect.size.x - 0.5f, _rect.size.y + 0.1f), _type, _pos, PanelPosition::RIGHT, 1, _angle, _flip);
 		}
 		else if (_pos == DoorPosition::RIGHT)
 		{
-			_doorRight = new DoorBorder(_scene, RectF(_rect.pos.x - 0.1, _rect.pos.y, _rect.size.x, _rect.size.y - 0.2), _type, _pos, 2, _angle, _flip);
-			_doorRightLeft = new DoorPanel(_scene, RectF(_rect.pos.x - 0.1, _rect.pos.y + 0.65, 2, 1), _type, _pos, PanelPosition::LEFT, 1, 0, SDL_FLIP_HORIZONTAL);
-			_doorRightRight = new DoorPanel(_scene, RectF(_rect.pos.x - 0.1, _rect.pos.y + 0.14, 2, 1), _type, _pos, PanelPosition::RIGHT, 1, 0, SDL_FLIP_HORIZONTAL);
+			_doorRight = new DoorBorder(_scene, RectF(_rect.pos.x - 0.1f, _rect.pos.y, _rect.size.x, _rect.size.y - 0.2f), _type, _pos, 2, _angle, _flip);
+			_doorRightLeft = new DoorPanel(_scene, RectF(_rect.pos.x - 0.1f, _rect.pos.y + 0.65f, 2, 1), _type, _pos, PanelPosition::LEFT, 1, 0, SDL_FLIP_HORIZONTAL);
+			_doorRightRight = new DoorPanel(_scene, RectF(_rect.pos.x - 0.1f, _rect.pos.y + 0.14f, 2, 1), _type, _pos, PanelPosition::RIGHT, 1, 0, SDL_FLIP_HORIZONTAL);
 		}
 		else if (_pos == DoorPosition::LEFT)
 		{
-			_doorLeft = new DoorBorder(_scene, RectF(_rect.pos.x + 0.1, _rect.pos.y, _rect.size.x, _rect.size.y - 0.2), _type, _pos, 2, _angle, _flip);
-			_doorLeftLeft = new DoorPanel(_scene, RectF(_rect.pos.x + 0.1, _rect.pos.y + 0.68, 2, 1), _type, _pos, PanelPosition::LEFT, 1);
-			_doorLeftRight = new DoorPanel(_scene, RectF(_rect.pos.x + 0.1, _rect.pos.y + 0.17, 2, 1), _type, _pos, PanelPosition::RIGHT, 1);
+			_doorLeft = new DoorBorder(_scene, RectF(_rect.pos.x + 0.1f, _rect.pos.y, _rect.size.x, _rect.size.y - 0.2f), _type, _pos, 2, _angle, _flip);
+			_doorLeftLeft = new DoorPanel(_scene, RectF(_rect.pos.x + 0.1f, _rect.pos.y + 0.68f, 2, 1), _type, _pos, PanelPosition::LEFT, 1);
+			_doorLeftRight = new DoorPanel(_scene, RectF(_rect.pos.x + 0.1f, _rect.pos.y + 0.17f, 2, 1), _type, _pos, PanelPosition::RIGHT, 1);
 		}
 	}
 
@@ -187,6 +188,7 @@ void Door::update(float dt)
 DoorBorder::DoorBorder(Scene* scene, const RectF& rect, RoomType type, DoorPosition pos, int layer, float angle, SDL_RendererFlip flip)
 	: RenderableObject(scene, rect, nullptr, layer, angle, flip)
 {
+
 	_scene = scene;
 	_rect = rect;
 	_angle = angle;
@@ -207,19 +209,18 @@ DoorBorder::DoorBorder(Scene* scene, const RectF& rect, RoomType type, DoorPosit
 	_sprites["boss"] = SpriteFactory::instance()->get("door_boss");
 	_sprites["boss_back"] = SpriteFactory::instance()->get("door_boss_back");
 
-	Sprite* _spriteBack;
 	if (_type == RoomType::BOSS)
 	{
 		_sprite = _sprites["boss"];
 
 		if (_pos == DoorPosition::TOP)
-			new RenderableObject(_scene, RectF(_rect.pos.x - 0.2, _rect.pos.y - 0.35, _rect.size.x + 0.4, _rect.size.y + 0.4), _sprites["boss_back"], 1, _angle, _flip);
+			new RenderableObject(_scene, RectF(_rect.pos.x - 0.2f, _rect.pos.y - 0.35f, _rect.size.x + 0.4f, _rect.size.y + 0.4f), _sprites["boss_back"], 1, _angle, _flip);
 		else if (_pos == DoorPosition::BOTTOM)
-			new RenderableObject(_scene, RectF(_rect.pos.x - 0.2, _rect.pos.y - 0.1, _rect.size.x + 0.4, _rect.size.y + 0.4), _sprites["boss_back"], 1, _angle, _flip);
+			new RenderableObject(_scene, RectF(_rect.pos.x - 0.2f, _rect.pos.y - 0.1f, _rect.size.x + 0.4f, _rect.size.y + 0.4f), _sprites["boss_back"], 1, _angle, _flip);
 		else if (_pos == DoorPosition::RIGHT)
-			new RenderableObject(_scene, RectF(_rect.pos.x - 0, _rect.pos.y - 0.2, _rect.size.x + 0.4, _rect.size.y + 0.4), _sprites["boss_back"], 1, _angle, _flip);
+			new RenderableObject(_scene, RectF(_rect.pos.x - 0, _rect.pos.y - 0.2f, _rect.size.x + 0.4f, _rect.size.y + 0.4f), _sprites["boss_back"], 1, _angle, _flip);
 		else if (_pos == DoorPosition::LEFT)
-			new RenderableObject(_scene, RectF(_rect.pos.x - 0.4, _rect.pos.y - 0.2, _rect.size.x + 0.4, _rect.size.y + 0.4), _sprites["boss_back"], 1, _angle, _flip);
+			new RenderableObject(_scene, RectF(_rect.pos.x - 0.4f, _rect.pos.y - 0.2f, _rect.size.x + 0.4f, _rect.size.y + 0.4f), _sprites["boss_back"], 1, _angle, _flip);
 	}
 	else 
 	{
@@ -229,13 +230,13 @@ DoorBorder::DoorBorder(Scene* scene, const RectF& rect, RoomType type, DoorPosit
 			_sprite = _sprites["normal"];
 
 		if (_pos == DoorPosition::TOP)
-			new RenderableObject(_scene, RectF(_rect.pos.x - 0.6, _rect.pos.y - 0.45, _rect.size.x + 1.3, _rect.size.y + 0.7), _sprites["normal_back"], 1, _angle, _flip);
+			new RenderableObject(_scene, RectF(_rect.pos.x - 0.6f, _rect.pos.y - 0.45f, _rect.size.x + 1.3f, _rect.size.y + 0.7f), _sprites["normal_back"], 1, _angle, _flip);
 		else if (_pos == DoorPosition::BOTTOM)
-			new RenderableObject(_scene, RectF(_rect.pos.x - 0.65, _rect.pos.y - 0.2, _rect.size.x + 1.3, _rect.size.y + 0.7), _sprites["normal_back"], 1, _angle, _flip);
+			new RenderableObject(_scene, RectF(_rect.pos.x - 0.65f, _rect.pos.y - 0.2f, _rect.size.x + 1.3f, _rect.size.y + 0.7f), _sprites["normal_back"], 1, _angle, _flip);
 		else if (_pos == DoorPosition::RIGHT)
-			new RenderableObject(_scene, RectF(_rect.pos.x - 0.5, _rect.pos.y - 0.35, _rect.size.x + 1.3, _rect.size.y + 0.7), _sprites["normal_back"], 1, _angle, _flip);
+			new RenderableObject(_scene, RectF(_rect.pos.x - 0.5f, _rect.pos.y - 0.35f, _rect.size.x + 1.3f, _rect.size.y + 0.7f), _sprites["normal_back"], 1, _angle, _flip);
 		else if (_pos == DoorPosition::LEFT)
-			new RenderableObject(_scene, RectF(_rect.pos.x - 0.75, _rect.pos.y - 0.35, _rect.size.x + 1.3, _rect.size.y + 0.7), _sprites["normal_back"], 1, _angle, _flip);
+			new RenderableObject(_scene, RectF(_rect.pos.x - 0.75f, _rect.pos.y - 0.35f, _rect.size.x + 1.3f, _rect.size.y + 0.7f), _sprites["normal_back"], 1, _angle, _flip);
 		
 	}
 

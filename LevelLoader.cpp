@@ -40,7 +40,7 @@ GameScene* LevelLoader::load(const std::string& name)
 {
 	SpriteFactory* spriteLoader = SpriteFactory::instance();
 
-	if (name == "supermario")
+	if (name == "basement")
 	{
 		GameScene* world = new GameScene(RectF(-50, -50, 50, 50), 1 / 60.0f);
 		world->setBackgroundColor(Color(0, 0, 0));
@@ -52,11 +52,9 @@ GameScene* LevelLoader::load(const std::string& name)
 
 
 
-		new Mario(world, PointF(3.5, 2.5));
-
 
 		// mario
-		Mario* mario = new Mario(world, PointF(7.5, 5.2));
+		Mario* mario = new Mario(world, PointF(7.5f, 5.2f));
 		world->setPlayer(mario);
 
 		return world;

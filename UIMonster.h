@@ -10,15 +10,14 @@ namespace agp
 	class UIMonster;
 }
 
-class agp::UIMonster : public UIScene, public Singleton<UIMonster>
+class agp::UIMonster : public Scene
 {
-	friend class Singleton<UIMonster>;
 
 		std::map<std::string, Sprite*> _sprites;
 
 		bool _show;
 
-		int _FPS;
+		float _FPS;
 		float _dx;
 
 		MovableObject* _isaacspot;
@@ -29,15 +28,18 @@ class agp::UIMonster : public UIScene, public Singleton<UIMonster>
 		MovableObject* _vs;
 		MovableObject* _bossname;
 
-		UIMonster();
+	
 
 	public:
 
+		UIMonster();
 		virtual ~UIMonster() {};
-	
-		void showVS();
-		bool getShowVS() { return _show; }
+
+		bool show() { return _show; }
+		void setActiveUIMonster();
 
 		// extends update logic (+time management)
 		virtual void update(float timeToSimulate) override;
+
+		static UIMonster* UIMonsterBoss();
 };

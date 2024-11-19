@@ -27,7 +27,7 @@ class agp::TiledSprite : public Sprite
 
 	public:
 
-		TiledSprite(SDL_Texture* spritesheet, const std::vector<RectI>& tiles, Vec2Df tileSize = {1,1});
+		TiledSprite(SDL_Texture* spritesheet, const std::vector<RectI>& tiles, std::string name, Vec2Df tileSize = {1,1});
 
 		// extends render method (+composite)
 		virtual void render(

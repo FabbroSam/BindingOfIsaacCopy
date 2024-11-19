@@ -25,10 +25,11 @@ class agp::Sprite
 		SDL_Texture* _spritesheet;		// spritesheet texture
 		RectI _rect;					// in spritesheets coordinates
 		SDL_RendererFlip _flip;
+		std::string _name;
 
 	public:
 
-		Sprite(SDL_Texture* spritesheet, const RectI& rect, SDL_RendererFlip flip = SDL_FLIP_NONE);
+		Sprite(SDL_Texture* spritesheet, const RectI& rect, std::string name, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
 		// render method (for rendering)
 		virtual void render(
@@ -37,6 +38,8 @@ class agp::Sprite
 			Transform camera,			// scene2view transform
 			float angle = 0,			// rotation in degrees, clockwise
 			SDL_RendererFlip flip = SDL_FLIP_NONE);
+
+		std::string name() { return _name; }
 
 		// update method (for logic, animations)
 		virtual void update(float dt) {};

@@ -9,6 +9,8 @@
 
 #pragma once
 #include "geometryUtils.h"
+#include "UIMonster.h"
+#include "HUD.h"
 #include <vector>
 
 namespace agp
@@ -16,7 +18,6 @@ namespace agp
 	class Game;
 	class Scene;
 	class Window;
-	class HUD;
 }
 
 // Game (singleton)
@@ -34,6 +35,8 @@ class agp::Game
 		int _scenesToPop;					// for popSceneLater
 		bool _running;
 		bool _reset;
+		UIMonster* _uiMonster;
+		HUD* _hud;
 
 		// helper functions
 		void init();
@@ -53,6 +56,8 @@ class agp::Game
 		// getters
 		Window* window() { return _window; }
 		float aspectRatio() { return 1.216f; }
+		UIMonster* uiMonster() { return _uiMonster; }
+		HUD* hud() { return _hud; }
 
 		// scene stacks
 		void pushScene(Scene* scene);
