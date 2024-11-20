@@ -35,7 +35,11 @@ SpriteFactory::SpriteFactory()
 	}
 
 	SDL_Renderer* renderer = Game::instance()->window()->renderer();
-	_spriteSheets["mario"] = loadTexture(renderer, "../sprites/mario.png", { 147, 187, 236 });
+	// ISAAC
+	_spriteSheets["isaac"] = loadTexture(renderer, "../sprites/isaac.png");
+	// ITEM
+	_spriteSheets["tears"] = loadTexture(renderer, "../sprites/tears.png");
+	
 	_spriteSheets["enemies"] = loadTexture(renderer, "../sprites/enemies.png", { 147, 187, 236 });
 	_spriteSheets["hud"] = loadTexture(renderer, "../sprites/hud.png", { 147, 187, 236 });
 	_spriteSheets["tiles"] = loadTexture(renderer, "../sprites/stage_tiles.png", { 147, 187, 236 });
@@ -89,17 +93,6 @@ static std::vector<RectI> basement_type{RectI(0, 0, 234, 156),
 										RectI(234, 0, 234, 156),
 										RectI(0, 156, 234, 156),
 										RectI(234, 156, 234, 156)};
-
-// ANDRANNO CANCELLATI
-static RectI mario_small(1, 9, 16, 16);
-static RectI hud_letter(519, 254, 8, 8);
-static RectI hud_number(519, 263, 8, 8);
-static RectI hud_letter_disabled(519, 366, 8, 8);
-static RectI hud_number_disabled(519, 375, 8, 8);
-static RectI hud_coin(519, 289, 8, 8);
-static RectI flower(1, 12, 16, 16);
-static RectI goomba(1, 28, 16, 16);
-static RectI koopa(52, 12, 16, 32);
 
 
 Sprite* SpriteFactory::get(const std::string& id)
@@ -399,56 +392,52 @@ Sprite* SpriteFactory::get(const std::string& id)
 		return new Sprite(_spriteSheets["menu_options"], RectI(0, 430, 121, 46), "menu_options_vsync_off_1");
 	else if (id == "menu_options_vsync_off_2")
 		return new Sprite(_spriteSheets["menu_options"], RectI(0, 476, 121, 46), "menu_options_vsync_off_2");
-
-
-	// ANDRANNO CANCELLATE
-	else if (id == "wall")
-		return new Sprite(_spriteSheets["tiles"], moveBy(flower, 2, 5), "wall");
-	else if (id == "block")
-		return new Sprite(_spriteSheets["tiles"], moveBy(flower, 5, 3), "block");
-	else if (id == "welcome")
-		return new Sprite(_spriteSheets["hud"], RectI(1, 2 + 16 * 2, 16 * 16, 13 * 16), "welcome");
-	else if (id == "gameover")
-		return new Sprite(_spriteSheets["hud"], RectI(260, 253, 16 * 16, 15 * 16), "gameover");
-	else if (id == "mario_stand")
-		return new Sprite(_spriteSheets["mario"], mario_small, "mario_stand");
-	else if (id == "mario_jump")
-		return new Sprite(_spriteSheets["mario"], moveBy(mario_small, 6, 0), "mario_jump");
-	else if (id == "mario_skid")
-		return new Sprite(_spriteSheets["mario"], moveBy(mario_small, 5, 0), "mario_skid");
-	else if (id == "mario_die")
-		return new Sprite(_spriteSheets["mario"], moveBy(mario_small, 1, 0), "mario_die");
-	else if (id == "hammer")
-		return new Sprite(_spriteSheets["enemies"], moveBy(goomba, 25, 0), "hammer");
-	else if (id == "hammer_brother_jump")
-		return new Sprite(_spriteSheets["enemies"], moveBy(koopa, 19, 0), "hammer_brother_jump");
-	else if (id == "platform")
-		return new FilledSprite(_spriteSheets["tiles"], RectI(120, 148, 8, 8), "platform", { 0.5f, 0.5f });
-
-	else if (id == "mario_walk")
+	// ISAAC SPRITES
+	else if (id == "isaac_headFront")
+		return new Sprite(_spriteSheets["isaac"], RectI(2, 2, 28, 25), "isaac_headFront");
+	else if (id == "isaac_headBack")
+		return new Sprite(_spriteSheets["isaac"], RectI(130, 3, 28, 25), "isaac_headBack");
+	else if (id == "isaac_headRight")
+		return new Sprite(_spriteSheets["isaac"], RectI(66, 2, 28, 25), "isaac_headRight");
+	else if (id == "isaac_headFrontShoot")
+		return new Sprite(_spriteSheets["isaac"], RectI(34, 2, 28, 25), "isaac_headFrontShoot");
+	else if (id == "isaac_headBackShoot")
+		return new Sprite(_spriteSheets["isaac"], RectI(162, 3, 28, 25), "isaac_headBackShoot");
+	else if (id == "isaac_headRightShoot")
+		return new Sprite(_spriteSheets["isaac"], RectI(98, 3, 28, 25), "isaac_headRightShoot");
+	else if (id == "isaac_bodyFront")
+		return new Sprite(_spriteSheets["isaac"], RectI(7, 49, 18, 14), "isaac_bodyFront");
+	else if (id == "isaac_walkDown")
 	{
-		rects.push_back(moveBy(mario_small, 2, 0));
-		rects.push_back(moveBy(mario_small, 3, 0));
-		rects.push_back(moveBy(mario_small, 4, 0));
-		return new AnimatedSprite(_spriteSheets["mario"], rects, 10, "mario_walk");
+		rects.push_back(RectI(7, 49, 18, 14));
+		rects.push_back(RectI(39, 49, 18, 14));
+		rects.push_back(RectI(72, 49, 18, 14));
+		rects.push_back(RectI(103, 49, 18, 14));
+		rects.push_back(RectI(135, 49, 18, 14));
+		rects.push_back(RectI(167, 49, 18, 14));
+		rects.push_back(RectI(199, 49, 18, 14));
+		rects.push_back(RectI(230, 49, 18, 14));
+		rects.push_back(RectI(199, 17, 18, 14));
+		rects.push_back(RectI(231, 17, 18, 14));
+		return new AnimatedSprite(_spriteSheets["isaac"], rects, 10, "isaac_walkDown");
 		}
-	else if (id == "mario_run")
+	else if (id == "isaac_walkRight")
 	{
-		rects.push_back(moveBy(mario_small, 2, 0));
-		rects.push_back(moveBy(mario_small, 3, 0));
-		rects.push_back(moveBy(mario_small, 4, 0));
-		return new AnimatedSprite(_spriteSheets["mario"], rects, 20, "mario_run");
+		rects.push_back(RectI(7, 80, 18, 14));
+		rects.push_back(RectI(39, 80, 18, 14));
+		rects.push_back(RectI(72, 80, 18, 14));
+		rects.push_back(RectI(103, 80, 18, 14));
+		rects.push_back(RectI(135, 80, 18, 14));
+		rects.push_back(RectI(167, 80, 18, 14));
+		rects.push_back(RectI(199, 80, 18, 14));
+		rects.push_back(RectI(230, 80, 18, 14));
+		rects.push_back(RectI(7, 111, 18, 14));
+		rects.push_back(RectI(39, 111, 18, 14));
+		return new AnimatedSprite(_spriteSheets["isaac"], rects, 10, "isaac_walkRight");
 		}
-	else if (id == "box")
-	{
-		rects.push_back(moveBy(flower, 0, 3));
-		rects.push_back(moveBy(flower, 1, 3));
-		rects.push_back(moveBy(flower, 2, 3));
-		rects.push_back(moveBy(flower, 1, 3));
-		rects.push_back(moveBy(flower, 0, 3));
-		return new AnimatedSprite(_spriteSheets["tiles"], rects, 5, "box");
-		}
-
+	// ITEM SPRITES
+	else if (id == "tears_default")
+		return new Sprite(_spriteSheets["tears"], RectI(195, 3, 26, 25), "tears_default");
 	else
 	{
 		std::cerr << "Cannot find sprite \"" << id << "\"\n";

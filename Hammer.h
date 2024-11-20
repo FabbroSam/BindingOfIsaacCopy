@@ -30,7 +30,7 @@ class agp::Hammer : public Enemy
 		// extends game logic (+Hammer logic)
 		virtual void update(float dt) override;
 
-		// extends collision logic (+collision with Mario only)
+		// extends collision logic (+collision with Isaac only)
 		virtual bool collidableWith(CollidableObject* obj) override;
 
 		virtual std::string name() override { return strprintf("Hammer[%d]", _id); }

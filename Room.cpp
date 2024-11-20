@@ -4,7 +4,7 @@
 #include "RenderableObject.h"
 #include "StaticObject.h"
 #include "Door.h"
-#include "Mario.h"
+#include "Isaac.h"
 #include "GameScene.h"
 #include "HUD.h"
 #include "Game.h"

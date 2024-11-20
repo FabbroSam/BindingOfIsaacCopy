@@ -2,7 +2,7 @@
 #include "SpriteFactory.h"
 #include "Hammer.h"
 #include "GameScene.h"
-#include "Mario.h"
+#include "Isaac.h"
 #include <random>
 
 using namespace agp;
@@ -39,7 +39,7 @@ HammerBrother::HammerBrother(Scene* scene, const PointF& pos)
 			}
 		}, -1);
 
-	// scripting (chasing Mario)
+	// scripting (chasing Isaac)
 	schedule("chasing", 15.0f + rand() % 10, [this]
 		{
 			_chasing = true;
@@ -51,10 +51,10 @@ void HammerBrother::update(float dt)
 {
 	Enemy::update(dt);
 
-	Mario* mario = dynamic_cast<GameScene*>(_scene)->player();
+	Isaac* isaac = dynamic_cast<GameScene*>(_scene)->player();
 
 	// state changes logic
-	if(mario->rect().center().x > _rect.center().x)
+	if(isaac->rect().center().x > _rect.center().x)
 		_facingDir = Direction::RIGHT;
 	else
 		_facingDir = Direction::LEFT;

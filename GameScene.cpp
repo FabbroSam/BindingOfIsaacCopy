@@ -15,7 +15,7 @@
 #include "Game.h"
 #include "Menu.h"
 #include "Audio.h"
-#include "Mario.h"
+#include "Isaac.h"
 #include "Room.h"
 #include "Door.h"
 #include "HUD.h"
@@ -28,7 +28,7 @@ GameScene::GameScene(const RectF& r, float dt)
 {
 	_dt = dt;
 	_timeToSimulate = 0;
-	_mario = nullptr;
+	_isaac = nullptr;
 	_cameraZoomVel = 0.1f;
 	_a_pressed = false;
 	_d_pressed = false;
@@ -43,14 +43,14 @@ GameScene::GameScene(const RectF& r, float dt)
 
 	// move view free
 	_moveView = false;
-	_moveMario = true;
+	_moveIsaac = true;
 
 	_vsMonster = true;
 
 	_room = nullptr;
 	_mapRooms = nullptr;
 
-	// setup view (specific for super mario bros)
+	// setup view (specific for super isaac bros)
 	_view = new View(this, _rect);
 	_view->setFixedAspectRatio(Game::instance()->aspectRatio());
 	_view->setRect(RectF(0, 0, 16, 12));
@@ -101,68 +101,68 @@ void GameScene::update(float timeToSimulate)
 	if (_view->getDir() != Direction::NONE || Game::instance()->uiMonster()->show())
 		return;
 	else {
-		_moveMario = true;
+		_moveIsaac = true;
 	}
 
-	// move Mario
-	if (_moveMario)
+	// move Isaac
+	if (_moveIsaac)
 	{
-		if (!_mario)
+		if (!_isaac)
 			return;
 
 		if (_d_pressed && !_a_pressed)
-			_mario->move_x(Direction::RIGHT);
+			_isaac->move_x(Direction::RIGHT);
 		else if (_a_pressed && !_d_pressed)
-			_mario->move_x(Direction::LEFT);
+			_isaac->move_x(Direction::LEFT);
 		else
-			_mario->move_x(Direction::NONE);
+			_isaac->move_x(Direction::NONE);
 
 		if (_w_pressed && !_s_pressed)
-			_mario->move_y(Direction::UP);
+			_isaac->move_y(Direction::UP);
 		else if (_s_pressed && !_w_pressed)
-			_mario->move_y(Direction::DOWN);
+			_isaac->move_y(Direction::DOWN);
 		else
-			_mario->move_y(Direction::NONE);
-		_mario->run(_run_pressed);
+			_isaac->move_y(Direction::NONE);
+		_isaac->run(_run_pressed);
 	}
 
 	float _view_x = _view->rect().pos.x;
 	float _view_y = _view->rect().pos.y;
-	float _mario_x = _mario->rect().pos.x;
-	float _mario_y = _mario->rect().pos.y;
+	float _isaac_x = _isaac->rect().pos.x;
+	float _isaac_y = _isaac->rect().pos.y;
 
-	if (_mario_x > 13.8f + _view_x || _mario_x < 1.1f + _view_x || _mario_y > 9.5f + _view_y || _mario_y < 0.8f + _view_y)
+	if (_isaac_x > 13.8f + _view_x || _isaac_x < 1.1f + _view_x || _isaac_y > 9.5f + _view_y || _isaac_y < 0.8f + _view_y)
 	{
-		_moveMario = false;
-		_mario->setVelX(0);
-		_mario->setVelY(0);
-		_mario->move_x(Direction::NONE);
-		_mario->move_y(Direction::NONE);
+		_moveIsaac = false;
+		_isaac->setVelX(0);
+		_isaac->setVelY(0);
+		_isaac->move_x(Direction::NONE);
+		_isaac->move_y(Direction::NONE);
 
 		//_room->openCloseDoor();
 
-		if (_mario_x > 13.8f + _view_x)
+		if (_isaac_x > 13.8f + _view_x)
 		{
 			_view->moveTransition(Direction::RIGHT); //cambiamenti dentro view per permettere la transizione della vista tra una stanza e l'altra
-			_mario->moveBy({ 4.3f,0 });
+			_isaac->moveBy({ 4.3f,0 });
 			setRooms(std::make_pair( 1,0 ));
 		}
-		else if (_mario_x < 1.1f + _view_x)
+		else if (_isaac_x < 1.1f + _view_x)
 		{
 			_view->moveTransition(Direction::LEFT);
-			_mario->moveBy({ -4.2f,0 });
+			_isaac->moveBy({ -4.2f,0 });
 			setRooms(std::make_pair(-1, 0));
 		}
-		else if (_mario_y > 9.5f + _view_y)
+		else if (_isaac_y > 9.5f + _view_y)
 		{
 			_view->moveTransition(Direction::DOWN);
-			_mario->moveBy({ 0,4.0f });
+			_isaac->moveBy({ 0,4.0f });
 			setRooms(std::make_pair(0, 1));
 		}
-		else if (_mario_y < 0.8f + _view_y)
+		else if (_isaac_y < 0.8f + _view_y)
 		{
 			_view->moveTransition(Direction::UP);
-			_mario->moveBy({ 0,-4.2f });
+			_isaac->moveBy({ 0,-4.2f });
 			setRooms(std::make_pair(0, -1));
 		}
 
@@ -180,7 +180,7 @@ void GameScene::update(float timeToSimulate)
 		}
 
 	}
-	Game::instance()->hud()->selectMinimapRoom(_mario_x, _mario_y);
+	Game::instance()->hud()->selectMinimapRoom(_isaac_x, _isaac_y);
 
 }
 
@@ -191,7 +191,7 @@ void GameScene::event(SDL_Event& evt)
 	if (evt.type == SDL_KEYDOWN && (evt.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
 		Game::instance()->pushScene(Menu::pauseMenu());
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_H)
-		_mario->die();
+		_isaac->die();
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_C && !evt.key.repeat)
 		toggleColliders();
 	else if (evt.type == SDL_MOUSEBUTTONDOWN)
@@ -247,6 +247,21 @@ void GameScene::event(SDL_Event& evt)
 				_view->scale(1 - _cameraZoomVel);
 			else if (evt.wheel.y < 0)
 				_view->scale(1 + _cameraZoomVel);
+		}
+	}
+	// sparo
+	else if (evt.type == SDL_KEYDOWN) {
+		if (evt.key.keysym.scancode == SDL_SCANCODE_UP) {
+			_isaac->shoot(Direction::UP);
+		}
+		else if (evt.key.keysym.scancode == SDL_SCANCODE_DOWN) {
+			_isaac->shoot(Direction::DOWN);
+		}
+		else if (evt.key.keysym.scancode == SDL_SCANCODE_LEFT) {
+			_isaac->shoot(Direction::LEFT);
+		}
+		else if (evt.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
+			_isaac->shoot(Direction::RIGHT);
 		}
 	}
 
