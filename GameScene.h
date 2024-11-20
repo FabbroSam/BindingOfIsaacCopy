@@ -15,7 +15,7 @@
 namespace agp
 {
 	class GameScene;
-	class Mario;
+	class Isaac;
 	class Door;
 	class Basement;
 }
@@ -23,7 +23,7 @@ namespace agp
 // GameScene (or World) class
 // - specialized update(dt) to semifixed timestep
 // - may provide more efficient access to game objects (e.g. quadtree)
-// - can/should be customized for the specific game to implement (here, supermariobros-like)
+// - can/should be customized for the specific game to implement (here, superisaacbros-like)
 // - stores the main player and implements player controls
 class agp::GameScene : public Scene
 {
@@ -32,7 +32,7 @@ class agp::GameScene : public Scene
 		float _dt;					// time integration step
 		float _timeToSimulate;		// time integration extent
 
-		Mario* _mario;
+		Isaac* _isaac;
 		bool _d_pressed;
 		bool _a_pressed;
 		bool _w_pressed;
@@ -48,7 +48,7 @@ class agp::GameScene : public Scene
 		bool _down_pressed;
 
 		bool _moveView;
-		bool _moveMario;
+		bool _moveIsaac;
 
 		bool _vsMonster;
 
@@ -60,8 +60,8 @@ class agp::GameScene : public Scene
 		GameScene(const RectF& r, float dt);
 		virtual ~GameScene() {};
 
-		Mario* player() { return _mario; }
-		void setPlayer(Mario* mario) { _mario = mario; }
+		Isaac* player() { return _isaac; }
+		void setPlayer(Isaac* isaac) { _isaac = isaac; }
 		void setMapRooms(Basement* mapRooms) { _mapRooms = mapRooms; }
 		void setRooms(Room* room) { _room = room; }
 		void setRooms(std::pair<int, int> coords) { _room = _mapRooms->room({ _room->coords().first + coords.first, _room->coords().second + coords.second}); }

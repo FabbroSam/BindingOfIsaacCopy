@@ -23,7 +23,7 @@ class agp::HammerBrother : public Enemy
 	protected:
 
 		bool _throwing;			// throwing hammer
-		bool _chasing;			// chasing Mario
+		bool _chasing;			// chasing Isaac
 		PointF _pivot;			// center of horizontal movement
 		float _halfRangeX;		// half range of horizontal movement
 		std::map<std::string, Sprite*> _sprites;

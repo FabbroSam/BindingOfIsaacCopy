@@ -1,6 +1,6 @@
 #include "Hammer.h"
 #include "SpriteFactory.h"
-#include "Mario.h"
+#include "Isaac.h"
 
 using namespace agp;
 
@@ -36,5 +36,5 @@ void Hammer::update(float dt)
 
 bool Hammer::collidableWith(CollidableObject* obj)
 {
-	return dynamic_cast<Mario*>(obj);
+	return dynamic_cast<Isaac*>(obj);
 }

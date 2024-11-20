@@ -13,7 +13,7 @@
 #include "RenderableObject.h"
 #include "StaticObject.h"
 #include "GameScene.h"
-#include "Mario.h"
+#include "Isaac.h"
 #include "HammerBrother.h"
 #include "Lift.h"
 #include "Trigger.h"
@@ -53,9 +53,9 @@ GameScene* LevelLoader::load(const std::string& name)
 
 
 
-		// mario
-		Mario* mario = new Mario(world, PointF(7.5f, 5.2f));
-		world->setPlayer(mario);
+		// isaac
+		Isaac* isaac = new Isaac(world, PointF(7.5f, 5.2f));
+		world->setPlayer(isaac);
 
 		return world;
 	}

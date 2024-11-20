@@ -19,7 +19,7 @@ UIScene::UIScene(const RectF& r)
 	: Scene(r)
 {
 
-	// setup view (specific for super mario bros)
+	// setup view (specific for super isaac bros)
 	_view = new View(this, _rect);
 	//_view->setFixedAspectRatio(Game::instance()->aspectRatio());
 	_view->setRect(RectF(0, 0, 16, 15));

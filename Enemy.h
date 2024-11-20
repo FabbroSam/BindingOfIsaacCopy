@@ -33,11 +33,11 @@ class agp::Enemy : public DynamicObject
 		Direction facingDir() { return _facingDir; }
 
 		// actions
-		//virtual void stomp();					// mario jumps on top of the enemy
-		//virtual void kick(bool right = true);	// mario kicks from one side
-		virtual void smash();					// hit by invincible mario, fireball, shell, or block bump
+		//virtual void stomp();					// isaac jumps on top of the enemy
+		//virtual void kick(bool right = true);	// isaac kicks from one side
+		virtual void smash();					// hit by invincible isaac, fireball, shell, or block bump
 
-		// extends logic collision (+smashed, +hurt Mario)
+		// extends logic collision (+smashed, +hurt Isaac)
 		virtual bool collision(CollidableObject* with, Direction fromDir) override;
 
 		virtual std::string name() override { return strprintf("Enemy[%d]", _id); }
