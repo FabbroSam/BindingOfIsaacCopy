@@ -47,6 +47,7 @@ class agp::RenderableObject : public Object
 		void setBorderColor(const Color& borderColor) { _borderColor = borderColor; }
 		void setVisible(bool visible) { _visible = visible; }
 		virtual void setSprite(Sprite* sprite, bool deallocateSprite = false, bool resetOnChange = true);
+		void setFlip(SDL_RendererFlip flip) { _flip = flip; }
 		void setFocused(bool focused) { _focused = focused; };
 		void setAngularVelocity(float angular) { _angularVelocity = angular; }
 		Sprite* sprite() { return _sprite; }

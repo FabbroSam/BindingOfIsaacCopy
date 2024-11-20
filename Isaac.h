@@ -22,8 +22,7 @@ class agp::Isaac : public DynamicObject
 {
 	private:
 
-		Sprite* _bodySprite;
-		RectF _bodyRect;
+		RenderableObject* _body;
 		bool _walking;
 		bool _running;
 		bool _jumping;
@@ -68,8 +67,6 @@ class agp::Isaac : public DynamicObject
 		virtual void hurt();
 
 		void shoot(Direction dir);
-
-		void draw(SDL_Renderer* renderer, Transform camera) override;
 
 		virtual std::string name() override { return strprintf("Isaac[%d]", _id); }
 };

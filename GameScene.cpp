@@ -186,6 +186,7 @@ void GameScene::update(float timeToSimulate)
 
 void GameScene::event(SDL_Event& evt)
 {
+
 	Scene::event(evt);
 
 	if (evt.type == SDL_KEYDOWN && (evt.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
@@ -230,10 +231,14 @@ void GameScene::event(SDL_Event& evt)
 		if (_moveView)
 		{
 			_view->setRect(_room->rect());
-			_moveView = false;			
+			_moveView = false;
+			_moveIsaac = true;
 		}
 		else
+		{
 			_moveView = true;
+			_moveIsaac = false;
+		}
 	}
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_L)
 	{
@@ -250,20 +255,19 @@ void GameScene::event(SDL_Event& evt)
 		}
 	}
 	// sparo
-	else if (evt.type == SDL_KEYDOWN) {
-		if (evt.key.keysym.scancode == SDL_SCANCODE_UP) {
-			_isaac->shoot(Direction::UP);
-		}
-		else if (evt.key.keysym.scancode == SDL_SCANCODE_DOWN) {
-			_isaac->shoot(Direction::DOWN);
-		}
-		else if (evt.key.keysym.scancode == SDL_SCANCODE_LEFT) {
-			_isaac->shoot(Direction::LEFT);
-		}
-		else if (evt.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
-			_isaac->shoot(Direction::RIGHT);
-		}
+	else if (_moveIsaac && evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_UP) {
+		_isaac->shoot(Direction::UP);
 	}
+	else if (_moveIsaac && evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_DOWN) {
+		_isaac->shoot(Direction::DOWN);
+	}
+	else if (_moveIsaac && evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_LEFT) {
+		_isaac->shoot(Direction::LEFT);
+	}
+	else if (_moveIsaac && evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
+		_isaac->shoot(Direction::RIGHT);
+	}
+
 
 	// update control flags
 	const Uint8* state = SDL_GetKeyboardState(0);

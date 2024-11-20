@@ -392,47 +392,40 @@ Sprite* SpriteFactory::get(const std::string& id)
 		return new Sprite(_spriteSheets["menu_options"], RectI(0, 430, 121, 46), "menu_options_vsync_off_1");
 	else if (id == "menu_options_vsync_off_2")
 		return new Sprite(_spriteSheets["menu_options"], RectI(0, 476, 121, 46), "menu_options_vsync_off_2");
-	// ISAAC SPRITES
+	
+		// ISAAC SPRITES
 	else if (id == "isaac_headFront")
-		return new Sprite(_spriteSheets["isaac"], RectI(2, 2, 28, 25), "isaac_headFront");
+		return new Sprite(_spriteSheets["isaac"], RectI(0*32, 0, 32, 32), "isaac_headFront");
 	else if (id == "isaac_headBack")
-		return new Sprite(_spriteSheets["isaac"], RectI(130, 3, 28, 25), "isaac_headBack");
+		return new Sprite(_spriteSheets["isaac"], RectI(4*32, 0, 32, 32), "isaac_headBack");
 	else if (id == "isaac_headRight")
-		return new Sprite(_spriteSheets["isaac"], RectI(66, 2, 28, 25), "isaac_headRight");
+		return new Sprite(_spriteSheets["isaac"], RectI(2*32, 0, 32, 32), "isaac_headRight");
 	else if (id == "isaac_headFrontShoot")
-		return new Sprite(_spriteSheets["isaac"], RectI(34, 2, 28, 25), "isaac_headFrontShoot");
+		return new Sprite(_spriteSheets["isaac"], RectI(1*32, 0, 32, 32), "isaac_headFrontShoot");
 	else if (id == "isaac_headBackShoot")
-		return new Sprite(_spriteSheets["isaac"], RectI(162, 3, 28, 25), "isaac_headBackShoot");
+		return new Sprite(_spriteSheets["isaac"], RectI(5*32, 3, 28, 32), "isaac_headBackShoot");
 	else if (id == "isaac_headRightShoot")
-		return new Sprite(_spriteSheets["isaac"], RectI(98, 3, 28, 25), "isaac_headRightShoot");
+		return new Sprite(_spriteSheets["isaac"], RectI(3*32, 3, 32, 32), "isaac_headRightShoot");
 	else if (id == "isaac_bodyFront")
-		return new Sprite(_spriteSheets["isaac"], RectI(7, 49, 18, 14), "isaac_bodyFront");
+		return new Sprite(_spriteSheets["isaac"], RectI(0, 32, 32, 32), "isaac_bodyFront");
 	else if (id == "isaac_walkDown")
-	{
-		rects.push_back(RectI(7, 49, 18, 14));
-		rects.push_back(RectI(39, 49, 18, 14));
-		rects.push_back(RectI(72, 49, 18, 14));
-		rects.push_back(RectI(103, 49, 18, 14));
-		rects.push_back(RectI(135, 49, 18, 14));
-		rects.push_back(RectI(167, 49, 18, 14));
-		rects.push_back(RectI(199, 49, 18, 14));
-		rects.push_back(RectI(230, 49, 18, 14));
-		rects.push_back(RectI(199, 17, 18, 14));
-		rects.push_back(RectI(231, 17, 18, 14));
+	{		
+		for (int i = 0; i < 7; i++)
+		{
+			rects.push_back(RectI(i * 32, 32, 32, 32));
+		}
+		rects.push_back(RectI(6*32, 0, 32, 32));
+		rects.push_back(RectI(7*32, 0, 32, 32));
 		return new AnimatedSprite(_spriteSheets["isaac"], rects, 10, "isaac_walkDown");
 		}
 	else if (id == "isaac_walkRight")
 	{
-		rects.push_back(RectI(7, 80, 18, 14));
-		rects.push_back(RectI(39, 80, 18, 14));
-		rects.push_back(RectI(72, 80, 18, 14));
-		rects.push_back(RectI(103, 80, 18, 14));
-		rects.push_back(RectI(135, 80, 18, 14));
-		rects.push_back(RectI(167, 80, 18, 14));
-		rects.push_back(RectI(199, 80, 18, 14));
-		rects.push_back(RectI(230, 80, 18, 14));
-		rects.push_back(RectI(7, 111, 18, 14));
-		rects.push_back(RectI(39, 111, 18, 14));
+		for (int i = 0; i < 7; i++)
+		{
+			rects.push_back(RectI(i * 32, 2 * 32, 32, 32));
+		}
+		rects.push_back(RectI(0, 3*32, 32, 32));
+		rects.push_back(RectI(1*32, 3*32, 32, 32));
 		return new AnimatedSprite(_spriteSheets["isaac"], rects, 10, "isaac_walkRight");
 		}
 	// ITEM SPRITES

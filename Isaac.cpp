@@ -19,9 +19,9 @@
 using namespace agp;
 
 Isaac::Isaac(Scene* scene, const PointF& pos)
-	: DynamicObject(scene, RectF( pos.x + 1 / 16.0f, pos.y, 1, 1 ), nullptr, 6)
+	: DynamicObject(scene, RectF(pos.x + 1 / 16.0f, pos.y, 1.6, 1.6), nullptr, 6)
 {
-	_collider.adjust(0.2f, 0.45f, -0.2f, 0);
+	_collider.adjust(0.3f, 1.0f, -0.2f, -0.0f);
 
 	_walking = false;
 	_jumping = false;
@@ -44,23 +44,15 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_sprites["jump"] = SpriteFactory::instance()->get("isaac_jump");
 	_sprites["die"] = SpriteFactory::instance()->get("isaac_die");
 	_sprite = _sprites["headFront"];
-	_bodySprite = _sprites["bodyFront"];
+
+	_body = new RenderableObject(_scene, _rect + Vec2Df({ 0, 0.55 }), _sprites["bodyFront"]);
 }
 
 void Isaac::update(float dt) {
-	if (!_canShoot) {
-		_shootCooldown -= dt;
-		if (_shootCooldown <= 0.0f) {
-			_canShoot = true;
-			_shootCooldown = 0.5f;
-		}
-	}
 
 	// physics and overrides
 	DynamicObject::update(dt);
-	if (_bodySprite) {
-		_bodySprite->update(dt);
-	}
+	_body->setRect(_rect + Vec2Df({ 0, 0.55 }));
 
 	// state logic
 	if (_vel.x != 0)
@@ -84,8 +76,6 @@ void Isaac::update(float dt) {
 	// animations
 	if (_dying)
 		_sprite = _sprites["die"];
-	else if (_jumping)
-		_sprite = _sprites["jump"];
 	else if (skidding())
 		_sprite = _sprites["skid"];
 	else if (_isShooting) {
@@ -98,31 +88,38 @@ void Isaac::update(float dt) {
 	else if (_walking) {
 		if (_vel.y > 0) {
 			_sprite = _sprites["headFront"];
-			_bodySprite = _sprites["walkDown"];
+			_body->setSprite(_sprites["walkDown"]);
 		}
 		else if (_vel.y < 0) {
 			_sprite = _sprites["headBack"];
-			_bodySprite = _sprites["walkDown"];
+			_body->setSprite(_sprites["walkDown"]);
 		}
 		else if (_vel.x > 0) {
 			_sprite = _sprites["headRight"];
-			_bodySprite = _sprites["walkRight"];
+			_body->setSprite(_sprites["walkRight"]);
 		}
 		else if (_vel.x < 0) {
 			_sprite = _sprites["headRight"];
-			_bodySprite = _sprites["walkRight"];
+			_body->setSprite(_sprites["walkRight"]);		
 		}
 	}
 	else {
 		_sprite = _sprites["headFront"];
-		_bodySprite = _sprites["bodyFront"];
+		_body->setSprite(_sprites["bodyFront"]);
 	}
 
 	// x-mirroring
 	if ((_vel.x < 0 && !_jumping) || _x_vel_last_nonzero < 0)
+	{
 		_flip = SDL_FLIP_HORIZONTAL;
+		_body->setFlip(SDL_FLIP_HORIZONTAL);
+	}
 	else
+	{
 		_flip = SDL_FLIP_NONE;
+		_body->setFlip(SDL_FLIP_NONE);
+	}
+
 
 	_prev_x_dir = _x_dir;
 	_prev_y_dir = _y_dir;
@@ -186,53 +183,13 @@ void Isaac::hurt()
 	//die();
 }
 
-void Isaac::draw(SDL_Renderer* renderer, Transform camera)
-{
-	if (!_visible)
-		return;
-
-	SDL_FRect drawRect = RectF(camera(_rect.tl()), camera(_rect.br())).toSDLf();
-
-	_bodyRect = _rect;
-	_bodyRect.size.x *= 0.8f;
-	_bodyRect.size.y *= 0.8f;
-	_bodyRect.pos.y += 0.85f;
-	_bodyRect.pos.x = _rect.pos.x + (_rect.size.x - _bodyRect.size.x) / 2;
-
-	SDL_FRect drawBodyRect = RectF(camera(_bodyRect.tl()), camera(_bodyRect.br())).toSDLf();
-
-	if (_bodySprite)
-		_bodySprite->render(renderer, _bodyRect, camera, _angle, _flip);
-	else
-	{
-		SDL_SetRenderDrawColor(renderer, _color.r, _color.g, _color.b, _color.a);
-		SDL_RenderFillRectF(renderer, &drawBodyRect);
-	}
-
-	if (_sprite)
-		_sprite->render(renderer, _rect, camera, _angle, _flip);
-	else
-	{
-		SDL_SetRenderDrawColor(renderer, _color.r, _color.g, _color.b, _color.a);
-		SDL_RenderFillRectF(renderer, &drawRect);
-	}
-
-	if (_borderColor.a)
-	{
-		SDL_SetRenderDrawColor(renderer, _borderColor.r, _borderColor.g, _borderColor.b, _borderColor.a);
-		SDL_RenderDrawRectF(renderer, &drawRect);
-	}
-
-	if (_focused)
-	{
-		SDL_SetRenderDrawColor(renderer, _focusColor.r, _focusColor.g, _focusColor.b, _focusColor.a);
-		SDL_RenderFillRectF(renderer, &drawRect);
-		_focused = false;
-	}
-}
-
 void Isaac::shoot(Direction dir) {
 	if (!_canShoot) return;
+
+	schedule("_canShoot", _shootCooldown, [this]() 
+		{
+		_canShoot = true;
+		});
 
 	_shootTimer = _shootAnimationTime;
 	_isShooting = true;
