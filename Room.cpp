@@ -30,9 +30,9 @@ Room::Room(Scene* scene,
 	_rect = RectF(rect.pos.x * 16, rect.pos.y * 12, 16, 12);
 	_roomState = RoomState::INACTIVE;
 	_roomType = roomType;
-	_roomTypeUp	= roomTypeUp;
+	_roomTypeUp = roomTypeUp;
 	_roomTypeDown = roomTypeDown;
-	_roomTypeRight= roomTypeRight;
+	_roomTypeRight = roomTypeRight;
 	_roomTypeLeft = roomTypeLeft;
 	_coords = coords;
 	_x = _rect.pos.x;
@@ -54,7 +54,7 @@ void Room::update(float dt)
 
 void Room::Draw()
 {
-	
+
 	SpriteFactory* spriteLoader = SpriteFactory::instance();
 	std::string wallUp;
 	std::string wallDown;
@@ -113,7 +113,7 @@ void Room::Draw()
 	// DOOR (viene inserita la porta senza collider oppure il collider sopra il muro)
 
 	RectF rect = RectF(_x + 7, _y, 2, 2);
-	if (_roomTypeUp == RoomType::BOSS || _roomTypeUp == RoomType::TREASURE )
+	if (_roomTypeUp == RoomType::BOSS || _roomTypeUp == RoomType::TREASURE)
 		_doorUp = new Door(_scene, rect, _roomTypeUp, DoorPosition::TOP);
 	else if (_roomTypeUp == RoomType::NORMAL || _roomTypeUp == RoomType::INITIAL || _roomTypeUp == RoomType::SHOP)
 		_doorUp = new Door(_scene, rect, _roomType, DoorPosition::TOP);
@@ -128,7 +128,7 @@ void Room::Draw()
 	else if (_roomTypeDown == RoomType::EMPTY)
 		new StaticObject(_scene, rect, spriteLoader->get("empty"));
 
-	rect = RectF(_x + 14, _y + 5 + 0.12f, 2, 2);
+	rect = RectF(_x + 14, _y + 4.95f, 2, 2.44f);
 	if (_roomTypeRight == RoomType::BOSS || _roomTypeRight == RoomType::TREASURE)
 		_doorRight = new Door(_scene, rect, _roomTypeRight, DoorPosition::RIGHT, 270);
 	else if (_roomTypeRight == RoomType::NORMAL || _roomTypeRight == RoomType::INITIAL || _roomTypeRight == RoomType::SHOP)
@@ -136,7 +136,7 @@ void Room::Draw()
 	else if (_roomTypeRight == RoomType::EMPTY)
 		new StaticObject(_scene, rect, spriteLoader->get("empty"));
 
-	rect = RectF(_x, _y + 5 + 0.12f, 2, 2);
+	rect = RectF(_x, _y + 4.85f, 2, 2.44f);
 	if (_roomTypeLeft == RoomType::BOSS || _roomTypeLeft == RoomType::TREASURE)
 		_doorLeft = new Door(_scene, rect, _roomTypeLeft, DoorPosition::LEFT, 90);
 	else if (_roomTypeLeft == RoomType::NORMAL || _roomTypeLeft == RoomType::INITIAL || _roomTypeLeft == RoomType::SHOP)
@@ -146,9 +146,9 @@ void Room::Draw()
 
 	if (_roomType == RoomType::INITIAL) {
 		new RenderableObject(_scene, RectF(2.25f, 4.4f, 11.5f, 3.2f), spriteLoader->get("controls"));
-	}	
+	}
 	else if (_roomType == RoomType::TREASURE)
-	{	
+	{
 		new CollidableObject(_scene, RectF(_x + 5.5f, _y + 4.0f, 1, 1), spriteLoader->get("fireplace_blue"));
 		new RenderableObject(_scene, RectF(_x + 5.5f, _y + 3.5f, 1, 1), spriteLoader->get("bluefire"));
 		new CollidableObject(_scene, RectF(_x + 9.5f, _y + 4.0f, 1, 1), spriteLoader->get("fireplace_blue"));
@@ -157,17 +157,17 @@ void Room::Draw()
 		new RenderableObject(_scene, RectF(_x + 5.5f, _y + 6.5f, 1, 1), spriteLoader->get("bluefire"));
 		new CollidableObject(_scene, RectF(_x + 9.5f, _y + 7.0f, 1, 1), spriteLoader->get("fireplace_blue"));
 		new RenderableObject(_scene, RectF(_x + 9.5f, _y + 6.5f, 1, 1), spriteLoader->get("bluefire"));
-	}	
+	}
 	else if (_roomType == RoomType::NORMAL)
 	{
-		float vec[4][8][2] = {  {{3,1.8f},{2,2.8f},{2,7.8f},{3,8.8f},{12,1.8f},{12.9f,2.8f},{12.9f,7.8f},{12,8.8f} },
-							    {{5,4.2f},{6,4.2f},{7,4.2f},{8,4.2f},{6,6.5f},{7,6.5f},{8,6.5f},{9,6.5f}},
+		float vec[4][8][2] = { {{3,1.8f},{2,2.8f},{2,7.8f},{3,8.8f},{12,1.8f},{12.9f,2.8f},{12.9f,7.8f},{12,8.8f} },
+								{{5,4.2f},{6,4.2f},{7,4.2f},{8,4.2f},{6,6.5f},{7,6.5f},{8,6.5f},{9,6.5f}},
 								{{6.4f,4.6f},{7.4f,4.6f},{8.4f,4.6f},{6.4f,5.4f},{8.4f,5.4f},{6.4f,6.2f},{7.4f,6.2f},{8.4f,6.2f}},
 								{{7.4f,4.2f},{8,4.2f},{3.4f,4.2f},{4,4.2f}, {5,6.5f},{9,6.5f},{11,8.4f},{9,6.5f}} };
 		int num = rand() % 4;
 		for (int i = 0; i < 8; i++)
 		{
-			new StaticObject(_scene, RectF(_x + vec[num][i][0],_y + vec[num][i][1], 1.4f, 1.2f), spriteLoader->get("rock"));
+			new StaticObject(_scene, RectF(_x + vec[num][i][0], _y + vec[num][i][1], 1.4f, 1.2f), spriteLoader->get("rock"));
 		}
 	}
 
@@ -184,7 +184,7 @@ void Room::openCloseDoor()
 		_doorRight->openClose();
 	if (_doorLeft)
 		_doorLeft->openClose();
-}	
+}
 
 void Room::offLightDoor()
 {
@@ -199,9 +199,9 @@ void Room::offLightDoor()
 }
 
 std::string Room::name()
-{ 
+{
 	if (_roomType == RoomType::BOSS)
-		return strprintf("RoomBoss[%d]", _id); 
+		return strprintf("RoomBoss[%d]", _id);
 	else if (_roomType == RoomType::SHOP)
 		return strprintf("RoomShop[%d]", _id);
 	else if (_roomType == RoomType::TREASURE)
@@ -213,10 +213,10 @@ std::string Room::name()
 void Basement::generateRooms(Scene* world)
 {
 	int typeRoomIndex = 1;
-	int typeRoom[13] = { 1,2,2,3,2,2,4,2,2,5}; // 1 init // 2 normal // 3 treasure // 4 shop // 5 boss
+	int typeRoom[13] = { 1,2,2,3,2,2,4,2,2,5 }; // 1 init // 2 normal // 3 treasure // 4 shop // 5 boss
 
 	int SIZE = 7; //std::size(typeRoom);
-	int START_COORD = static_cast<int>(SIZE/2);
+	int START_COORD = static_cast<int>(SIZE / 2);
 
 	std::vector<std::vector<int>> matrix(SIZE, std::vector<int>(SIZE, 0));
 	matrix[START_COORD][START_COORD] = 1;
@@ -233,19 +233,19 @@ void Basement::generateRooms(Scene* world)
 		int checkAtLeastOneDir = 0;
 		for (const auto& room : rooms)
 		{
-	
+
 			std::list<Vec2D<int>> newDirs;
-		
+
 			// Generatore di numeri casuali, per non iniziare sempre dalla direzione in alto
 			std::vector<int> numbers = { 0, 1, 2, 3 };
-			std::random_device rd; 
+			std::random_device rd;
 			std::mt19937 gen(rd());
 			std::shuffle(numbers.begin(), numbers.end(), gen);
 
 			/////////////////////////////////////////// Ciclo scelta direzioni
-			
+
 			for (int i : numbers) //randomizza l'ordine della creazione delle stanze
-			{		
+			{
 
 				int probability = 70;
 				Vec2D<int> tempDirRoom = dir[i] + room;
@@ -274,7 +274,7 @@ void Basement::generateRooms(Scene* world)
 				int randomDir = rand() % 100 > probability ? 0 : 1;
 				if (randomDir == 1) // creazione di una stanza
 				{
-					
+
 					newDirs.push_back(tempDirRoom);
 					probability = std::max(15, probability -= 10);
 				}
@@ -298,7 +298,7 @@ void Basement::generateRooms(Scene* world)
 			if (typeRoomIndex > std::size(typeRoom) - 1)
 				break;
 		}
-		
+
 		if (typeRoomIndex > std::size(typeRoom) - 1)
 		{
 			rooms.clear();
@@ -317,11 +317,11 @@ void Basement::generateRooms(Scene* world)
 				RoomType roomTypeDown = (i < SIZE - 1) ? RoomType(matrix[i + 1][j]) : RoomType::EMPTY;
 				RoomType roomTypeRight = (j < SIZE - 1) ? RoomType(matrix[i][j + 1]) : RoomType::EMPTY;
 				RoomType roomTypeLeft = (j > 0) ? RoomType(matrix[i][j - 1]) : RoomType::EMPTY;
-				
+
 				Room* room = new Room(world, RectI(j - START_COORD, i - START_COORD, 16, 12), roomType, roomTypeUp, roomTypeDown, roomTypeRight, roomTypeLeft, { j - START_COORD, i - START_COORD });
-				
+
 				_mapRooms[{j - START_COORD, i - START_COORD}] = room;
-				
+
 				Game::instance()->hud()->drawMinimap(RectI(j - START_COORD, i - START_COORD, 1, 1), roomType);
 			}
 		}

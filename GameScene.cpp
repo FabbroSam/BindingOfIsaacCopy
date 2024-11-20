@@ -53,6 +53,7 @@ GameScene::GameScene(const RectF& r, float dt)
 	// setup view (specific for super isaac bros)
 	_view = new View(this, _rect);
 	_view->setFixedAspectRatio(Game::instance()->aspectRatio());
+				//modifica 16 --> 20
 	_view->setRect(RectF(0, 0, 16, 12));
 
 	_name = "gamescene";

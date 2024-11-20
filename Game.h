@@ -55,7 +55,7 @@ class agp::Game
 
 		// getters
 		Window* window() { return _window; }
-		float aspectRatio() { return 1.216f; }
+		float aspectRatio() { return 1.51f; }
 		UIMonster* uiMonster() { return _uiMonster; }
 		HUD* hud() { return _hud; }
 

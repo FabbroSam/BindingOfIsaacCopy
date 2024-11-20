@@ -19,9 +19,9 @@
 using namespace agp;
 
 Isaac::Isaac(Scene* scene, const PointF& pos)
-	: DynamicObject(scene, RectF(pos.x + 1 / 16.0f, pos.y, 1.6, 1.6), nullptr, 6)
+	: DynamicObject(scene, RectF(pos.x + 1 / 16.0f, pos.y, 1.2, 1.1), nullptr, 6)
 {
-	_collider.adjust(0.3f, 1.0f, -0.2f, -0.0f);
+	_collider.adjust(0.3f, 0.85f, -0.3f, 0.2f);
 
 	_walking = false;
 	_jumping = false;
@@ -45,14 +45,14 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_sprites["die"] = SpriteFactory::instance()->get("isaac_die");
 	_sprite = _sprites["headFront"];
 
-	_body = new RenderableObject(_scene, _rect + Vec2Df({ 0, 0.55 }), _sprites["bodyFront"]);
+	_body = new RenderableObject(_scene, _rect + Vec2Df({ 0, 0.34 }), _sprites["bodyFront"], 5);
 }
 
 void Isaac::update(float dt) {
 
 	// physics and overrides
 	DynamicObject::update(dt);
-	_body->setRect(_rect + Vec2Df({ 0, 0.55 }));
+	_body->setRect(_rect + Vec2Df({ 0, 0.34 }));
 
 	// state logic
 	if (_vel.x != 0)
@@ -109,7 +109,7 @@ void Isaac::update(float dt) {
 	}
 
 	// x-mirroring
-	if ((_vel.x < 0 && !_jumping) || _x_vel_last_nonzero < 0)
+	if ((_vel.x < 0) || _x_vel_last_nonzero < 0)
 	{
 		_flip = SDL_FLIP_HORIZONTAL;
 		_body->setFlip(SDL_FLIP_HORIZONTAL);

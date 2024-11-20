@@ -39,7 +39,7 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["isaac"] = loadTexture(renderer, "../sprites/isaac.png");
 	// ITEM
 	_spriteSheets["tears"] = loadTexture(renderer, "../sprites/tears.png");
-	
+
 	_spriteSheets["enemies"] = loadTexture(renderer, "../sprites/enemies.png", { 147, 187, 236 });
 	_spriteSheets["hud"] = loadTexture(renderer, "../sprites/hud.png", { 147, 187, 236 });
 	_spriteSheets["tiles"] = loadTexture(renderer, "../sprites/stage_tiles.png", { 147, 187, 236 });
@@ -68,7 +68,7 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["hud_hearts"] = loadTexture(renderer, "../sprites/ui_hearts.png", { 147, 187, 236 });
 	_spriteSheets["hud_items"] = loadTexture(renderer, "../sprites/ui_items.png", { 147, 187, 236 });
 	_spriteSheets["hud_minimap"] = loadTexture(renderer, "../sprites/ui_minimap.png", { 147, 187, 236 });
-		_spriteSheets["hud_minimap"] = loadTexture(renderer, "../sprites/ui_minimap.png", { 147, 187, 236 });
+	_spriteSheets["hud_minimap"] = loadTexture(renderer, "../sprites/ui_minimap.png", { 147, 187, 236 });
 
 
 	//UI MONSTER
@@ -89,10 +89,10 @@ SpriteFactory::SpriteFactory()
 }
 
 // anchors
-static std::vector<RectI> basement_type{RectI(0, 0, 234, 156),
+static std::vector<RectI> basement_type{ RectI(0, 0, 234, 156),
 										RectI(234, 0, 234, 156),
 										RectI(0, 156, 234, 156),
-										RectI(234, 156, 234, 156)};
+										RectI(234, 156, 234, 156) };
 
 
 Sprite* SpriteFactory::get(const std::string& id)
@@ -151,14 +151,14 @@ Sprite* SpriteFactory::get(const std::string& id)
 		rects.push_back(moveBy(RectF(0, 0, 51, 51), 0, 1, 47, 51));
 		return new AnimatedSprite(_spriteSheets["bluefire"], rects, 13, "bluefire");
 	}
-	else if (id == "rock") 
+	else if (id == "rock")
 	{
 		int x = rand() % 3;
 		//int y = rand() % 10 < 6 ? 0 : rand() % 3;
 		int srcPosx = 32 * x;
 		//int srcPosy = 32 * y;
 		return new Sprite(_spriteSheets["rocks"], RectF(float(srcPosx), 0, 32, 32), "rock");
-	}		
+	}
 	else if (id == "basement_UpL" || id == "basement_UpR" || id == "basement_DownL" || id == "basement_DownR")
 	{
 		float size = 52;
@@ -175,11 +175,11 @@ Sprite* SpriteFactory::get(const std::string& id)
 				}
 				else if (id == "basement_UpR")
 				{
-					rects.push_back(RectF(srcPosx + ( 3 - i) * size, srcPosy + j * size, size, size));
+					rects.push_back(RectF(srcPosx + (3 - i) * size, srcPosy + j * size, size, size));
 				}
 				else if (id == "basement_DownL")
 				{
-					rects.push_back(RectF(srcPosx + i * size, srcPosy + (2 - j) * size - 1 +0.1f, size, size));
+					rects.push_back(RectF(srcPosx + i * size, srcPosy + (2 - j) * size - 1 + 0.1f, size, size));
 				}
 				else if (id == "basement_DownR")
 				{
@@ -187,7 +187,7 @@ Sprite* SpriteFactory::get(const std::string& id)
 				}
 			}
 		}
-		return new TiledSprite(_spriteSheets["basement"],  rects, "basement_wall", { 2,2 });
+		return new TiledSprite(_spriteSheets["basement"], rects, "basement_wall", { 2,2 });
 	}
 	else if (id == "basement_boss_UpL" || id == "basement_boss_UpR" || id == "basement_boss_DownL" || id == "basement_boss_DownR")
 	{
@@ -234,11 +234,11 @@ Sprite* SpriteFactory::get(const std::string& id)
 				}
 				else if (id == "basement_shop_UpR")
 				{
-					rects.push_back(RectF(srcPosx + ( 3 - i) * size, srcPosy + j * size, size, size));
+					rects.push_back(RectF(srcPosx + (3 - i) * size, srcPosy + j * size, size, size));
 				}
 				else if (id == "basement_shop_DownL")
 				{
-					rects.push_back(RectF(srcPosx + i * size, srcPosy + (2 - j) * size - 1 +0.1f, size, size));
+					rects.push_back(RectF(srcPosx + i * size, srcPosy + (2 - j) * size - 1 + 0.1f, size, size));
 				}
 				else if (id == "basement_shop_DownR")
 				{
@@ -277,8 +277,8 @@ Sprite* SpriteFactory::get(const std::string& id)
 			}
 		}
 		return new TiledSprite(_spriteSheets["treasure"], rects, "basement_wall_treasure", { 2,2 });
-		}
-	
+	}
+
 	// UI_MONSTER
 	else if (id == "ui_boss")
 		return new Sprite(_spriteSheets["ui_boss"], RectI(0, 0, 192, 192), "ui_boss");
@@ -293,7 +293,7 @@ Sprite* SpriteFactory::get(const std::string& id)
 	else if (id == "ui_vs")
 		return new Sprite(_spriteSheets["ui_vs"], RectI(0, 0, 128, 64), "ui_vs");
 
-		// SPRITES HUD
+	// SPRITES HUD
 	else if (id == "hud_heart_red")
 		return new Sprite(_spriteSheets["hud_hearts"], RectI(0, 0, 16, 16), "hud_heart_red");
 	else if (id == "hud_heart_half_red")
@@ -317,14 +317,14 @@ Sprite* SpriteFactory::get(const std::string& id)
 	else if (id == "hud_minimap_shop")
 		return new Sprite(_spriteSheets["hud_minimap"], RectI(30, 51, 9, 8), "hud_minimap_shop");
 
-		// SPRITES MENU
+	// SPRITES MENU
 	else if (id == "menu_title")
 		return new Sprite(_spriteSheets["menu_title"], RectI(0, 0, 480, 272), "menu_title");
 	else if (id == "menu_title_angel")
 		return new Sprite(_spriteSheets["menu_title"], RectI(0, 272, 479, 105), "menu_title_angel");
 	else if (id == "menu_title_start")
 	{
-		rects.push_back(RectF(9,382,160,158));
+		rects.push_back(RectF(9, 382, 160, 158));
 		rects.push_back(RectF(169, 382, 160, 158));
 		return new AnimatedSprite(_spriteSheets["menu_title"], rects, 10, "menu_title_start");
 	}
@@ -392,42 +392,42 @@ Sprite* SpriteFactory::get(const std::string& id)
 		return new Sprite(_spriteSheets["menu_options"], RectI(0, 430, 121, 46), "menu_options_vsync_off_1");
 	else if (id == "menu_options_vsync_off_2")
 		return new Sprite(_spriteSheets["menu_options"], RectI(0, 476, 121, 46), "menu_options_vsync_off_2");
-	
-		// ISAAC SPRITES
+
+	// ISAAC SPRITES
 	else if (id == "isaac_headFront")
-		return new Sprite(_spriteSheets["isaac"], RectI(0*32, 0, 32, 32), "isaac_headFront");
+		return new Sprite(_spriteSheets["isaac"], RectI(0 * 32, 0, 32, 32), "isaac_headFront");
 	else if (id == "isaac_headBack")
-		return new Sprite(_spriteSheets["isaac"], RectI(4*32, 0, 32, 32), "isaac_headBack");
+		return new Sprite(_spriteSheets["isaac"], RectI(4 * 32, 0, 32, 32), "isaac_headBack");
 	else if (id == "isaac_headRight")
-		return new Sprite(_spriteSheets["isaac"], RectI(2*32, 0, 32, 32), "isaac_headRight");
+		return new Sprite(_spriteSheets["isaac"], RectI(2 * 32, 0, 32, 32), "isaac_headRight");
 	else if (id == "isaac_headFrontShoot")
-		return new Sprite(_spriteSheets["isaac"], RectI(1*32, 0, 32, 32), "isaac_headFrontShoot");
+		return new Sprite(_spriteSheets["isaac"], RectI(1 * 32, 0, 32, 32), "isaac_headFrontShoot");
 	else if (id == "isaac_headBackShoot")
-		return new Sprite(_spriteSheets["isaac"], RectI(5*32, 3, 28, 32), "isaac_headBackShoot");
+		return new Sprite(_spriteSheets["isaac"], RectI(5 * 32, 3, 28, 32), "isaac_headBackShoot");
 	else if (id == "isaac_headRightShoot")
-		return new Sprite(_spriteSheets["isaac"], RectI(3*32, 3, 32, 32), "isaac_headRightShoot");
+		return new Sprite(_spriteSheets["isaac"], RectI(3 * 32, 3, 32, 32), "isaac_headRightShoot");
 	else if (id == "isaac_bodyFront")
 		return new Sprite(_spriteSheets["isaac"], RectI(0, 32, 32, 32), "isaac_bodyFront");
 	else if (id == "isaac_walkDown")
-	{		
+	{
 		for (int i = 0; i < 7; i++)
 		{
 			rects.push_back(RectI(i * 32, 32, 32, 32));
 		}
-		rects.push_back(RectI(6*32, 0, 32, 32));
-		rects.push_back(RectI(7*32, 0, 32, 32));
+		rects.push_back(RectI(6 * 32, 0, 32, 32));
+		rects.push_back(RectI(7 * 32, 0, 32, 32));
 		return new AnimatedSprite(_spriteSheets["isaac"], rects, 10, "isaac_walkDown");
-		}
+	}
 	else if (id == "isaac_walkRight")
 	{
 		for (int i = 0; i < 7; i++)
 		{
 			rects.push_back(RectI(i * 32, 2 * 32, 32, 32));
 		}
-		rects.push_back(RectI(0, 3*32, 32, 32));
-		rects.push_back(RectI(1*32, 3*32, 32, 32));
+		rects.push_back(RectI(0, 3 * 32, 32, 32));
+		rects.push_back(RectI(1 * 32, 3 * 32, 32, 32));
 		return new AnimatedSprite(_spriteSheets["isaac"], rects, 10, "isaac_walkRight");
-		}
+	}
 	// ITEM SPRITES
 	else if (id == "tears_default")
 		return new Sprite(_spriteSheets["tears"], RectI(195, 3, 26, 25), "tears_default");
@@ -451,7 +451,7 @@ Sprite* SpriteFactory::getNumber(int n, int fill)
 	for (auto& c : text)
 	{
 		if (isdigit(c))
-			tiles.push_back(moveBy(RectI(0,145,9,11), c - '0', 0, 9, 11));
+			tiles.push_back(moveBy(RectI(0, 145, 9, 11), c - '0', 0, 9, 11));
 	}
 
 	return new TiledSprite(_spriteSheets["ui_font"], tiles, "number", { 0.4f, 0.4f });
