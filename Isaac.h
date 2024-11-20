@@ -32,7 +32,7 @@ class agp::Isaac : public DynamicObject
 		
 		float _shootAnimationTime = 0.15f;
 		float _shootTimer = 0.0f;
-		float _shootCooldown = 0.3f;
+		float _shootCooldown = 0.4f;
 		bool _isShooting = false;
 		bool _canShoot = true;
 		bool _isShootingAnimation = false;

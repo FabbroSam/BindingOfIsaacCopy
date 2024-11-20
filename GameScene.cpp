@@ -125,6 +125,16 @@ void GameScene::update(float timeToSimulate)
 		else
 			_isaac->move_y(Direction::NONE);
 		_isaac->run(_run_pressed);
+
+		//sparo
+		if (_right_pressed && !_left_pressed)
+			_isaac->shoot(Direction::RIGHT);
+		else if (_left_pressed && !_right_pressed)
+			_isaac->shoot(Direction::LEFT);
+		else if (_up_pressed && !_down_pressed)
+			_isaac->shoot(Direction::UP);
+		else if (_down_pressed && !_up_pressed)
+			_isaac->shoot(Direction::DOWN);
 	}
 
 	float _view_x = _view->rect().pos.x;
@@ -190,6 +200,8 @@ void GameScene::event(SDL_Event& evt)
 
 	Scene::event(evt);
 
+	std::cout << evt.type << std::endl;
+
 	if (evt.type == SDL_KEYDOWN && (evt.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
 		Game::instance()->pushScene(Menu::pauseMenu());
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_H)
@@ -254,19 +266,6 @@ void GameScene::event(SDL_Event& evt)
 			else if (evt.wheel.y < 0)
 				_view->scale(1 + _cameraZoomVel);
 		}
-	}
-	// sparo
-	else if (_moveIsaac && evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_UP) {
-		_isaac->shoot(Direction::UP);
-	}
-	else if (_moveIsaac && evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_DOWN) {
-		_isaac->shoot(Direction::DOWN);
-	}
-	else if (_moveIsaac && evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_LEFT) {
-		_isaac->shoot(Direction::LEFT);
-	}
-	else if (_moveIsaac && evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
-		_isaac->shoot(Direction::RIGHT);
 	}
 
 
