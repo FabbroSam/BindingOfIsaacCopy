@@ -19,7 +19,7 @@
 using namespace agp;
 
 Isaac::Isaac(Scene* scene, const PointF& pos)
-	: DynamicObject(scene, RectF(pos.x + 1 / 16.0f, pos.y, 1.2, 1.1), nullptr, 6)
+	: DynamicObject(scene, RectF(pos.x + 1 / 16.0f, pos.y, 1.2f, 1.1f), nullptr, 6)
 {
 	_collider.adjust(0.3f, 0.85f, -0.3f, 0.2f);
 
@@ -45,14 +45,14 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_sprites["die"] = SpriteFactory::instance()->get("isaac_die");
 	_sprite = _sprites["headFront"];
 
-	_body = new RenderableObject(_scene, _rect + Vec2Df({ 0, 0.34 }), _sprites["bodyFront"], 5);
+	_body = new RenderableObject(_scene, _rect + Vec2Df({ 0, 0.34f }), _sprites["bodyFront"], 5);
 }
 
 void Isaac::update(float dt) {
 
 	// physics and overrides
 	DynamicObject::update(dt);
-	_body->setRect(_rect + Vec2Df({ 0, 0.34 }));
+	_body->setRect(_rect + Vec2Df({ 0, 0.34f }));
 
 	// state logic
 	if (_vel.x != 0)

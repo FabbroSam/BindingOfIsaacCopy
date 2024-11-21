@@ -20,7 +20,6 @@ StaticObject::StaticObject(Scene* scene, const RectF& rect, Sprite* sprite, int 
 
 bool StaticObject::collision(CollidableObject* with, Direction fromDir)
 {
-	_focused = true;
-	
+	//_focused = true;	
 	return true;
 }

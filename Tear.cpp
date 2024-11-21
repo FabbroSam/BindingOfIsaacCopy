@@ -43,15 +43,13 @@ void Tear::update(float dt)
 
 bool Tear::collision(CollidableObject* with, Direction fromDir)
 {
-    std::cout << with->name() << std::endl;
     Isaac* isaac = dynamic_cast<Isaac*>(with);
-
-    if (!isaac) {
-        _vel = { 0.0f,0.0f };
-        _compenetrable = true;
-        _scene->killObject(this);
+    if (!isaac || with->sprite()->name().find("tears") == std::string::npos)
+    {    
+            with->setFocused(true);
+            _vel = { 0.0f,0.0f };
+            _scene->killObject(this);
     }
-
     return true;
 }
 

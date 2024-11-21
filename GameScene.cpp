@@ -53,7 +53,6 @@ GameScene::GameScene(const RectF& r, float dt)
 	// setup view (specific for super isaac bros)
 	_view = new View(this, _rect);
 	_view->setFixedAspectRatio(Game::instance()->aspectRatio());
-				//modifica 16 --> 20
 	_view->setRect(RectF(0, 0, 16, 12));
 
 	_name = "gamescene";
@@ -105,12 +104,13 @@ void GameScene::update(float timeToSimulate)
 		_moveIsaac = true;
 	}
 
-	// move Isaac
+	// Isaac
 	if (_moveIsaac)
 	{
 		if (!_isaac)
 			return;
 
+		// move
 		if (_d_pressed && !_a_pressed)
 			_isaac->move_x(Direction::RIGHT);
 		else if (_a_pressed && !_d_pressed)
@@ -126,7 +126,7 @@ void GameScene::update(float timeToSimulate)
 			_isaac->move_y(Direction::NONE);
 		_isaac->run(_run_pressed);
 
-		//sparo
+		// shoot
 		if (_right_pressed && !_left_pressed)
 			_isaac->shoot(Direction::RIGHT);
 		else if (_left_pressed && !_right_pressed)
@@ -200,7 +200,6 @@ void GameScene::event(SDL_Event& evt)
 
 	Scene::event(evt);
 
-	std::cout << evt.type << std::endl;
 
 	if (evt.type == SDL_KEYDOWN && (evt.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
 		Game::instance()->pushScene(Menu::pauseMenu());

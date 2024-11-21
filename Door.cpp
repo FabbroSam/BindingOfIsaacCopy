@@ -114,7 +114,6 @@ void Door::Draw()
 			_doorLeftRight = new DoorPanel(_scene, RectF(_rect.pos.x + 0.1f, _rect.pos.y + 0.38f, 2, 1), _type, _pos, PanelPosition::RIGHT, 1);
 		}
 	}
-
 }
 
 void Door::openClose()

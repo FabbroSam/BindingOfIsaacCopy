@@ -22,7 +22,7 @@ RenderableObject::RenderableObject(Scene* scene, const RectF& rect, const Color&
 	_focused = false;
 	_visible = true;
 	_sprite = nullptr;
-	_focusColor = { 255, 255, 0, 128 };
+	_focusColor = { 255, 0, 0, 255 };
 	_borderColor = { 0, 0, 0, 0 };
 }
 
@@ -36,6 +36,8 @@ RenderableObject::RenderableObject(Scene* scene, const RectF& rect, Sprite* spri
 	_sprite = sprite;
 	_focused = false;
 	_visible = true;
+	_focusColor = { 255, 0, 0, 255 };
+	_borderColor = { 0, 0, 0, 0 };
 }
 
 void RenderableObject::draw(SDL_Renderer* renderer, Transform camera)
@@ -59,12 +61,6 @@ void RenderableObject::draw(SDL_Renderer* renderer, Transform camera)
 		SDL_RenderDrawRectF(renderer, &drawRect);
 	}
 
-	if (_focused)
-	{
-		SDL_SetRenderDrawColor(renderer, _focusColor.r, _focusColor.g, _focusColor.b, _focusColor.a);
-		SDL_RenderFillRectF(renderer, &drawRect); 
-		_focused = false;
-	}
 }
 
 void RenderableObject::update(float dt)
@@ -91,4 +87,12 @@ void RenderableObject::setSprite(Sprite* sprite, bool deallocateSprite, bool res
 	}
 
 	_sprite = sprite;
+}
+
+std::string RenderableObject::name()
+{
+	if(_sprite)
+		return strprintf("RenderableObject[%10s]",_sprite->name());
+	else
+		return strprintf("RenderableObject[%d]", _id);
 }

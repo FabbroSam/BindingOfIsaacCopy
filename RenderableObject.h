@@ -58,7 +58,5 @@ class agp::RenderableObject : public Object
 		// core game rendering
 		virtual void draw(SDL_Renderer* renderer, Transform camera);
 
-		virtual std::string name() override {
-			return strprintf("RenderableObject[%d]", _id);
-		}
+		virtual std::string name() override;
 };

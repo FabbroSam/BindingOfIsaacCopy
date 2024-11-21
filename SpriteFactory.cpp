@@ -100,8 +100,10 @@ Sprite* SpriteFactory::get(const std::string& id)
 	std::vector< RectI> rects;
 
 	// BASEMENT
-	if (id == "empty")
-		return new FilledSprite(_spriteSheets["basement"], RectI(0, 312, 52, 52), "basement");
+	if (id == "wall")
+		return new FilledSprite(_spriteSheets["basement"], RectI(0, 312, 52, 52), "wall");
+	if (id == "upWall")
+		return new FilledSprite(_spriteSheets["basement"], RectI(0, 312, 52, 52), "upWall");
 	else if (id == "door_normal")
 		return new Sprite(_spriteSheets["door"], RectI(0, 0, 52, 52), "door_normal");
 	else if (id == "door_normal_back")

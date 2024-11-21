@@ -98,17 +98,21 @@ void Room::Draw()
 	new RenderableObject(_scene, RectF(_x + 8, _y + 6, 8, 6), spriteLoader->get(wallLeft), 0, 0, SDL_RendererFlip(SDL_FLIP_VERTICAL | SDL_FLIP_HORIZONTAL));
 	//COLLIDER
 	//left
-	new StaticObject(_scene, RectF(_x, _y, 2, 5 + 0.4f), spriteLoader->get("empty"));
-	new StaticObject(_scene, RectF(_x, _y + 7 - 0.75f, 2, 5), spriteLoader->get("empty"));
+	new StaticObject(_scene, RectF(_x, _y, 2, 5 + 0.4f), spriteLoader->get("wall"));
+	new StaticObject(_scene, RectF(_x, _y + 7 - 0.75f, 2, 5 + 0.75f), spriteLoader->get("wall"));
+	new DynamicObject(_scene, RectF(_x, _y, 1, 12), spriteLoader->get("upWall"));
 	//up						   _
-	new StaticObject(_scene, RectF(_x + 2, _y, 5 + 0.6f, 2), spriteLoader->get("empty"));
-	new StaticObject(_scene, RectF(_x + 2 + 7 - 0.6f, _y, 5 + 1.2f, 2), spriteLoader->get("empty"));
+	new StaticObject(_scene, RectF(_x + 2, _y, 5 + 0.6f, 2), spriteLoader->get("wall"));
+	new StaticObject(_scene, RectF(_x + 2 + 7 - 0.6f, _y, 5 + 0.6f, 2), spriteLoader->get("wall"));
+	new DynamicObject(_scene, RectF(_x, _y, 16, 1), spriteLoader->get("upWall"));
 	//down						   _
-	new StaticObject(_scene, RectF(_x + 2, _y + 10, 5 + 0.6f, 2), spriteLoader->get("empty"));
-	new StaticObject(_scene, RectF(_x + 2 + 7 - 0.6f, _y + 10, 5 + 1.2f, 2), spriteLoader->get("empty"));
+	new StaticObject(_scene, RectF(_x + 2, _y + 10, 5 + 0.6f, 2), spriteLoader->get("wall"));
+	new StaticObject(_scene, RectF(_x + 2 + 7 - 0.6f, _y + 10, 5 + 0.6f, 2), spriteLoader->get("wall"));
+	new DynamicObject(_scene, RectF(_x, _y + 11, 16, 1), spriteLoader->get("upWall"));
 	//right						   _
-	new StaticObject(_scene, RectF(_x + 14, _y, 2, 5 + 0.4f), spriteLoader->get("empty"));
-	new StaticObject(_scene, RectF(_x + 14, _y + 7 - 0.75f, 2, 5), spriteLoader->get("empty"));
+	new StaticObject(_scene, RectF(_x + 14, _y, 2, 5 + 0.4f), spriteLoader->get("wall"));
+	new StaticObject(_scene, RectF(_x + 14, _y + 7 - 0.75f, 2, 5 + 0.75f), spriteLoader->get("wall"));
+	new DynamicObject(_scene, RectF(_x + 15, _y, 1, 12), spriteLoader->get("upWall"));
 
 	// DOOR (viene inserita la porta senza collider oppure il collider sopra il muro)
 
@@ -118,7 +122,7 @@ void Room::Draw()
 	else if (_roomTypeUp == RoomType::NORMAL || _roomTypeUp == RoomType::INITIAL || _roomTypeUp == RoomType::SHOP)
 		_doorUp = new Door(_scene, rect, _roomType, DoorPosition::TOP);
 	else if (_roomTypeUp == RoomType::EMPTY)
-		new StaticObject(_scene, rect, spriteLoader->get("empty"));
+		new StaticObject(_scene, rect, spriteLoader->get("wall"));
 
 	rect = RectF(_x + 7, _y + 10, 2, 2);
 	if (_roomTypeDown == RoomType::BOSS || _roomTypeDown == RoomType::TREASURE)
@@ -126,7 +130,7 @@ void Room::Draw()
 	else if (_roomTypeDown == RoomType::NORMAL || _roomTypeDown == RoomType::INITIAL || _roomTypeDown == RoomType::SHOP)
 		_doorDown = new Door(_scene, rect, _roomType, DoorPosition::BOTTOM, 0, SDL_FLIP_VERTICAL);
 	else if (_roomTypeDown == RoomType::EMPTY)
-		new StaticObject(_scene, rect, spriteLoader->get("empty"));
+		new StaticObject(_scene, rect, spriteLoader->get("wall"));
 
 	rect = RectF(_x + 14, _y + 4.95f, 2, 2.44f);
 	if (_roomTypeRight == RoomType::BOSS || _roomTypeRight == RoomType::TREASURE)
@@ -134,7 +138,7 @@ void Room::Draw()
 	else if (_roomTypeRight == RoomType::NORMAL || _roomTypeRight == RoomType::INITIAL || _roomTypeRight == RoomType::SHOP)
 		_doorRight = new Door(_scene, rect, _roomType, DoorPosition::RIGHT, 270);
 	else if (_roomTypeRight == RoomType::EMPTY)
-		new StaticObject(_scene, rect, spriteLoader->get("empty"));
+		new StaticObject(_scene, rect, spriteLoader->get("wall"));
 
 	rect = RectF(_x, _y + 4.85f, 2, 2.44f);
 	if (_roomTypeLeft == RoomType::BOSS || _roomTypeLeft == RoomType::TREASURE)
@@ -142,20 +146,20 @@ void Room::Draw()
 	else if (_roomTypeLeft == RoomType::NORMAL || _roomTypeLeft == RoomType::INITIAL || _roomTypeLeft == RoomType::SHOP)
 		_doorLeft = new Door(_scene, rect, _roomType, DoorPosition::LEFT, 90);
 	else if (_roomTypeLeft == RoomType::EMPTY)
-		new StaticObject(_scene, rect, spriteLoader->get("empty"));
+		new StaticObject(_scene, rect, spriteLoader->get("wall"));
 
 	if (_roomType == RoomType::INITIAL) {
 		new RenderableObject(_scene, RectF(2.25f, 4.4f, 11.5f, 3.2f), spriteLoader->get("controls"));
 	}
 	else if (_roomType == RoomType::TREASURE)
 	{
-		new CollidableObject(_scene, RectF(_x + 5.5f, _y + 4.0f, 1, 1), spriteLoader->get("fireplace_blue"));
+		new StaticObject(_scene, RectF(_x + 5.5f, _y + 4.0f, 1, 1), spriteLoader->get("fireplace_blue"));
 		new RenderableObject(_scene, RectF(_x + 5.5f, _y + 3.5f, 1, 1), spriteLoader->get("bluefire"));
-		new CollidableObject(_scene, RectF(_x + 9.5f, _y + 4.0f, 1, 1), spriteLoader->get("fireplace_blue"));
+		new StaticObject(_scene, RectF(_x + 9.5f, _y + 4.0f, 1, 1), spriteLoader->get("fireplace_blue"));
 		new RenderableObject(_scene, RectF(_x + 9.5f, _y + 3.5f, 1, 1), spriteLoader->get("bluefire"));
-		new CollidableObject(_scene, RectF(_x + 5.5f, _y + 7.0f, 1, 1), spriteLoader->get("fireplace_blue"));
+		new StaticObject(_scene, RectF(_x + 5.5f, _y + 7.0f, 1, 1), spriteLoader->get("fireplace_blue"));
 		new RenderableObject(_scene, RectF(_x + 5.5f, _y + 6.5f, 1, 1), spriteLoader->get("bluefire"));
-		new CollidableObject(_scene, RectF(_x + 9.5f, _y + 7.0f, 1, 1), spriteLoader->get("fireplace_blue"));
+		new StaticObject(_scene, RectF(_x + 9.5f, _y + 7.0f, 1, 1), spriteLoader->get("fireplace_blue"));
 		new RenderableObject(_scene, RectF(_x + 9.5f, _y + 6.5f, 1, 1), spriteLoader->get("bluefire"));
 	}
 	else if (_roomType == RoomType::NORMAL)

@@ -109,6 +109,22 @@ void CollidableObject::draw(SDL_Renderer* renderer, Transform camera)
 		SDL_SetRenderDrawColor(renderer, _colliderColor.r, _colliderColor.g, _colliderColor.b, _colliderColor.a);
 		SDL_RenderDrawRectF(renderer, &drawRect);
 	}
+	if (_focused)
+	{
+		auto vertices = sceneCollider().vertices();
+		SDL_FRect drawRect = RectF(camera(vertices[0]), camera(vertices[2])).toSDLf();
+		SDL_SetRenderDrawColor(renderer, _focusColor.r, _focusColor.g, _focusColor.b, _focusColor.a);
+		SDL_RenderDrawRectF(renderer, &drawRect);
+		schedule("focus", 1.0f, [this]()
+			{
+				_focused = false;
+				printf("Stampa in CollidableObj: Shoot ---> ");
+				if (_sprite)
+					printf("%s[%d]\n", _sprite->name().c_str(), _id);
+				else
+					printf("%s\n", name().c_str());
+			}, 0, false);
+	}
 }
 
 float CollidableObject::distance(CollidableObject* obj) const

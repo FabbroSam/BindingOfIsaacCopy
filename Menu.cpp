@@ -104,7 +104,7 @@ void MenuItem::update(float dt)
 		_menuArrow->setVisible(true);
 	else
 		_menuArrow->setVisible(false);
-	_focused = _selected;
+	//_focused = _selected;
 }
 
 Menu::Menu(const PointF& position, float width, Menu* parent, bool closable)
