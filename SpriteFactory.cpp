@@ -81,6 +81,11 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["ui_font"] = loadTexture(renderer, "../sprites/ui_font.png", { 147, 187, 236 });
 
 
+
+	// MOBS
+	_spriteSheets["duke"] = loadTexture(renderer, "../sprites/duke.png", { 147, 187, 236 });
+	_spriteSheets["fly"] = loadTexture(renderer, "../sprites/fly.png", { 147, 187, 236 });
+
 	std::vector<RectI> vecRect;
 	SDL_Texture* base = loadTextureSequence(renderer, "../image", vecRect, Point(0, 0), Point(52, 52));
 	RectI src(0, 0, 180, 180);
@@ -433,6 +438,26 @@ Sprite* SpriteFactory::get(const std::string& id)
 	// ITEM SPRITES
 	else if (id == "tears_default")
 		return new Sprite(_spriteSheets["tears"], RectI(195, 3, 26, 25), "tears_default");
+
+		//DUKE OF FLIES (MOB)
+	else if (id == "duke_1")
+		return new Sprite(_spriteSheets["duke"], RectF(154, 0, 77, 66), "duke");		
+	else if (id == "duke_2")
+		return new Sprite(_spriteSheets["duke"], RectF(0, 0, 77, 66), "duke");	
+	else if (id == "duke_3")
+		return new Sprite(_spriteSheets["duke"], RectF(231, 0, 77, 66), "duke");
+	else if (id == "duke_4")
+		return new Sprite(_spriteSheets["duke"], RectF(77, 0, 77, 66), "duke");
+
+
+	else if (id == "fly")
+	{
+		rects.push_back(moveBy(RectF(0, 0, 30, 30), 0, 0, 30, 30));
+		rects.push_back(moveBy(RectF(0, 0, 30, 30), 1, 0, 30, 30));
+		return new AnimatedSprite(_spriteSheets["fly"], rects, 30, "fly");
+	}
+
+
 	else
 	{
 		std::cerr << "Cannot find sprite \"" << id << "\"\n";

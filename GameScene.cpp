@@ -20,6 +20,8 @@
 #include "Door.h"
 #include "HUD.h"
 #include "UIMonster.h"
+#include "Duke.h"
+#include "Fly.h"
 #include <iostream>
 using namespace agp;
 
@@ -62,6 +64,7 @@ void GameScene::update(float timeToSimulate)
 {
 
 	Scene::update(timeToSimulate);
+
 
 	if (!_active)
 		return;
@@ -177,6 +180,9 @@ void GameScene::update(float timeToSimulate)
 			setRooms(std::make_pair(0, -1));
 		}
 
+		if (_room->type() == RoomType::NORMAL)
+			new Fly(this, PointF(this->room()->rect().pos.x + 3, this->room()->rect().pos.y + 3), 1.5f);
+
 		if (_room->type() == RoomType::BOSS)
 		{
 			if (_vsMonster)
@@ -184,7 +190,7 @@ void GameScene::update(float timeToSimulate)
 				Game::instance()->uiMonster()->setActiveUIMonster();
 				_vsMonster = false;
 
-				// schedule for show BOSS ???				
+				new Duke(this, PointF(this->room()->rect().pos.x + 2, this->room()->rect().pos.y + 2), 1.5f);
 					//_room->openCloseDoor();
 					//_room->offLightDoor();
 			}

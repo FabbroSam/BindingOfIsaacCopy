@@ -14,7 +14,6 @@
 #include "StaticObject.h"
 #include "GameScene.h"
 #include "Isaac.h"
-#include "HammerBrother.h"
 #include "Lift.h"
 #include "Trigger.h"
 #include "sdlUtils.h"

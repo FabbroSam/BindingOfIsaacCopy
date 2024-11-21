@@ -5,12 +5,13 @@
 
 using namespace agp;
 
-Enemy::Enemy(Scene* scene, const RectF& rect, Sprite* sprite, int layer)
+Enemy::Enemy(Scene* scene, const RectF& rect, Sprite* sprite, float spawnDelay, int layer)
 	: DynamicObject(scene, rect, sprite, layer)
 {
 	_smashable = true;
 	_dying = false;
 	_facingDir = Direction::LEFT;
+	_spawnDelay = spawnDelay;
 }
 
 bool Enemy::collision(CollidableObject* with, Direction fromDir)

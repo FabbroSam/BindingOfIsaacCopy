@@ -7,7 +7,7 @@
 #include "Object.h"
 #include "Door.h"
 #include "geometryUtils.h"
-#include "HammerBrother.h"
+
 
 namespace agp
 {

@@ -25,10 +25,11 @@ class agp::Enemy : public DynamicObject
 		bool _smashable;
 		bool _dying;
 		Direction _facingDir;
+		float _spawnDelay;
 
 	public:
 
-		Enemy(Scene* scene, const RectF& rect, Sprite* sprite, int layer = 0);
+		Enemy(Scene* scene, const RectF& rect, Sprite* sprite,float _spawnDelay, int layer = 0);
 
 		Direction facingDir() { return _facingDir; }
 
