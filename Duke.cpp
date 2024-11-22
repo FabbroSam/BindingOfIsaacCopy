@@ -10,7 +10,7 @@
 using namespace agp;
 
 Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
-	:Enemy(scene, RectF(pos.x, pos.y, 77 / 16 * 0.9f, 66 / 16 * 0.9f), nullptr, spawnDelay, 5)
+	:Enemy(scene, RectF(pos.x, pos.y, 77 / 16 * 0.85f, 66 / 16 * 0.85f), nullptr, spawnDelay, 5)
 {
 	//_rect = RectF(pos.x, pos.y, 77/16, 66/12);
 	//setCollider(pos.x, pos.y, 77/16, 66/12);
@@ -18,9 +18,10 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 	_x_dir = Direction:: NONE;
 	_y_dir = Direction::NONE;
 
-	_shadow = new RenderableObject(_scene, _rect+Vec2Df(0,1), SpriteFactory::instance()->get("duke_1"), 5);
+	_shadow = new RenderableObject(_scene,_rect, SpriteFactory::instance()->get("shadow"), 4);
 
-	_collider.adjust(0.0f, 0.0f, 0.0f, 0.0f);
+	_collider.adjust(1, 0.3f, -0.8, -1);
+
 	_sprites["duke_1"] = SpriteFactory::instance()->get("duke_1");
 	_sprites["duke_2"] = SpriteFactory::instance()->get("duke_2");
 	_sprites["duke_3"] = SpriteFactory::instance()->get("duke_3");
@@ -62,8 +63,6 @@ bool Duke::collision(CollidableObject* with, Direction fromDir)
 			_y_dir = inverse(fromDir);
 
 	}
-		
-
 	return true;
 }
 
@@ -81,32 +80,19 @@ void Duke::update(float dt)
 	index[2] = 4.0f;
 	index[3] = 3.0f;
 
-	_shadow->setRect(_rect + Vec2Df(0, 1));
+	_shadow->setRect(_rect * Vec2Df(0.5f, 0.3f) + Vec2Df(0.85f, 2.9f));
 	
 
 	if (accumulator <= index[0])
-	{
 		_sprite = _sprites["duke_1"];
-		
-	}
 	else if (accumulator <= (index[0] + index[1]))
-	{
 		_sprite = _sprites["duke_2"];
-	}
 	else if (accumulator <= (index[0] + index[1] + index[2]))
-	{
 		_sprite = _sprites["duke_3"];
-	}
 	else if (accumulator <= (index[0] + 4 * index[1] + index[2]))
-	{
 		_sprite = _sprites["duke_2"];
-	}
 	else if (accumulator <= (index[0] + index[1] + index[2] + index[3]))
-	{
-
 		_sprite = _sprites["duke_4"];
-	}
 	else
 		accumulator = 0;
-
 }

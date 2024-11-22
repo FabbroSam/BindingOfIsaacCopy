@@ -16,6 +16,8 @@ protected:
 
 	std::map<std::string, Sprite*> _sprites;
 
+	RenderableObject* _shadow;
+
 
 public:
 
