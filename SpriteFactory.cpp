@@ -40,6 +40,7 @@ SpriteFactory::SpriteFactory()
 	// ITEM
 	_spriteSheets["tears"] = loadTexture(renderer, "../sprites/tears.png");
 	_spriteSheets["explosion"] = loadTexture(renderer, "../sprites/tear_animation.png");
+	_spriteSheets["altar"] = loadTexture(renderer, "../sprites/altar.png");
 
 	_spriteSheets["enemies"] = loadTexture(renderer, "../sprites/enemies.png", { 147, 187, 236 });
 	_spriteSheets["hud"] = loadTexture(renderer, "../sprites/hud.png", { 147, 187, 236 });
@@ -451,6 +452,8 @@ Sprite* SpriteFactory::get(const std::string& id)
 		}
 		return new AnimatedSprite(_spriteSheets["explosion"], rects, 24, "tear_explosion");
 	}
+	else if (id == "altar")
+		return new Sprite(_spriteSheets["altar"], RectI(0, 0, 32, 32), "altar");
 
 		//DUKE OF FLIES (MOB)
 	else if (id == "duke_1")
