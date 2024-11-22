@@ -189,7 +189,7 @@ void Isaac::shoot(Direction dir) {
 	schedule("_canShoot", _shootCooldown, [this]() 
 		{
 		_canShoot = true;
-		});
+		},0, true);
 
 	_shootTimer = _shootAnimationTime;
 	_isShooting = true;
@@ -209,7 +209,5 @@ void Isaac::shoot(Direction dir) {
 		break;
 	}
 
-	PointF spawnPos = _rect.pos;
-	Tear* newTear = new Tear(_scene, spawnPos, dir);
-	_scene->newObject(newTear);
+	Tear* newTear = new Tear(_scene, _rect.pos, dir, 3);
 }
