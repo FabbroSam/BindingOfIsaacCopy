@@ -7,12 +7,15 @@
 #include <list>
 #include <iostream>
 #include "Isaac.h"
-
+#include "Enemy.h"
 using namespace agp;
 
 Tear::Tear(Scene* scene, const PointF& pos, Direction dir, int layer)
     : DynamicObject(scene, RectF(pos.x, pos.y, 1, 1), SpriteFactory::instance()->get("tears_default"), layer)
 {
+    _h = 1;
+    _absVel = 8.0f;
+    _compenetrable = true;
     _vel = { 0.0f, 0.0f };
     _x_dec_rel = 0;
     _y_dec_rel = 0;
@@ -38,18 +41,48 @@ Tear::Tear(Scene* scene, const PointF& pos, Direction dir, int layer)
 
 void Tear::update(float dt)
 {
+    float gravita = 0.6f; //si può pensare di renderla una variabile nella classe Movable
+
+    if(_h > 0)
+        _h = _h - gravita * dt;
+
     DynamicObject::update(dt);
 }
 
+
+
 bool Tear::collision(CollidableObject* with, Direction fromDir)
 {
-    Isaac* isaac = dynamic_cast<Isaac*>(with);
-    if (!isaac || with->sprite()->name().find("tears") == std::string::npos)
-    {    
-            with->setFocused(true);
-            _vel = { 0.0f,0.0f };
-            _scene->killObject(this);
-    }
     return true;
+}
+
+void Tear::destroy(CollidableObject* obj)
+{
+    obj->setFocused(true);
+    _vel = { 0.0f,0.0f };
+    _collidable = false;
+    // settare la sprite di scomparsa
+    schedule("die", 0.001f, [this]() {kill(); }); //schedule evita che crasha il gioco - comunque utile per aspettare che finisca l'animazione di scomparsa
+}
+
+bool Tear::collidableWith(CollidableObject* obj)
+{
+    Isaac* isaac = dynamic_cast<Isaac*>(obj);
+    Enemy* enemy = dynamic_cast<Enemy*>(obj);
+    if (!isaac)
+    {
+        if (enemy)    // se incontra un nemico colpiscilo
+            destroy(enemy);
+        else if (_h > 0.5f) //se h > 0.5 colpisci solo i muri alti, altrimenti tutto il resto
+        {
+            if (obj->sprite())
+                if (!obj->sprite()->name().find("upWall"))
+                    destroy(obj);
+        }
+        else
+            destroy(obj);
+    }
+
+    return false; // false per non risolvere le collisioni (vogliamo gestire noi le collisioni)
 }
 
