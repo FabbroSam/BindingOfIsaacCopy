@@ -12,8 +12,15 @@
 using namespace agp;
 
 Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_inertia, float y_inertia, int layer)
-    : DynamicObject(scene, RectF(pos.x, pos.y, 1, 1), SpriteFactory::instance()->get("tears_default"), layer)
+    : DynamicObject(scene, RectF(pos.x, pos.y, 1, 1), nullptr, layer)
 {
+    _sprites["tear"] = SpriteFactory::instance()->get("tears_default");
+    _sprites["tears_explosion"] = SpriteFactory::instance()->get("tears_explosion");
+    _sprites["shadow"] = SpriteFactory::instance()->get("shadow");
+    _sprite = _sprites["tear"];
+
+    _shadow = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["shadow"],4);
+
     _collider.adjust(0.3f, 0.3f, -0.3f, -0.3f);
     _h = 1;
     _absVel = 8.0f;
@@ -23,7 +30,9 @@ Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_inertia, floa
     _y_dec_rel = 0;
     _x_inertia = x_inertia;
     _y_inertia = y_inertia;
-    
+
+
+
 	switch (dir) {
 	case Direction::LEFT:
         _vel = { -_absVel+_x_inertia, _y_inertia };
@@ -45,6 +54,8 @@ Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_inertia, floa
 
 void Tear::update(float dt)
 {
+    _shadow->setRect(RectF(_rect.pos.x + 0.6f, _rect.pos.y + 0.6f, 0.3, 0.3));
+
     float gravita = 0.6f; //si può pensare di renderla una variabile nella classe Movable
 
     if(_h > 0)
@@ -52,8 +63,6 @@ void Tear::update(float dt)
 
     DynamicObject::update(dt);
 }
-
-
 
 bool Tear::collision(CollidableObject* with, Direction fromDir)
 {
@@ -96,6 +105,6 @@ bool Tear::collidableWith(CollidableObject* obj)
 }
 
 void Tear::kill() {
-    _sprite = SpriteFactory::instance()->get("tears_explosion");
+    _sprite = _sprites["tears_explosion"];
     schedule("explosion", 0.3f, [this]() {_scene->killObject(this); });
 }

@@ -57,7 +57,7 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_sprites["die"] = SpriteFactory::instance()->get("isaac_die");
 	_sprite = _sprites["headFront"];
 
-	_body = new RenderableObject(_scene, _rect + Vec2Df({ 0, 0.34f }), _sprites["bodyFront"], 5);
+	_body = new RenderableObject(_scene, RectF(0,0,0,0), _sprites["bodyFront"], 5);
 }
 
 void Isaac::update(float dt) {
@@ -191,7 +191,7 @@ void Isaac::hurt()
 void Isaac::shoot(Direction dir) {
 	PointF spawnPoint;
 	spawnPoint.x = _rect.pos.x;
-	spawnPoint.y = _rect.pos.y + 0.3;
+	spawnPoint.y = _rect.pos.y + 0.3f;
 	if (!_canShoot) return;
 
 	schedule("_canShoot", _shootCooldown, [this]() 
@@ -227,7 +227,7 @@ void Isaac::shoot(Direction dir) {
 		break;
 	}
 
-	Tear* newTear = new Tear(_scene, spawnPoint, dir, _vel.x*0.35, _vel.y*0.35, 7);
+	Tear* newTear = new Tear(_scene, spawnPoint, dir, _vel.x, _vel.y, 7);
 	if (_isShootingRight)
 		_isShootingRight = false;
 	else
