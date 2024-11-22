@@ -39,6 +39,7 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["isaac"] = loadTexture(renderer, "../sprites/isaac.png");
 	// ITEM
 	_spriteSheets["tears"] = loadTexture(renderer, "../sprites/tears.png");
+	_spriteSheets["explosion"] = loadTexture(renderer, "../sprites/tear_animation.png");
 
 	_spriteSheets["enemies"] = loadTexture(renderer, "../sprites/enemies.png", { 147, 187, 236 });
 	_spriteSheets["hud"] = loadTexture(renderer, "../sprites/hud.png", { 147, 187, 236 });
@@ -410,9 +411,9 @@ Sprite* SpriteFactory::get(const std::string& id)
 	else if (id == "isaac_headFrontShoot")
 		return new Sprite(_spriteSheets["isaac"], RectI(1 * 32, 0, 32, 32), "isaac_headFrontShoot");
 	else if (id == "isaac_headBackShoot")
-		return new Sprite(_spriteSheets["isaac"], RectI(5 * 32, 3, 28, 32), "isaac_headBackShoot");
+		return new Sprite(_spriteSheets["isaac"], RectI(5 * 32, 0, 32, 32), "isaac_headBackShoot");
 	else if (id == "isaac_headRightShoot")
-		return new Sprite(_spriteSheets["isaac"], RectI(3 * 32, 3, 32, 32), "isaac_headRightShoot");
+		return new Sprite(_spriteSheets["isaac"], RectI(3 * 32, 0, 32, 32), "isaac_headRightShoot");
 	else if (id == "isaac_bodyFront")
 		return new Sprite(_spriteSheets["isaac"], RectI(0, 32, 32, 32), "isaac_bodyFront");
 	else if (id == "isaac_walkDown")
@@ -437,7 +438,15 @@ Sprite* SpriteFactory::get(const std::string& id)
 	}
 	// ITEM SPRITES
 	else if (id == "tears_default")
-		return new Sprite(_spriteSheets["tears"], RectI(195, 3, 26, 25), "tears_default");
+		return new Sprite(_spriteSheets["tears"], RectI(192, 0, 32, 32), "tears_default");
+	else if (id == "tears_explosion") {
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				rects.push_back(RectI(j * 64, i * 64, 64, 64));
+			}
+		}
+		return new AnimatedSprite(_spriteSheets["explosion"], rects, 24, "tear_explosion");
+	}
 
 		//DUKE OF FLIES (MOB)
 	else if (id == "duke_1")

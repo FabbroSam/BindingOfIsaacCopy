@@ -30,13 +30,25 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_dead = false;
 	_invincible = true;
 
+	_x_acc = 1.8f;
+	_x_dec_rel = 5.0f;
+	_x_vel_max = 5.5f;
+	_x_vel_min = 0.2f;
+
+	_y_acc = 1.8f;
+	_y_dec_rel = 5.0f; 
+	_y_vel_max = 5.5f;
+	_y_vel_min = 0.2f;
+
 	_x_vel_last_nonzero = 0;
 	_y_vel_last_nonzero = 0;
 
 	_sprites["headFront"] = SpriteFactory::instance()->get("isaac_headFront");
 	_sprites["headFrontShoot"] = SpriteFactory::instance()->get("isaac_headFrontShoot");
 	_sprites["headBack"] = SpriteFactory::instance()->get("isaac_headBack");
+	_sprites["headBackShoot"] = SpriteFactory::instance()->get("isaac_headBackShoot");
 	_sprites["headRight"] = SpriteFactory::instance()->get("isaac_headRight");
+	_sprites["headRightShoot"] = SpriteFactory::instance()->get("isaac_headRightShoot");
 	_sprites["bodyFront"] = SpriteFactory::instance()->get("isaac_bodyFront");
 	_sprites["walkDown"] = SpriteFactory::instance()->get("isaac_walkDown");
 	_sprites["walkRight"] = SpriteFactory::instance()->get("isaac_walkRight");
@@ -49,9 +61,9 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 }
 
 void Isaac::update(float dt) {
-
 	// physics and overrides
 	DynamicObject::update(dt);
+
 	_body->setRect(_rect + Vec2Df({ 0, 0.34f }));
 
 	// state logic
@@ -81,7 +93,7 @@ void Isaac::update(float dt) {
 	else if (_isShooting) {
 		_shootTimer -= dt;
 		if (_shootTimer <= 0.0f) {
-			_sprite = _sprites["headFront"];
+			//_sprite = _sprites["headFront"];
 			_isShooting = false;
 		}
 	}
@@ -104,12 +116,19 @@ void Isaac::update(float dt) {
 		}
 	}
 	else {
-		_sprite = _sprites["headFront"];
+		if (_state[SDL_SCANCODE_UP])
+			_sprite = _sprites["headBack"];
+		else if (_state[SDL_SCANCODE_RIGHT])
+			_sprite = _sprites["headRight"];
+		else if (_state[SDL_SCANCODE_LEFT])
+			_sprite = _sprites["headRight"];
+		else
+			_sprite = _sprites["headFront"];
 		_body->setSprite(_sprites["bodyFront"]);
 	}
 
 	// x-mirroring
-	if ((_vel.x < 0) || _x_vel_last_nonzero < 0)
+	if ((_vel.x < 0) || _x_vel_last_nonzero < 0 || _state[SDL_SCANCODE_LEFT])
 	{
 		_flip = SDL_FLIP_HORIZONTAL;
 		_body->setFlip(SDL_FLIP_HORIZONTAL);
@@ -137,20 +156,6 @@ void Isaac::move_y(Direction dir)
 		return;
 
 	MovableObject::move_y(dir);
-}
-
-void Isaac::run(bool on)
-{
-	if (on)
-	{
-		_x_vel_max = 10;
-		_x_acc = 13;
-	}
-	else
-	{
-		_x_vel_max = 6;	
-		_x_acc = 8;
-	}
 }
 
 void Isaac::die()
@@ -184,6 +189,9 @@ void Isaac::hurt()
 }
 
 void Isaac::shoot(Direction dir) {
+	PointF spawnPoint;
+	spawnPoint.x = _rect.pos.x;
+	spawnPoint.y = _rect.pos.y + 0.3;
 	if (!_canShoot) return;
 
 	schedule("_canShoot", _shootCooldown, [this]() 
@@ -197,17 +205,31 @@ void Isaac::shoot(Direction dir) {
 
 	switch (dir) {
 	case Direction::LEFT:
+		spawnPoint.y += (_isShootingRight ? -0.5f : -0.2f);
+		spawnPoint.x += (_isShootingRight ? -0.5f : 0.0f);
+		_sprite = _sprites["headRightShoot"];
 		break;
 	case Direction::RIGHT:
+		spawnPoint.y += (_isShootingRight ? -0.2f : -0.5f);
+		spawnPoint.x += (_isShootingRight ? 0.0f : 0.5f);
+		_sprite = _sprites["headRightShoot"];
 		break;
 	case Direction::UP:
+		spawnPoint.x += (_isShootingRight ? 0.2f : -0.05f);
+		spawnPoint.y -= 1.0f;
+		_sprite = _sprites["headBackShoot"];
 		break;
 	case Direction::DOWN:
+		spawnPoint.x += (_isShootingRight ? -0.05f : 0.2f);
 		_sprite = _sprites["headFrontShoot"];
 		break;
 	default:
 		break;
 	}
 
-	Tear* newTear = new Tear(_scene, _rect.pos, dir, 3);
+	Tear* newTear = new Tear(_scene, spawnPoint, dir, _vel.x*0.35, _vel.y*0.35, 7);
+	if (_isShootingRight)
+		_isShootingRight = false;
+	else
+		_isShootingRight = true;
 }

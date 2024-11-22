@@ -127,7 +127,6 @@ void GameScene::update(float timeToSimulate)
 			_isaac->move_y(Direction::DOWN);
 		else
 			_isaac->move_y(Direction::NONE);
-		_isaac->run(_run_pressed);
 
 		// shoot
 		if (_right_pressed && !_left_pressed)

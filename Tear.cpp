@@ -10,28 +10,31 @@
 #include "Enemy.h"
 using namespace agp;
 
-Tear::Tear(Scene* scene, const PointF& pos, Direction dir, int layer)
+Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_inertia, float y_inertia, int layer)
     : DynamicObject(scene, RectF(pos.x, pos.y, 1, 1), SpriteFactory::instance()->get("tears_default"), layer)
 {
+    _collider.adjust(0.3f, 0.3f, -0.3f, -0.3f);
     _h = 1;
     _absVel = 8.0f;
     _compenetrable = true;
     _vel = { 0.0f, 0.0f };
     _x_dec_rel = 0;
     _y_dec_rel = 0;
+    _x_inertia = x_inertia;
+    _y_inertia = y_inertia;
     
 	switch (dir) {
 	case Direction::LEFT:
-        _vel = { -_absVel, 0.0f };
+        _vel = { -_absVel+_x_inertia, _y_inertia };
 		break;
 	case Direction::RIGHT:
-        _vel = { _absVel, 0.0f };
+        _vel = { _absVel+_x_inertia, _y_inertia };
 		break;
 	case Direction::UP:
-        _vel = { 0.0f, -_absVel };
+        _vel = { _x_inertia, -_absVel+_y_inertia };
 		break;
 	case Direction::DOWN:
-        _vel = { 0.0f, _absVel };
+        _vel = { _x_inertia, _absVel+_y_inertia };
 		break;
 	default:
         _vel = { 0.0f, 0.0f };
@@ -86,3 +89,7 @@ bool Tear::collidableWith(CollidableObject* obj)
     return false; // false per non risolvere le collisioni (vogliamo gestire noi le collisioni)
 }
 
+void Tear::kill() {
+    _sprite = SpriteFactory::instance()->get("tears_explosion");
+    schedule("explosion", 0.3f, [this]() {_scene->killObject(this); });
+}
