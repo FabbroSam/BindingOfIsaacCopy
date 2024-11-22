@@ -96,7 +96,7 @@ bool Fly::collision(CollidableObject* with, Direction fromDir)
 		schedule("dyingFlyAnimation", 0.25f, [this]() {
 
 			_scene->killObject(_shadow);
-			_scene->killObject(this);
+			kill();
 
 			}, 0, false);
 
