@@ -19,9 +19,9 @@
 using namespace agp;
 
 Isaac::Isaac(Scene* scene, const PointF& pos)
-	: DynamicObject(scene, RectF(pos.x + 1 / 16.0f, pos.y, 1.2f, 1.1f), nullptr, 6)
+	: DynamicObject(scene, RectF(pos.x + 1 / 16.0f, pos.y, 1.2f, 1.4f), nullptr, 6)
 {
-	_collider.adjust(0.3f, 0.85f, -0.3f, 0.2f);
+	_collider.adjust(0.3f, 1.1f, -0.3f, 0.2f);
 
 	_walking = false;
 	_jumping = false;
@@ -55,16 +55,19 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_sprites["skid"] = SpriteFactory::instance()->get("isaac_skid");
 	_sprites["jump"] = SpriteFactory::instance()->get("isaac_jump");
 	_sprites["die"] = SpriteFactory::instance()->get("isaac_die");
+	_sprites["shadow"] = SpriteFactory::instance()->get("shadow");
 	_sprite = _sprites["headFront"];
 
-	_body = new RenderableObject(_scene, _rect + Vec2Df({ 0, 0.34f }), _sprites["bodyFront"], 5);
+	_body = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["bodyFront"], 5);
+	_shadow = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["shadow"], 4);
 }
 
 void Isaac::update(float dt) {
 	// physics and overrides
 	DynamicObject::update(dt);
 
-	_body->setRect(_rect + Vec2Df({ 0, 0.34f }));
+	_body->setRect(_rect + Vec2Df({ 0, 0.45f }));
+	_shadow->setRect(RectF(_rect.pos.x+0.3f, _rect.pos.y+1.4f, 0.6f, 0.22f));
 
 	// state logic
 	if (_vel.x != 0)
