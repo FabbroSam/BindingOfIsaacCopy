@@ -87,6 +87,10 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["duke"] = loadTexture(renderer, "../sprites/duke.png", { 147, 187, 236 });
 	_spriteSheets["fly"] = loadTexture(renderer, "../sprites/fly.png", { 147, 187, 236 });
 
+
+	// SHADOW______da fixare trasparenza
+	_spriteSheets["shadow"] = loadTexture(renderer, "../sprites/shadow.png", { 147, 187, 236});
+
 	std::vector<RectI> vecRect;
 	SDL_Texture* base = loadTextureSequence(renderer, "../image", vecRect, Point(0, 0), Point(52, 52));
 	RectI src(0, 0, 180, 180);
@@ -465,6 +469,24 @@ Sprite* SpriteFactory::get(const std::string& id)
 		rects.push_back(moveBy(RectF(0, 0, 30, 30), 1, 0, 30, 30));
 		return new AnimatedSprite(_spriteSheets["fly"], rects, 30, "fly");
 	}
+
+	else if (id == "dyingFly")
+	{
+		rects.push_back(moveBy(RectF(0, 68, 58, 55), 0, 0, 58, 55));
+		rects.push_back(moveBy(RectF(0, 68, 58, 55), 1, 0, 58, 55));
+		rects.push_back(moveBy(RectF(0, 68, 58, 55), 2, 0, 58, 55));
+		rects.push_back(moveBy(RectF(0, 68, 58, 55), 3, 0, 58, 55));
+		rects.push_back(moveBy(RectF(0, 128, 62,61), 0, 0 ,62, 61));
+		rects.push_back(moveBy(RectF(0, 128, 62,61), 1, 0, 62, 61));
+		rects.push_back(moveBy(RectF(0, 128, 62,61), 2, 0, 62, 61));
+		rects.push_back(moveBy(RectF(0, 128, 62,61), 3, 0, 62, 61));
+		rects.push_back(moveBy(RectF(0, 193, 62, 61), 0, 0, 62, 61));
+		rects.push_back(moveBy(RectF(0, 193, 62, 61), 1, 0, 62, 61));
+		return new AnimatedSprite(_spriteSheets["fly"], rects, 27, "fly");
+	}
+
+	else if (id == "shadow")
+		return new Sprite(_spriteSheets["shadow"], RectF(0, 0, 120, 49), "shadow");
 
 
 	else

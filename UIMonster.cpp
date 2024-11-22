@@ -69,7 +69,7 @@ void UIMonster::update(float dt)
 	}
 	else if (_dx > 13)
 	{
-		_FPS = 1.001f;
+		_FPS = 0.7f;
 		_isaacspot->moveBy({ _FPS * dt,0 });
 		_isaac->moveBy({ _FPS * dt,0 });
 

@@ -8,6 +8,7 @@
 #include <iostream>
 #include "Isaac.h"
 #include "Enemy.h"
+#include "Fly.h"
 using namespace agp;
 
 Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_inertia, float y_inertia, int layer)
@@ -65,17 +66,22 @@ void Tear::destroy(CollidableObject* obj)
     _vel = { 0.0f,0.0f };
     _collidable = false;
     // settare la sprite di scomparsa
-    schedule("die", 0.001f, [this]() {kill(); }); //schedule evita che crasha il gioco - comunque utile per aspettare che finisca l'animazione di scomparsa
+    schedule("die", 0.02f, [this]() {kill(); }); //schedule evita che crasha il gioco - comunque utile per aspettare che finisca l'animazione di scomparsa
 }
 
 bool Tear::collidableWith(CollidableObject* obj)
 {
     Isaac* isaac = dynamic_cast<Isaac*>(obj);
     Enemy* enemy = dynamic_cast<Enemy*>(obj);
+    Fly* fly = dynamic_cast<Fly*>(obj);
     if (!isaac)
     {
-        if (enemy)    // se incontra un nemico colpiscilo
+        if (enemy) // se incontra un nemico colpiscilo
+        {  
             destroy(enemy);
+            fly->hurt();
+        }
+
         else if (_h > 0.5f) //se h > 0.5 colpisci solo i muri alti, altrimenti tutto il resto
         {
             if (obj->sprite())
