@@ -11,109 +11,118 @@
 #include "Fly.h"
 using namespace agp;
 
+
+
 Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, float y_velIsaac, int layer)
-    : DynamicObject(scene, RectF(pos.x, pos.y, 1, 1), nullptr, layer)
+    : DynamicObject(scene, RectF(pos.x, pos.y, 1.2f, 1.2f), nullptr, 6)
 {
+
     _sprites["tear"] = SpriteFactory::instance()->get("tears_default");
     _sprites["tears_explosion"] = SpriteFactory::instance()->get("tears_explosion");
     _sprites["shadow"] = SpriteFactory::instance()->get("shadow");
     _sprite = _sprites["tear"];
 
-    _shadow = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["shadow"], 4);
-    _shadowFollow = true;
+    _destroy = true;
 
-    _collider.adjust(0.3f, 0.3f, -0.3f, -0.3f);
-    _h = 1;
-    _absVel = 5.0f;
-    _y_acc = 0;
-    _fallVel = 0.001f;
     _compenetrable = true;
+    _collider.adjust(0.3f, 0.3f, -0.3f, -0.3f);
+
+    //fisica
+    pos0 = _rect.pos;
+    _absVel = 7.0f;
     _vel = { 0.0f, 0.0f };
     _x_dec_rel = 0;
     _y_dec_rel = 0;
-    _x_velIsaac = x_velIsaac;
-    _y_velIsaac = y_velIsaac;
+    _x_velIsaac = x_velIsaac * 0.6f;
+    _y_velIsaac = y_velIsaac * 0.6f;
 
-    /*switch (dir) {
+    switch (dir) {
     case Direction::LEFT:
-        _y_dir = Direction::DOWN;
-        _y_acc = 0.035f;
-        _vel = { -_absVel + _x_velIsaac * 0.2f, _fallVel + _y_velIsaac * 0.2f};
+        _vel = { -_absVel + (_x_velIsaac < 0 ? _x_velIsaac : 0), _y_velIsaac };
+        _distance = _x_velIsaac < 0 ? 8.5f : 6;
         break;
     case Direction::RIGHT:
-        _vel = { _absVel + _x_velIsaac, _y_velIsaac };
+        _vel = { _absVel + (_x_velIsaac > 0 ? _x_velIsaac : 0), _y_velIsaac };
+        _distance = _x_velIsaac > 0 ? 8.5f : 6;
         break;
     case Direction::UP:
-        _vel = { _x_velIsaac, -_absVel + _y_velIsaac };
+        _vel = { _x_velIsaac, -_absVel + (_x_velIsaac < 0 ? _x_velIsaac : 0) };
+        _distance = _y_velIsaac < 0 ? 8.5f : 6;
         break;
     case Direction::DOWN:
-        _vel = { _x_velIsaac, _absVel + _y_velIsaac };
+        _vel = { _x_velIsaac, _absVel + (_x_velIsaac > 0 ? _x_velIsaac : 0) };
+        _distance = _y_velIsaac > 0 ? 8.5f : 6;
         break;
     default:
         _vel = { 0.0f, 0.0f };
         break;
-    }*/
-
-    _cases = -1;
-    _shadow->setRect(RectF(_rect.pos.x + 0.38f, _rect.pos.y + 1.0f, 0.3, 0.2));
-
-    _vel = { -_absVel + _x_velIsaac * 0.2f, _y_velIsaac * 0.2f };
-    if (_vel.y == 0) {
-        _cases = 0;
-        _y_dir = Direction::DOWN;
-        _y_acc = 0.035f;
-        _vel.y += _fallVel;
     }
-    else if (_vel.y > 0){
-        _cases = 1;
-    }
-    else if (_vel.y < 0)
-        ;
+
+    //_shadow = new ShadowTear(scene, pos + PointF({ 0.34f,1 }), _vel, 5);
+    _shadow = new RenderableObject(scene, RectF(pos.x + 0.34f, pos.y + 1.3f, 0.37f, 0.23f), _sprites["shadow"], 5);
 }
 
 void Tear::update(float dt)
 {
-    /*if (_shadowFollow)
+    RenderableObject::update(dt);
+
+    resolveCollisions(dt);
+
+    if (!_destroy)
+        return;
+
+    //control tear level respect shadow
+    if (_rect.pos.y > _shadow->rect().pos.y - 0.5f)
     {
-        _shadow->setRect(RectF(_rect.pos.x + 0.38f, _rect.pos.y + 1.0f, 0.3, 0.2));
-        _shadowFollow = false;
-    }*/
-    RectF _rectShadow = _shadow->rect();
-
-    if (_cases == 0) {
-        _shadow->setRect(RectF(_rect.pos.x + 0.38f, _rectShadow.pos.y, 0.3, 0.2));
-        if (_rect.pos.y >= _shadow->rect().pos.y - 0.5f)
-            kill();
-    }
-    else if (_cases == 1) {
-        _shadow->setRect(RectF(_rect.pos.x + 0.38f, _rect.pos.y + 1.0f, 0.3, 0.2));
+        destroy(nullptr);
+        _destroy = false;
+        return;
     }
 
-    //if(_h > 0)
-    //    _h = _h - gravita * dt;
+    // move shadow
+    PointF _shadowPos = _shadow->rect().pos + _vel * dt;
+    PointF _shadowSize = _shadow->rect().size;
+    _shadow->setRect(RectF(_shadowPos.x, _shadowPos.y, _shadowSize.x, _shadowSize.y));
 
-    DynamicObject::update(dt);
+    //move tear
+    float x = _rect.pos.x + _vel.x * dt;
+    float y = _rect.pos.y + _vel.y * dt;
+    float norm = sqrt(pow(pos0.x - x, 2) + pow(pos0.y - y, 2));
+    _rect.pos.x += _vel.x * dt;
+    std::cout << norm << std::endl;
+    if (norm < _distance)
+        _rect.pos.y += (10 * pow(dt,2)) / 2 + _vel.y * dt;
+    else
+        _rect.pos.y += (500 * pow(dt, 2)) / 2 + _vel.y * dt;
+ 
+}
+
+
+void Tear::destroy(CollidableObject* obj)
+{
+    if(obj)
+        obj->setFocused(true);
+    
+    if (isSchedule("explosion") || isSchedule("die"))
+        return;
+
+    schedule("explosion", 0.01f, [this]() {
+        _sprite = _sprites["tears_explosion"];
+        _rect.size = {1.8f, 1.8f};
+        _rect.pos += {-0.4f, -0.4f};
+        _vel = { 0.0f,0.0f };
+        _collidable = false;
+        _shadow->setVisible(false);
+        }, 0, false);
+    schedule("die", 0.4f, [this]() {
+        kill();
+        _scene->killObject(_shadow);
+        },0,false); //schedule evita che crasha il gioco - comunque utile per aspettare che finisca l'animazione di scomparsa
 }
 
 bool Tear::collision(CollidableObject* with, Direction fromDir)
 {
     return true;
-}
-
-void Tear::destroy(CollidableObject* obj)
-{
-    obj->setFocused(true);
-
-}
-
-void Tear::kill() {
-    _sprite = _sprites["tears_explosion"];
-    schedule("explosion", 0.3f, [this]() {_scene->killObject(this); });
-    _vel = { 0.0f,0.0f };
-    _collidable = false;
-    // settare la sprite di scomparsa
-    schedule("die", 0.02f, [this]() {kill(); }); //schedule evita che crasha il gioco - comunque utile per aspettare che finisca l'animazione di scomparsa
-
 }
 
 bool Tear::collidableWith(CollidableObject* obj)
@@ -129,16 +138,33 @@ bool Tear::collidableWith(CollidableObject* obj)
             fly->hurt();
         }
 
-        else if (_h > 0.5f) //se h > 0.5 colpisci solo i muri alti, altrimenti tutto il resto
+        if (obj->sprite())
         {
-            if (obj->sprite())
-                if (!obj->sprite()->name().find("upWall"))
-                    destroy(obj);
+            std::cout << obj->sprite()->name() << std::endl;
+            if (!obj->sprite()->name().find("upWall"))
+                destroy(obj);
         }
-        else
-            destroy(obj);
     }
 
     return false; // false per non risolvere le collisioni (vogliamo gestire noi le collisioni)
 }
 
+
+ShadowTear::ShadowTear(Scene* scene, const PointF& pos, const Vec2Df& vel, int layer)
+    : DynamicObject(scene, RectF(pos.x, pos.y, 0.37f, 0.23f), nullptr, layer)
+{
+    _sprites["shadow"] = SpriteFactory::instance()->get("shadow");
+    _sprite = _sprites["shadow"];
+
+    _collidable = false;
+
+    _vel = vel;
+    _x_dec_rel = 0;
+    _y_dec_rel = 0;
+}
+
+void ShadowTear::update(float dt)
+{
+    DynamicObject::update(dt);
+
+}

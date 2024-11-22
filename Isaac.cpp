@@ -230,7 +230,7 @@ void Isaac::shoot(Direction dir) {
 		break;
 	}
 
-	Tear* newTear = new Tear(_scene, spawnPoint, dir, _vel.x, _vel.y, 7);
+	Tear* newTear = new Tear(_scene, spawnPoint, dir, _vel.x, _vel.y);
 	if (_isShootingRight)
 		_isShootingRight = false;
 	else

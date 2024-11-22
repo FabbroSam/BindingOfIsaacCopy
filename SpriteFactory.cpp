@@ -445,12 +445,12 @@ Sprite* SpriteFactory::get(const std::string& id)
 	else if (id == "tears_default")
 		return new Sprite(_spriteSheets["tears"], RectI(192, 0, 32, 32), "tears_default");
 	else if (id == "tears_explosion") {
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
 				rects.push_back(RectI(j * 64, i * 64, 64, 64));
 			}
 		}
-		return new AnimatedSprite(_spriteSheets["explosion"], rects, 24, "tear_explosion");
+		return new AnimatedSprite(_spriteSheets["explosion"], rects, 20, "tear_explosion");
 	}
 	else if (id == "altar")
 		return new Sprite(_spriteSheets["altar"], RectI(0, 0, 32, 32), "altar");
