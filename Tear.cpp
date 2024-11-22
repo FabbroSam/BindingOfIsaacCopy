@@ -19,12 +19,14 @@ Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, flo
     _sprites["shadow"] = SpriteFactory::instance()->get("shadow");
     _sprite = _sprites["tear"];
 
-    _shadow = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["shadow"],4);
+    _shadow = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["shadow"], 4);
     _shadowFollow = true;
 
     _collider.adjust(0.3f, 0.3f, -0.3f, -0.3f);
     _h = 1;
-    _absVel = 1.0f;
+    _absVel = 5.0f;
+    _y_acc = 0;
+    _fallVel = 0.001f;
     _compenetrable = true;
     _vel = { 0.0f, 0.0f };
     _x_dec_rel = 0;
@@ -32,46 +34,59 @@ Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, flo
     _x_velIsaac = x_velIsaac;
     _y_velIsaac = y_velIsaac;
 
-
-
-	switch (dir) {
-	case Direction::LEFT:
-        _vel = { -_absVel+ _x_velIsaac, _y_velIsaac };
-		break;
-	case Direction::RIGHT:
-        _vel = { _absVel+ _x_velIsaac, _y_velIsaac };
-		break;
-	case Direction::UP:
-        _vel = { _x_velIsaac, -_absVel+ _y_velIsaac };
-		break;
-	case Direction::DOWN:
-        _vel = { _x_velIsaac, _absVel+ _y_velIsaac };
-		break;
-	default:
+    /*switch (dir) {
+    case Direction::LEFT:
+        _y_dir = Direction::DOWN;
+        _y_acc = 0.035f;
+        _vel = { -_absVel + _x_velIsaac * 0.2f, _fallVel + _y_velIsaac * 0.2f};
+        break;
+    case Direction::RIGHT:
+        _vel = { _absVel + _x_velIsaac, _y_velIsaac };
+        break;
+    case Direction::UP:
+        _vel = { _x_velIsaac, -_absVel + _y_velIsaac };
+        break;
+    case Direction::DOWN:
+        _vel = { _x_velIsaac, _absVel + _y_velIsaac };
+        break;
+    default:
         _vel = { 0.0f, 0.0f };
-		break;
-	}
+        break;
+    }*/
+
+    _cases = -1;
+    _shadow->setRect(RectF(_rect.pos.x + 0.38f, _rect.pos.y + 1.0f, 0.3, 0.2));
+
+    _vel = { -_absVel + _x_velIsaac * 0.2f, _y_velIsaac * 0.2f };
+    if (_vel.y == 0) {
+        _cases = 0;
+        _y_dir = Direction::DOWN;
+        _y_acc = 0.035f;
+        _vel.y += _fallVel;
+    }
+    else if (_vel.y > 0){
+        _cases = 1;
+    }
+    else if (_vel.y < 0)
+        ;
 }
 
 void Tear::update(float dt)
 {
-
-    if (_shadowFollow)
+    /*if (_shadowFollow)
     {
         _shadow->setRect(RectF(_rect.pos.x + 0.38f, _rect.pos.y + 1.0f, 0.3, 0.2));
         _shadowFollow = false;
-    }
-    else
-    {
-        RectF _rectShadow = _shadow->rect();
+    }*/
+    RectF _rectShadow = _shadow->rect();
+
+    if (_cases == 0) {
         _shadow->setRect(RectF(_rect.pos.x + 0.38f, _rectShadow.pos.y, 0.3, 0.2));
+        if (_rect.pos.y >= _shadow->rect().pos.y - 0.5f)
+            kill();
     }
-    _y_acc = 0.1f;
-    _vel.y = 0.001f;
-    _y_dir = Direction::DOWN;
-    if (_rect.pos.y >= _shadow->rect().pos.y - 0.5f)
-    {
-        kill();
+    else if (_cases == 1) {
+        _shadow->setRect(RectF(_rect.pos.x + 0.38f, _rect.pos.y + 1.0f, 0.3, 0.2));
     }
 
     //if(_h > 0)

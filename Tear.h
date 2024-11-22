@@ -12,9 +12,12 @@ private:
     RenderableObject* _shadow;
     float _h;  // altezza simulata [ ipotizziamo due altezze nel gioco, h va da 0 a 1, 0.5 divide le due zone ]
     float _absVel;
+    float _fallVel;
     float _x_velIsaac;
     float _y_velIsaac;
     bool _shadowFollow;
+
+    int _cases;
 
     std::map<std::string, Sprite*> _sprites;
 public:
