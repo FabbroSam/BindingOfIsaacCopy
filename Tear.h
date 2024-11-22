@@ -19,10 +19,6 @@ private:
     float _x_velIsaac;
     float _y_velIsaac;
 
-    int _cases;
-    Vec2Df _x0y0;
-    Vec2Df _xy;
-
     std::map<std::string, Sprite*> _sprites;
 
 public:
@@ -37,16 +33,4 @@ public:
     virtual bool collidableWith(CollidableObject* obj) override;
 };
 
-class agp::ShadowTear : public DynamicObject
-{
-private:
-
-    std::map<std::string, Sprite*> _sprites;
-
-public:
-    ShadowTear(Scene* scene, const PointF& pos, const Vec2Df& vel, int layer = 0);
-    virtual ~ShadowTear() {};
-
-    void update(float dt) override;
-};
 

@@ -12,7 +12,6 @@
 using namespace agp;
 
 
-
 Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, float y_velIsaac, int layer)
     : DynamicObject(scene, RectF(pos.x, pos.y, 1.2f, 1.2f), nullptr, 6)
 {
@@ -117,7 +116,7 @@ void Tear::destroy(CollidableObject* obj)
     schedule("die", 0.4f, [this]() {
         kill();
         _scene->killObject(_shadow);
-        },0,false); //schedule evita che crasha il gioco - comunque utile per aspettare che finisca l'animazione di scomparsa
+        },0,false);
 }
 
 bool Tear::collision(CollidableObject* with, Direction fromDir)
@@ -147,24 +146,4 @@ bool Tear::collidableWith(CollidableObject* obj)
     }
 
     return false; // false per non risolvere le collisioni (vogliamo gestire noi le collisioni)
-}
-
-
-ShadowTear::ShadowTear(Scene* scene, const PointF& pos, const Vec2Df& vel, int layer)
-    : DynamicObject(scene, RectF(pos.x, pos.y, 0.37f, 0.23f), nullptr, layer)
-{
-    _sprites["shadow"] = SpriteFactory::instance()->get("shadow");
-    _sprite = _sprites["shadow"];
-
-    _collidable = false;
-
-    _vel = vel;
-    _x_dec_rel = 0;
-    _y_dec_rel = 0;
-}
-
-void ShadowTear::update(float dt)
-{
-    DynamicObject::update(dt);
-
 }
