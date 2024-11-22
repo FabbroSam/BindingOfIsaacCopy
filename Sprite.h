@@ -25,11 +25,12 @@ class agp::Sprite
 		SDL_Texture* _spritesheet;		// spritesheet texture
 		RectI _rect;					// in spritesheets coordinates
 		SDL_RendererFlip _flip;
+		Uint8 _alpha;
 		std::string _name;
 
 	public:
 
-		Sprite(SDL_Texture* spritesheet, const RectI& rect, std::string name, SDL_RendererFlip flip = SDL_FLIP_NONE);
+		Sprite(SDL_Texture* spritesheet, const RectI& rect, std::string name, SDL_RendererFlip flip = SDL_FLIP_NONE, Uint8 alpha=255);
 
 		// render method (for rendering)
 		virtual void render(

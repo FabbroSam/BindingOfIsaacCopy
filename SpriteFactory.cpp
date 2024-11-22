@@ -489,7 +489,7 @@ Sprite* SpriteFactory::get(const std::string& id)
 	}
 
 	else if (id == "shadow")
-		return new Sprite(_spriteSheets["shadow"], RectF(0, 0, 120, 49), "shadow");
+		return new Sprite(_spriteSheets["shadow"], RectF(0, 0, 120, 49), "shadow", SDL_FLIP_NONE, 75);
 
 
 	else

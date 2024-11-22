@@ -23,6 +23,7 @@ class agp::Isaac : public DynamicObject
 	private:
 
 		RenderableObject* _body;
+		RenderableObject* _shadow;
 		bool _walking;
 		bool _running;
 		bool _jumping;
