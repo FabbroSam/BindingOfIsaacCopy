@@ -5,18 +5,21 @@
 #include <random>
 #include <iostream>
 #include "Room.h"
-
+#include "Tear.h"
 
 using namespace agp;
 
 Fly::Fly(Scene* scene, const PointF& pos, float spawnDelay)
 	:Enemy(scene, RectF(pos.x, pos.y, 30/16, 30/16), nullptr, spawnDelay, 5)
 {
+	heart = 0;
+
 	_x_dir = Direction::NONE;
 	_y_dir = Direction::NONE;
 
 	_sprites["fly"] = SpriteFactory::instance()->get("fly");
 	_sprites["dyingFly"] = SpriteFactory::instance()->get("dyingFly");
+	_sprite = _sprites["fly"];
 
 	_shadow = new RenderableObject(_scene, _rect, SpriteFactory::instance()->get("shadow"), 4);
 
@@ -50,11 +53,6 @@ void::Fly::update(float dt)
 {
 	Enemy::update(dt);
 
-	_sprite = _sprites["fly"];
-
-	if(!_collidable)
-		_sprite = _sprites["dyingFly"];
-
 	_shadow->setRect(_rect * Vec2Df(0.35f, 0.15f) + Vec2Df(0.44f, 1.5f));
 
 	schedule("randomMovement", 0, [this]() {
@@ -77,6 +75,7 @@ void::Fly::update(float dt)
 
 bool Fly::collision(CollidableObject* with, Direction fromDir)
 {
+
 	if (with->name().find("Static") == 0) {
 
 		if (fromDir == Direction::RIGHT || fromDir == Direction::LEFT)
@@ -85,24 +84,33 @@ bool Fly::collision(CollidableObject* with, Direction fromDir)
 			_y_dir = inverse(fromDir);
 
 	}
-	else if (with->name().find("tears"))
+	return true;
+}
+
+bool Fly::collidableWith(CollidableObject* obj)
+{
+	return true;
+}
+
+void Fly::hurt()
+{
+	heart += 1;
+	if (heart > 2)
 	{
 		_collidable = false;
+		_sprite = _sprites["dyingFly"];
 
 		_x_dir = Direction::NONE;
 		_y_dir = Direction::NONE;
 
 
 		schedule("dyingFlyAnimation", 0.25f, [this]() {
-
 			_scene->killObject(_shadow);
-			kill();
+			_scene->killObject(this);
 
 			}, 0, false);
 
 
 
 	}
-
-	return true;
 }

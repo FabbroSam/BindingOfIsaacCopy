@@ -175,7 +175,7 @@ void Room::Draw()
 		}
 	}
 
-	new RenderableObject(_scene, RectF(_x, _y, 16, 12), spriteLoader->get("shading"));
+	new RenderableObject(_scene, RectF(_x, _y, 16, 12), spriteLoader->get("shading"), 2);
 }
 
 void Room::openCloseDoor()
