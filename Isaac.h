@@ -56,6 +56,7 @@ class agp::Isaac : public DynamicObject
 
 		// getters/setters
 		bool invincible() { return _invincible; }
+		void setSprite();
 
 		// extends game logic (+isaac logic)
 		virtual void update(float dt) override;

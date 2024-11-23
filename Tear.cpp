@@ -35,22 +35,25 @@ Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, flo
     _x_velIsaac = x_velIsaac * 0.6f;
     _y_velIsaac = y_velIsaac * 0.6f;
 
+    float distanceMax = 8.5f;
+    float distanceMin = 5.0f;
+
     switch (dir) {
     case Direction::LEFT:
         _vel = { -_absVel + (_x_velIsaac < 0 ? _x_velIsaac : 0), _y_velIsaac };
-        _distance = _x_velIsaac < 0 ? 8.5f : 6;
+        _distance = _x_velIsaac < 0 ? distanceMax : distanceMin;
         break;
     case Direction::RIGHT:
         _vel = { _absVel + (_x_velIsaac > 0 ? _x_velIsaac : 0), _y_velIsaac };
-        _distance = _x_velIsaac > 0 ? 8.5f : 6;
+        _distance = _x_velIsaac > 0 ? distanceMax : distanceMin;
         break;
     case Direction::UP:
         _vel = { _x_velIsaac, -_absVel + (_x_velIsaac < 0 ? _x_velIsaac : 0) };
-        _distance = _y_velIsaac < 0 ? 8.5f : 6;
+        _distance = _y_velIsaac < 0 ? distanceMax : distanceMin;
         break;
     case Direction::DOWN:
         _vel = { _x_velIsaac, _absVel + (_x_velIsaac > 0 ? _x_velIsaac : 0) };
-        _distance = _y_velIsaac > 0 ? 8.5f : 6;
+        _distance = _y_velIsaac > 0 ? distanceMax : distanceMin;
         break;
     default:
         _vel = { 0.0f, 0.0f };
@@ -88,7 +91,6 @@ void Tear::update(float dt)
     float y = _rect.pos.y + _vel.y * dt;
     float norm = sqrt(pow(pos0.x - x, 2) + pow(pos0.y - y, 2));
     _rect.pos.x += _vel.x * dt;
-    std::cout << norm << std::endl;
     if (norm < _distance)
         _rect.pos.y += (10 * pow(dt,2)) / 2 + _vel.y * dt;
     else

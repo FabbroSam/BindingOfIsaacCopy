@@ -76,17 +76,14 @@ void Isaac::update(float dt) {
 		_y_vel_last_nonzero = _vel.y;
 	_walking = (_vel.x != 0 || _vel.y != 0);
 
-	if (_x_dir != _prev_x_dir) {
-		if (_x_dir != Direction::NONE) {
+	if (_x_dir != _prev_x_dir)
+		if (_x_dir != Direction::NONE)
 			_vel.x = 0;
-		}
-	}
 
-	if (_y_dir != _prev_y_dir) {
-		if (_y_dir != Direction::NONE) {
+	if (_y_dir != _prev_y_dir)
+		if (_y_dir != Direction::NONE)
 			_vel.y = 0;
-		}
-	}
+
 
 	// animations
 	if (_dying)
@@ -100,48 +97,8 @@ void Isaac::update(float dt) {
 			_isShooting = false;
 		}
 	}
-	else if (_walking) {
-		if (_vel.y > 0) {
-			_sprite = _sprites["headFront"];
-			_body->setSprite(_sprites["walkDown"]);
-		}
-		else if (_vel.y < 0) {
-			_sprite = _sprites["headBack"];
-			_body->setSprite(_sprites["walkDown"]);
-		}
-		else if (_vel.x > 0) {
-			_sprite = _sprites["headRight"];
-			_body->setSprite(_sprites["walkRight"]);
-		}
-		else if (_vel.x < 0) {
-			_sprite = _sprites["headRight"];
-			_body->setSprite(_sprites["walkRight"]);		
-		}
-	}
-	else {
-		if (_state[SDL_SCANCODE_UP])
-			_sprite = _sprites["headBack"];
-		else if (_state[SDL_SCANCODE_RIGHT])
-			_sprite = _sprites["headRight"];
-		else if (_state[SDL_SCANCODE_LEFT])
-			_sprite = _sprites["headRight"];
-		else
-			_sprite = _sprites["headFront"];
-		_body->setSprite(_sprites["bodyFront"]);
-	}
 
-	// x-mirroring
-	if ((_vel.x < 0) || _x_vel_last_nonzero < 0 || _state[SDL_SCANCODE_LEFT])
-	{
-		_flip = SDL_FLIP_HORIZONTAL;
-		_body->setFlip(SDL_FLIP_HORIZONTAL);
-	}
-	else
-	{
-		_flip = SDL_FLIP_NONE;
-		_body->setFlip(SDL_FLIP_NONE);
-	}
-
+	setSprite();
 
 	_prev_x_dir = _x_dir;
 	_prev_y_dir = _y_dir;
@@ -235,4 +192,55 @@ void Isaac::shoot(Direction dir) {
 		_isShootingRight = false;
 	else
 		_isShootingRight = true;
+}
+
+void Isaac::setSprite()
+{
+	if (_walking)
+	{
+		if (_vel.y > 0) {
+			_sprite = _sprites["headFront"];
+			_body->setSprite(_sprites["walkDown"]);
+		}
+		else if (_vel.y < 0) {
+			_sprite = _sprites["headBack"];
+			_body->setSprite(_sprites["walkDown"]);
+		}
+		else if (_vel.x != 0) {
+			_sprite = _sprites["headRight"];
+			_body->setSprite(_sprites["walkRight"]);
+		}
+	}
+	else
+	{
+		_sprite = _sprites["headFront"];
+		_body->setSprite(_sprites["bodyFront"]);
+	}
+	// x-mirroring (move)
+	if ((_vel.x < 0) || _x_vel_last_nonzero < 0)
+	{
+		_flip = SDL_FLIP_HORIZONTAL;
+		_body->setFlip(SDL_FLIP_HORIZONTAL);
+	}
+	else
+	{
+		_flip = SDL_FLIP_NONE;
+		_body->setFlip(SDL_FLIP_NONE);
+	}
+
+
+	if (_state[SDL_SCANCODE_UP])
+		_sprite = _sprites["headBack"];
+	else if (_state[SDL_SCANCODE_RIGHT])
+		_sprite = _sprites["headRight"];
+	else if (_state[SDL_SCANCODE_LEFT])
+		_sprite = _sprites["headRight"];
+	else
+		_sprite = _sprites["headFront"];
+
+	// x-mirroring
+	if (_state[SDL_SCANCODE_LEFT])
+		_flip = SDL_FLIP_HORIZONTAL;
+	else
+		_flip = SDL_FLIP_NONE;
 }

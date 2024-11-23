@@ -57,6 +57,7 @@ GameScene::GameScene(const RectF& r, float dt)
 	_view->setFixedAspectRatio(Game::instance()->aspectRatio());
 	_view->setRect(RectF(0, 0, 16, 12));
 
+
 	_name = "gamescene";
 }
 
@@ -205,7 +206,6 @@ void GameScene::event(SDL_Event& evt)
 
 	Scene::event(evt);
 
-
 	if (evt.type == SDL_KEYDOWN && (evt.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
 		Game::instance()->pushScene(Menu::pauseMenu());
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_H)
@@ -271,7 +271,6 @@ void GameScene::event(SDL_Event& evt)
 				_view->scale(1 + _cameraZoomVel);
 		}
 	}
-
 
 	// update control flags
 	const Uint8* state = SDL_GetKeyboardState(0);
