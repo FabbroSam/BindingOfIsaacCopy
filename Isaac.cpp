@@ -19,9 +19,9 @@
 using namespace agp;
 
 Isaac::Isaac(Scene* scene, const PointF& pos)
-	: DynamicObject(scene, RectF(pos.x + 1 / 16.0f, pos.y, 1.2f, 1.1f), nullptr, 6)
+	: DynamicObject(scene, RectF(pos.x + 1 / 16.0f, pos.y, 1.2f, 1.4f), nullptr, 6)
 {
-	_collider.adjust(0.3f, 0.85f, -0.3f, 0.2f);
+	_collider.adjust(0.3f, 1.1f, -0.3f, 0.2f);
 
 	_walking = false;
 	_jumping = false;
@@ -30,29 +30,44 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_dead = false;
 	_invincible = true;
 
+	_x_acc = 1.8f;
+	_x_dec_rel = 5.0f;
+	_x_vel_max = 5.5f;
+	_x_vel_min = 0.2f;
+
+	_y_acc = 1.8f;
+	_y_dec_rel = 5.0f; 
+	_y_vel_max = 5.5f;
+	_y_vel_min = 0.2f;
+
 	_x_vel_last_nonzero = 0;
 	_y_vel_last_nonzero = 0;
 
 	_sprites["headFront"] = SpriteFactory::instance()->get("isaac_headFront");
 	_sprites["headFrontShoot"] = SpriteFactory::instance()->get("isaac_headFrontShoot");
 	_sprites["headBack"] = SpriteFactory::instance()->get("isaac_headBack");
+	_sprites["headBackShoot"] = SpriteFactory::instance()->get("isaac_headBackShoot");
 	_sprites["headRight"] = SpriteFactory::instance()->get("isaac_headRight");
+	_sprites["headRightShoot"] = SpriteFactory::instance()->get("isaac_headRightShoot");
 	_sprites["bodyFront"] = SpriteFactory::instance()->get("isaac_bodyFront");
 	_sprites["walkDown"] = SpriteFactory::instance()->get("isaac_walkDown");
 	_sprites["walkRight"] = SpriteFactory::instance()->get("isaac_walkRight");
 	_sprites["skid"] = SpriteFactory::instance()->get("isaac_skid");
 	_sprites["jump"] = SpriteFactory::instance()->get("isaac_jump");
 	_sprites["die"] = SpriteFactory::instance()->get("isaac_die");
+	_sprites["shadow"] = SpriteFactory::instance()->get("shadow");
 	_sprite = _sprites["headFront"];
 
-	_body = new RenderableObject(_scene, _rect + Vec2Df({ 0, 0.34f }), _sprites["bodyFront"], 5);
+	_body = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["bodyFront"], 5);
+	_shadow = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["shadow"], 4);
 }
 
 void Isaac::update(float dt) {
-
 	// physics and overrides
 	DynamicObject::update(dt);
-	_body->setRect(_rect + Vec2Df({ 0, 0.34f }));
+
+	_body->setRect(_rect + Vec2Df({ 0, 0.45f }));
+	_shadow->setRect(RectF(_rect.pos.x+0.3f, _rect.pos.y+1.4f, 0.6f, 0.22f));
 
 	// state logic
 	if (_vel.x != 0)
@@ -61,17 +76,14 @@ void Isaac::update(float dt) {
 		_y_vel_last_nonzero = _vel.y;
 	_walking = (_vel.x != 0 || _vel.y != 0);
 
-	if (_x_dir != _prev_x_dir) {
-		if (_x_dir != Direction::NONE) {
+	if (_x_dir != _prev_x_dir)
+		if (_x_dir != Direction::NONE)
 			_vel.x = 0;
-		}
-	}
 
-	if (_y_dir != _prev_y_dir) {
-		if (_y_dir != Direction::NONE) {
+	if (_y_dir != _prev_y_dir)
+		if (_y_dir != Direction::NONE)
 			_vel.y = 0;
-		}
-	}
+
 
 	// animations
 	if (_dying)
@@ -81,45 +93,12 @@ void Isaac::update(float dt) {
 	else if (_isShooting) {
 		_shootTimer -= dt;
 		if (_shootTimer <= 0.0f) {
-			_sprite = _sprites["headFront"];
+			//_sprite = _sprites["headFront"];
 			_isShooting = false;
 		}
 	}
-	else if (_walking) {
-		if (_vel.y > 0) {
-			_sprite = _sprites["headFront"];
-			_body->setSprite(_sprites["walkDown"]);
-		}
-		else if (_vel.y < 0) {
-			_sprite = _sprites["headBack"];
-			_body->setSprite(_sprites["walkDown"]);
-		}
-		else if (_vel.x > 0) {
-			_sprite = _sprites["headRight"];
-			_body->setSprite(_sprites["walkRight"]);
-		}
-		else if (_vel.x < 0) {
-			_sprite = _sprites["headRight"];
-			_body->setSprite(_sprites["walkRight"]);		
-		}
-	}
-	else {
-		_sprite = _sprites["headFront"];
-		_body->setSprite(_sprites["bodyFront"]);
-	}
 
-	// x-mirroring
-	if ((_vel.x < 0) || _x_vel_last_nonzero < 0)
-	{
-		_flip = SDL_FLIP_HORIZONTAL;
-		_body->setFlip(SDL_FLIP_HORIZONTAL);
-	}
-	else
-	{
-		_flip = SDL_FLIP_NONE;
-		_body->setFlip(SDL_FLIP_NONE);
-	}
-
+	setSprite();
 
 	_prev_x_dir = _x_dir;
 	_prev_y_dir = _y_dir;
@@ -137,20 +116,6 @@ void Isaac::move_y(Direction dir)
 		return;
 
 	MovableObject::move_y(dir);
-}
-
-void Isaac::run(bool on)
-{
-	if (on)
-	{
-		_x_vel_max = 10;
-		_x_acc = 13;
-	}
-	else
-	{
-		_x_vel_max = 6;	
-		_x_acc = 8;
-	}
 }
 
 void Isaac::die()
@@ -184,6 +149,9 @@ void Isaac::hurt()
 }
 
 void Isaac::shoot(Direction dir) {
+	PointF spawnPoint;
+	spawnPoint.x = _rect.pos.x;
+	spawnPoint.y = _rect.pos.y + 0.3f;
 	if (!_canShoot) return;
 
 	schedule("_canShoot", _shootCooldown, [this]() 
@@ -197,17 +165,82 @@ void Isaac::shoot(Direction dir) {
 
 	switch (dir) {
 	case Direction::LEFT:
+		spawnPoint.y += (_isShootingRight ? -0.5f : -0.2f);
+		spawnPoint.x += (_isShootingRight ? -0.5f : 0.0f);
+		_sprite = _sprites["headRightShoot"];
 		break;
 	case Direction::RIGHT:
+		spawnPoint.y += (_isShootingRight ? -0.2f : -0.5f);
+		spawnPoint.x += (_isShootingRight ? 0.0f : 0.5f);
+		_sprite = _sprites["headRightShoot"];
 		break;
 	case Direction::UP:
+		spawnPoint.x += (_isShootingRight ? 0.2f : -0.05f);
+		spawnPoint.y -= 1.0f;
+		_sprite = _sprites["headBackShoot"];
 		break;
 	case Direction::DOWN:
+		spawnPoint.x += (_isShootingRight ? -0.05f : 0.2f);
 		_sprite = _sprites["headFrontShoot"];
 		break;
 	default:
 		break;
 	}
 
-	Tear* newTear = new Tear(_scene, _rect.pos, dir, 3);
+	Tear* newTear = new Tear(_scene, spawnPoint, dir, _vel.x, _vel.y);
+	if (_isShootingRight)
+		_isShootingRight = false;
+	else
+		_isShootingRight = true;
+}
+
+void Isaac::setSprite()
+{
+	if (_walking)
+	{
+		if (_vel.y > 0) {
+			_sprite = _sprites["headFront"];
+			_body->setSprite(_sprites["walkDown"]);
+		}
+		else if (_vel.y < 0) {
+			_sprite = _sprites["headBack"];
+			_body->setSprite(_sprites["walkDown"]);
+		}
+		else if (_vel.x != 0) {
+			_sprite = _sprites["headRight"];
+			_body->setSprite(_sprites["walkRight"]);
+		}
+	}
+	else
+	{
+		_sprite = _sprites["headFront"];
+		_body->setSprite(_sprites["bodyFront"]);
+	}
+	// x-mirroring (move)
+	if ((_vel.x < 0) || _x_vel_last_nonzero < 0)
+	{
+		_flip = SDL_FLIP_HORIZONTAL;
+		_body->setFlip(SDL_FLIP_HORIZONTAL);
+	}
+	else
+	{
+		_flip = SDL_FLIP_NONE;
+		_body->setFlip(SDL_FLIP_NONE);
+	}
+
+
+	if (_state[SDL_SCANCODE_UP])
+		_sprite = _sprites["headBack"];
+	else if (_state[SDL_SCANCODE_RIGHT])
+		_sprite = _sprites["headRight"];
+	else if (_state[SDL_SCANCODE_LEFT])
+		_sprite = _sprites["headRight"];
+	else
+		_sprite = _sprites["headFront"];
+
+	// x-mirroring
+	if (_state[SDL_SCANCODE_LEFT])
+		_flip = SDL_FLIP_HORIZONTAL;
+	else
+		_flip = SDL_FLIP_NONE;
 }

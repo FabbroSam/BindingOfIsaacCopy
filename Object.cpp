@@ -51,6 +51,13 @@ void Object::unschedule(const std::string& id)
 		_schedulers.erase(id);
 }
 
+bool Object::isSchedule(const std::string& id)
+{
+	if (_schedulers.find(id) != _schedulers.end())
+		return true;
+	return false;
+}
+
 void Object::kill()
 {
 	_scene->killObject(this);

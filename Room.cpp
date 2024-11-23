@@ -12,6 +12,7 @@
 #include <list>
 #include <algorithm>
 #include <random>
+#include "Altar.h"
 
 using namespace agp;
 
@@ -108,7 +109,7 @@ void Room::Draw()
 	//down						   _
 	new StaticObject(_scene, RectF(_x + 2, _y + 10, 5 + 0.6f, 2), spriteLoader->get("wall"));
 	new StaticObject(_scene, RectF(_x + 2 + 7 - 0.6f, _y + 10, 5 + 0.6f, 2), spriteLoader->get("wall"));
-	new DynamicObject(_scene, RectF(_x, _y + 11, 16, 1), spriteLoader->get("upWall"));
+	new DynamicObject(_scene, RectF(_x, _y + 10, 16, 2), spriteLoader->get("upWall"));
 	//right						   _
 	new StaticObject(_scene, RectF(_x + 14, _y, 2, 5 + 0.4f), spriteLoader->get("wall"));
 	new StaticObject(_scene, RectF(_x + 14, _y + 7 - 0.75f, 2, 5 + 0.75f), spriteLoader->get("wall"));
@@ -161,6 +162,7 @@ void Room::Draw()
 		new RenderableObject(_scene, RectF(_x + 5.5f, _y + 6.5f, 1, 1), spriteLoader->get("bluefire"));
 		new StaticObject(_scene, RectF(_x + 9.5f, _y + 7.0f, 1, 1), spriteLoader->get("fireplace_blue"));
 		new RenderableObject(_scene, RectF(_x + 9.5f, _y + 6.5f, 1, 1), spriteLoader->get("bluefire"));
+		new Altar(_scene, RectF(_x + 7.5f, _y + 5.5f, 1, 1), spriteLoader->get("altar"));
 	}
 	else if (_roomType == RoomType::NORMAL)
 	{

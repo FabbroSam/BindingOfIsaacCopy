@@ -20,7 +20,7 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 
 	_shadow = new RenderableObject(_scene,_rect, SpriteFactory::instance()->get("shadow"), 4);
 
-	_collider.adjust(1, 0.3f, -0.8, -1);
+	_collider.adjust(1, 0.3f, -0.8f, -1);
 
 	_sprites["duke_1"] = SpriteFactory::instance()->get("duke_1");
 	_sprites["duke_2"] = SpriteFactory::instance()->get("duke_2");
