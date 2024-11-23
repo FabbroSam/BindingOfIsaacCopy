@@ -172,9 +172,8 @@ void Room::Draw()
 								{{6.4f,4.6f},{7.4f,4.6f},{8.4f,4.6f},{6.4f,5.4f},{8.4f,5.4f},{6.4f,6.2f},{7.4f,6.2f},{8.4f,6.2f}},
 								{{7.4f,4.2f},{8,4.2f},{3.4f,4.2f},{4,4.2f}, {5,6.5f},{9,6.5f},{11,8.4f},{9,6.5f}} };
 		int num = rand() % 4;
-		for (int i = 0; i < 8; i++)
-		{
-			new StaticObject(_scene, RectF(_x + vec[num][i][0], _y + vec[num][i][1], 1.4f, 1.2f), spriteLoader->get("rock"), 2);
+		for (int i = 0; i < 8; i++) {
+			new StaticObject(_scene, RectF(_x + vec[num][i][0], _y + vec[num][i][1], 1.4f, 1.2f), spriteLoader->get("rock"), 3);
 		}
 	}
 
@@ -187,11 +186,11 @@ void Room::Draw()
 		new RenderableObject(_scene, RectF(_x + 8 + (rand() % 8 ? rand() % 6 : 2), _y + 6 + (rand() % 2 ? rand() % 5 : 1), 1, 1), spriteLoader->get("basement_props"), 1);
 		
 		// OVERLAY
-		new RenderableObject(_scene, RectF(_x, _y,16,12), spriteLoader->get("basement_overlay"), 1);
+		new RenderableObject(_scene, RectF(_x, _y,16,12), spriteLoader->get("basement_overlay"), 3);
 	}
 
 	//SHADING
-	new RenderableObject(_scene, RectF(_x, _y, 16, 12), spriteLoader->get("shading"), 2);
+	new RenderableObject(_scene, RectF(_x, _y-0.5f, 16, 13), spriteLoader->get("shading"), 2);
 }
 
 void Room::openCloseDoor()

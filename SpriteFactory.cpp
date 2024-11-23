@@ -483,6 +483,10 @@ Sprite* SpriteFactory::get(const std::string& id)
 		}
 		return new AnimatedSprite(_spriteSheets["explosion"], rects, 20, "tear_explosion");
 	}
+	else if (id == "tears_wet")
+		return new Sprite(_spriteSheets["shadow"], RectF(0, 0, 120, 49), "tears_wet", SDL_FLIP_NONE, rand()%5 + 5);
+
+
 	else if (id == "altar")
 		return new Sprite(_spriteSheets["altar"], RectI(0, 0, 32, 32), "altar");
 

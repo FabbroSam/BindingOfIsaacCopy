@@ -17,7 +17,8 @@ Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, flo
 {
 
     _sprites["tear"] = SpriteFactory::instance()->get("tears_default");
-    _sprites["tears_explosion"] = SpriteFactory::instance()->get("tears_explosion");
+    _sprites["tear_explosion"] = SpriteFactory::instance()->get("tears_explosion");
+    _sprites["tear_wet"] = SpriteFactory::instance()->get("tears_wet");
     _sprites["shadow"] = SpriteFactory::instance()->get("shadow");
     _sprite = _sprites["tear"];
 
@@ -102,9 +103,15 @@ void Tear::destroy(CollidableObject* obj)
 {
     //if(obj)
     //    obj->setFocused(true);
+    
+    float newX = _rect.pos.x + (static_cast<float>(rand() % 15000 - 5000) / 9000.0f);
+    float newY = _rect.pos.y + (static_cast<float>(rand() % 15000 - 5000) / 9000.0f);
+    new RenderableObject(_scene, RectF(newX, newY, (rand() % 20 + 10) / 100.0f, (rand() % 20 + 10) / 100.0f), _sprites["tear_wet"], 2);
+    new RenderableObject(_scene, RectF(newX, newY, (rand() % 20 + 10) / 100.0f, (rand() % 20 + 10) / 100.0f), _sprites["tear_wet"], 2);
+    new RenderableObject(_scene, RectF(newX, newY, (rand() % 20 + 10) / 100.0f, (rand() % 20 + 10) / 100.0f), _sprites["tear_wet"], 2);
 
     schedule("explosion", 0.01f, [this]() {
-        _sprite = _sprites["tears_explosion"];
+        _sprite = _sprites["tear_explosion"];
         _rect.size = {1.8f, 1.8f};
         _rect.pos += {-0.4f, -0.4f};
         _vel = { 0.0f,0.0f };
