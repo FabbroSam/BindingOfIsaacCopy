@@ -3,7 +3,7 @@
 #include "Coin.h"
 #include "Isaac.h"
 #include "SpriteFactory.h"
-#include "GameScene.h"
+#include "Game.h"
 
 using namespace agp;
 
@@ -57,7 +57,10 @@ bool Coin::collidableWith(CollidableObject* obj)
 {
     Isaac* isaac = dynamic_cast<Isaac*>(obj);
     if (isaac && _collidable)
+    {   
+        Game::instance()->hud()->addCoins();
         destroy(isaac);
+    }
 
     return false;
 }
