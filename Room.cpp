@@ -109,7 +109,7 @@ void Room::Draw()
 	//down						   _
 	new StaticObject(_scene, RectF(_x + 2, _y + 10, 5 + 0.6f, 2), spriteLoader->get("wall"));
 	new StaticObject(_scene, RectF(_x + 2 + 7 - 0.6f, _y + 10, 5 + 0.6f, 2), spriteLoader->get("wall"));
-	new DynamicObject(_scene, RectF(_x, _y + 10, 16, 2), spriteLoader->get("upWall"));
+	new DynamicObject(_scene, RectF(_x, _y + 10.2f, 16, 1.8f), spriteLoader->get("upWall"));
 	//right						   _
 	new StaticObject(_scene, RectF(_x + 14, _y, 2, 5 + 0.4f), spriteLoader->get("wall"));
 	new StaticObject(_scene, RectF(_x + 14, _y + 7 - 0.75f, 2, 5 + 0.75f), spriteLoader->get("wall"));
@@ -166,6 +166,7 @@ void Room::Draw()
 	}
 	else if (_roomType == RoomType::NORMAL)
 	{
+		//ROCKS
 		float vec[4][8][2] = { {{3,1.8f},{2,2.8f},{2,7.8f},{3,8.8f},{12,1.8f},{12.9f,2.8f},{12.9f,7.8f},{12,8.8f} },
 								{{5,4.2f},{6,4.2f},{7,4.2f},{8,4.2f},{6,6.5f},{7,6.5f},{8,6.5f},{9,6.5f}},
 								{{6.4f,4.6f},{7.4f,4.6f},{8.4f,4.6f},{6.4f,5.4f},{8.4f,5.4f},{6.4f,6.2f},{7.4f,6.2f},{8.4f,6.2f}},
@@ -173,10 +174,23 @@ void Room::Draw()
 		int num = rand() % 4;
 		for (int i = 0; i < 8; i++)
 		{
-			new StaticObject(_scene, RectF(_x + vec[num][i][0], _y + vec[num][i][1], 1.4f, 1.2f), spriteLoader->get("rock"));
+			new StaticObject(_scene, RectF(_x + vec[num][i][0], _y + vec[num][i][1], 1.4f, 1.2f), spriteLoader->get("rock"), 2);
 		}
 	}
 
+	if (_roomType == RoomType::INITIAL || _roomType == RoomType::NORMAL)
+	{
+		// PROPS
+		new RenderableObject(_scene, RectF(_x + 2 + (rand() % 2 ? rand() % 6 : 2), _y + 2 + (rand() % 2 ? rand() % 5 : 1), 1, 1), spriteLoader->get("basement_props"), 1);
+		new RenderableObject(_scene, RectF(_x + 2 + (rand() % 2 ? rand() % 6 : 2), _y + 6 + (rand() % 2 ? rand() % 5 : 1), 1, 1), spriteLoader->get("basement_props"), 1);
+		new RenderableObject(_scene, RectF(_x + 8 + (rand() % 8 ? rand() % 6 : 2), _y + 2 + (rand() % 2 ? rand() % 5 : 1), 1, 1), spriteLoader->get("basement_props"), 1);
+		new RenderableObject(_scene, RectF(_x + 8 + (rand() % 8 ? rand() % 6 : 2), _y + 6 + (rand() % 2 ? rand() % 5 : 1), 1, 1), spriteLoader->get("basement_props"), 1);
+		
+		// OVERLAY
+		new RenderableObject(_scene, RectF(_x, _y,16,12), spriteLoader->get("basement_overlay"), 1);
+	}
+
+	//SHADING
 	new RenderableObject(_scene, RectF(_x, _y, 16, 12), spriteLoader->get("shading"), 2);
 }
 
