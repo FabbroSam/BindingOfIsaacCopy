@@ -141,7 +141,6 @@ bool Tear::collidableWith(CollidableObject* obj)
 
         if (obj->sprite())
         {
-            std::cout << obj->sprite()->name() << std::endl;
             if (!obj->sprite()->name().find("upWall"))
                 destroy(obj);
         }

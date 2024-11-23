@@ -56,6 +56,8 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["bluefire"] = loadTexture(renderer, "../sprites/basement_bluefire.png", { 147, 187, 236 });
 	_spriteSheets["controls"] = loadTexture(renderer, "../sprites/basement_controls.png", { 147, 187, 236 });
 	_spriteSheets["shading"] = loadTexture(renderer, "../sprites/basement_shading.png", { 147, 187, 236 });
+	_spriteSheets["props"] = loadTexture(renderer, "../sprites/basement_props.png", { 147, 187, 236 });
+	_spriteSheets["overlay"] = loadTexture(renderer, "../sprites/basement_overlay.png", { 147, 187, 236 });
 
 	// MENU
 	_spriteSheets["menu_title"] = loadTexture(renderer, "../sprites/titlemenu.png", { 147, 187, 236 });
@@ -113,7 +115,7 @@ Sprite* SpriteFactory::get(const std::string& id)
 	// BASEMENT
 	if (id == "wall")
 		return new FilledSprite(_spriteSheets["basement"], RectI(0, 312, 52, 52), "wall");
-	if (id == "upWall")
+	else if (id == "upWall")
 		return new FilledSprite(_spriteSheets["basement"], RectI(0, 312, 52, 52), "upWall");
 	else if (id == "door_normal")
 		return new Sprite(_spriteSheets["door"], RectI(0, 0, 52, 52), "door_normal");
@@ -291,7 +293,36 @@ Sprite* SpriteFactory::get(const std::string& id)
 		}
 		return new TiledSprite(_spriteSheets["treasure"], rects, "basement_wall_treasure", { 2,2 });
 	}
-
+	else if (id == "basement_props")
+	{
+		int index = rand() % 20;
+		for (int i = 0; i < 2; i++)
+		{
+			for (int j = 0; j < 10; j++)
+			{
+				if ((i * 10 + j) == index)
+				{
+					return new Sprite(_spriteSheets["props"], RectI(j * 27, i * 27, 27, 27), "basement_props");
+				}
+			}
+		}
+	}
+	else if (id == "basement_overlay")
+	{
+		int index = rand() % 13;
+		int overlay[13] = { 3,5,8,10,11,12,13,14,15,18,19,20,21 };
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 6; j++)
+			{
+				if ((i * 6 + j) == overlay[index])
+				{
+					std::cout << index << std::endl;
+					return new Sprite(_spriteSheets["overlay"], RectI(j * 331, i * 215, 331, 215), "basement_overlay", SDL_FLIP_NONE, 200);
+				}
+			}
+		}
+	}
 	// UI_MONSTER
 	else if (id == "ui_boss")
 		return new Sprite(_spriteSheets["ui_boss"], RectI(0, 0, 192, 192), "ui_boss");
@@ -489,9 +520,9 @@ Sprite* SpriteFactory::get(const std::string& id)
 	}
 
 	else if (id == "shadow")
+	{
 		return new Sprite(_spriteSheets["shadow"], RectF(0, 0, 120, 49), "shadow", SDL_FLIP_NONE, 75);
-
-
+	}
 	else
 	{
 		std::cerr << "Cannot find sprite \"" << id << "\"\n";
