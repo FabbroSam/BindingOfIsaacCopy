@@ -485,7 +485,7 @@ Sprite* SpriteFactory::get(const std::string& id)
 		rects.push_back(moveBy(RectF(0, 128, 62,61), 3, 0, 62, 61));
 		rects.push_back(moveBy(RectF(0, 193, 62, 61), 0, 0, 62, 61));
 		rects.push_back(moveBy(RectF(0, 193, 62, 61), 1, 0, 62, 61));
-		return new AnimatedSprite(_spriteSheets["fly"], rects, 27, "fly");
+		return new AnimatedSprite(_spriteSheets["fly"], rects, 31, "fly");
 	}
 
 	else if (id == "shadow")

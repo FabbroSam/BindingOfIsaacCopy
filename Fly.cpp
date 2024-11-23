@@ -23,7 +23,7 @@ Fly::Fly(Scene* scene, const PointF& pos, float spawnDelay)
 
 	_shadow = new RenderableObject(_scene, _rect, SpriteFactory::instance()->get("shadow"), 4);
 
-	_collider.adjust(0.4f,0.58f,-0.3f,-0.58f);
+	_collider.adjust(0.4f,-0.58f,-0.3f,1.0f);
 
 	_visible = true;
 	_collidable = true;
@@ -53,7 +53,7 @@ void::Fly::update(float dt)
 {
 	Enemy::update(dt);
 
-	_shadow->setRect(_rect * Vec2Df(0.35f, 0.15f) + Vec2Df(0.44f, 1.5f));
+	_shadow->setRect(_rect * Vec2Df(0.35f, 0.15f) + Vec2Df(0.4f, 0.9f));
 
 	schedule("randomMovement", 0, [this]() {
 
