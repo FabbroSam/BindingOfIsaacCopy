@@ -14,6 +14,7 @@
 #include "Game.h"
 #include "Tear.h"
 #include "Scene.h"
+#include "Coin.h"
 #include <iostream>
 
 using namespace agp;

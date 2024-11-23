@@ -9,6 +9,7 @@
 #include "Isaac.h"
 #include "Enemy.h"
 #include "Fly.h"
+#include "Poop.h"
 using namespace agp;
 
 
@@ -16,9 +17,9 @@ Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, flo
     : DynamicObject(scene, RectF(pos.x, pos.y, 1.2f, 1.2f), nullptr, 6)
 {
 
-    _sprites["tear"] = SpriteFactory::instance()->get("tears_default");
-    _sprites["tear_explosion"] = SpriteFactory::instance()->get("tears_explosion");
-    _sprites["tear_wet"] = SpriteFactory::instance()->get("tears_wet");
+    _sprites["tear"] = SpriteFactory::instance()->get("tear_default");
+    _sprites["tear_explosion"] = SpriteFactory::instance()->get("tear_explosion");
+    _sprites["tear_wet"] = SpriteFactory::instance()->get("tear_wet");
     _sprites["shadow"] = SpriteFactory::instance()->get("shadow");
     _sprite = _sprites["tear"];
 
@@ -133,6 +134,7 @@ bool Tear::collidableWith(CollidableObject* obj)
 {
     Isaac* isaac = dynamic_cast<Isaac*>(obj);
     Enemy* enemy = dynamic_cast<Enemy*>(obj);
+    Poop* poop = dynamic_cast<Poop*>(obj);
     Fly* fly = dynamic_cast<Fly*>(obj);
     if (!isaac)
     {
@@ -141,8 +143,12 @@ bool Tear::collidableWith(CollidableObject* obj)
             destroy(enemy);
             fly->hurt();
         }
-
-        if (obj->sprite())
+        if (poop)
+        {
+            destroy(poop);
+            poop->destroy();
+        }
+        else if (obj->sprite())
         {
             if (!obj->sprite()->name().find("upWall"))
                 destroy(obj);
