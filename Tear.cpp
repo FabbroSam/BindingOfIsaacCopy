@@ -68,16 +68,15 @@ void Tear::update(float dt)
 {
     RenderableObject::update(dt);
 
-    resolveCollisions(dt);
-
-    if (!_destroy)
+    if (isSchedule("explosion") || isSchedule("die"))
         return;
+
+    resolveCollisions(dt);
 
     //control tear level respect shadow
     if (_rect.pos.y > _shadow->rect().pos.y - 0.5f)
     {
         destroy(nullptr);
-        _destroy = false;
         return;
     }
 
@@ -101,11 +100,8 @@ void Tear::update(float dt)
 
 void Tear::destroy(CollidableObject* obj)
 {
-    if(obj)
-        obj->setFocused(true);
-    
-    if (isSchedule("explosion") || isSchedule("die"))
-        return;
+    //if(obj)
+    //    obj->setFocused(true);
 
     schedule("explosion", 0.01f, [this]() {
         _sprite = _sprites["tears_explosion"];

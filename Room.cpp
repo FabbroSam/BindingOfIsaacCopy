@@ -109,7 +109,7 @@ void Room::Draw()
 	//down						   _
 	new StaticObject(_scene, RectF(_x + 2, _y + 10, 5 + 0.6f, 2), spriteLoader->get("wall"));
 	new StaticObject(_scene, RectF(_x + 2 + 7 - 0.6f, _y + 10, 5 + 0.6f, 2), spriteLoader->get("wall"));
-	new DynamicObject(_scene, RectF(_x, _y + 10, 16, 2), spriteLoader->get("upWall"));
+	new DynamicObject(_scene, RectF(_x, _y + 10.2f, 16, 1.8f), spriteLoader->get("upWall"));
 	//right						   _
 	new StaticObject(_scene, RectF(_x + 14, _y, 2, 5 + 0.4f), spriteLoader->get("wall"));
 	new StaticObject(_scene, RectF(_x + 14, _y + 7 - 0.75f, 2, 5 + 0.75f), spriteLoader->get("wall"));
