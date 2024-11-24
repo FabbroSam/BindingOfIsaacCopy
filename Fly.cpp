@@ -12,7 +12,7 @@ using namespace agp;
 Fly::Fly(Scene* scene, const PointF& pos, float spawnDelay)
 	:Enemy(scene, RectF(pos.x, pos.y, 30/16, 30/16), nullptr, spawnDelay, 5)
 {
-	heart = 0;
+	_heart = 0;
 
 	_x_dir = Direction::NONE;
 	_y_dir = Direction::NONE;
@@ -23,7 +23,7 @@ Fly::Fly(Scene* scene, const PointF& pos, float spawnDelay)
 
 	_shadow = new RenderableObject(_scene, _rect, SpriteFactory::instance()->get("shadow"), 4);
 
-	_collider.adjust(0.4f,-0.58f,-0.3f,1.0f);
+	_collider.adjust(0.4f,0.28f,-0.3f,0.1f);
 
 	_visible = true;
 	_collidable = true;
@@ -57,7 +57,7 @@ void::Fly::update(float dt)
 
 	schedule("randomMovement", 0, [this]() {
 
-		if (rand() % 7 == 0)
+		if (rand() % 2 == 0)
 			_x_dir = Direction::RIGHT;
 
 		else if (rand() % 7 == 0)
@@ -94,23 +94,21 @@ bool Fly::collidableWith(CollidableObject* obj)
 
 void Fly::hurt()
 {
-	heart += 1;
-	if (heart > 2)
+	_heart += 1;
+	if (_heart > 1)
 	{
 		_collidable = false;
-		_sprite = _sprites["dyingFly"];
+		_sprite = _sprites["bloodExplotion"];
 
 		_x_dir = Direction::NONE;
 		_y_dir = Direction::NONE;
 
 
-		schedule("dyingFlyAnimation", 0.25f, [this]() {
+		schedule("dyingDukeAnimation", 0.5f, [this]() {
 			_scene->killObject(_shadow);
 			_scene->killObject(this);
 
 			}, 0, false);
-
-
 
 	}
 }

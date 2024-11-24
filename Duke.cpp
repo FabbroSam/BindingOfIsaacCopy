@@ -15,17 +15,21 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 	//_rect = RectF(pos.x, pos.y, 77/16, 66/12);
 	//setCollider(pos.x, pos.y, 77/16, 66/12);
 
+	_heart = 0;
+
 	_x_dir = Direction:: NONE;
 	_y_dir = Direction::NONE;
 
 	_shadow = new RenderableObject(_scene,_rect, SpriteFactory::instance()->get("shadow"), 4);
 
-	_collider.adjust(1, 0.3f, -0.8f, -1);
+	_collider.adjust(0.6, 0.3f, -0.6f, -0.6);
 
 	_sprites["duke_1"] = SpriteFactory::instance()->get("duke_1");
 	_sprites["duke_2"] = SpriteFactory::instance()->get("duke_2");
 	_sprites["duke_3"] = SpriteFactory::instance()->get("duke_3");
 	_sprites["duke_4"] = SpriteFactory::instance()->get("duke_4");
+
+	_sprites["bloodExplotion"] = SpriteFactory::instance()->get("bloodExplotion");
 
 	_visible = false;
 	_collidable = false;
@@ -66,6 +70,38 @@ bool Duke::collision(CollidableObject* with, Direction fromDir)
 	return true;
 }
 
+void Duke::wobble(float dt)
+{
+	//utilizza funzione obj->adjust
+}
+
+bool Duke::collidableWith(CollidableObject* obj)
+{
+	return true;
+}
+
+void Duke::hurt()
+{
+	_heart += 1;
+	if (_heart > 2)
+	{
+		_sprite = _sprites["bloodExplotion"];
+
+		_x_dir = Direction::NONE;
+		_y_dir = Direction::NONE;
+
+
+		schedule("dyingDukeAnimation", 0.25f, [this]() {
+			_scene->killObject(_shadow);
+			_scene->killObject(this);
+
+			}, 0, false);
+
+
+
+	}
+}
+
 void Duke::update(float dt)
 {
 	Enemy::update(dt);
@@ -83,16 +119,31 @@ void Duke::update(float dt)
 	_shadow->setRect(_rect * Vec2Df(0.5f, 0.3f) + Vec2Df(0.85f, 2.9f));
 	
 
-	if (accumulator <= index[0])
+	if (accumulator <= index[0]) {
+		wobble(dt);
 		_sprite = _sprites["duke_1"];
+	}
+		
 	else if (accumulator <= (index[0] + index[1]))
+	{
 		_sprite = _sprites["duke_2"];
+		wobble(dt);
+	}
 	else if (accumulator <= (index[0] + index[1] + index[2]))
+	{
 		_sprite = _sprites["duke_3"];
+		wobble(dt);
+	}
 	else if (accumulator <= (index[0] + 4 * index[1] + index[2]))
+	{
 		_sprite = _sprites["duke_2"];
+		wobble(dt);
+	}
 	else if (accumulator <= (index[0] + index[1] + index[2] + index[3]))
+	{
 		_sprite = _sprites["duke_4"];
+		wobble(dt);
+	}
 	else
 		accumulator = 0;
 }

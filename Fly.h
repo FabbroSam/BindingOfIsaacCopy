@@ -13,7 +13,7 @@ class agp::Fly : public Enemy
 {
 protected:
 
-	int heart;
+	int _heart;
 	std::map<std::string, Sprite*> _sprites;
 
 	RenderableObject* _shadow;

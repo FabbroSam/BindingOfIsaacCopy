@@ -95,6 +95,8 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["duke"] = loadTexture(renderer, "../sprites/duke.png", { 147, 187, 236 });
 	_spriteSheets["fly"] = loadTexture(renderer, "../sprites/fly.png", { 147, 187, 236 });
 
+	//BLOOD EXPLOTION
+	_spriteSheets["bloodExplotion"] = loadTexture(renderer, "../sprites/bloodExplotion.png", { 147, 187, 236 });
 
 	// SHADOW______da fixare trasparenza
 	_spriteSheets["shadow"] = loadTexture(renderer, "../sprites/shadow.png", { 147, 187, 236});
@@ -595,6 +597,16 @@ Sprite* SpriteFactory::get(const std::string& id)
 		rects.push_back(moveBy(RectF(0, 193, 62, 61), 1, 0, 62, 61));
 		return new AnimatedSprite(_spriteSheets["fly"], rects, 28, "fly");
 	}
+
+	else if (id == "bloodExplotion")
+	{
+		rects.push_back(moveBy(RectF(0, 0, 144, 103), 0, 0, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 144, 103), 1, 0, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 144, 103), 2, 0, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 144, 103), 3, 0, 144, 103));
+
+		return new AnimatedSprite(_spriteSheets["bloodExplotion"], rects, 28, "bloodExplotion");
+		}
 
 	else if (id == "shadow")
 	{

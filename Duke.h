@@ -15,6 +15,7 @@ protected:
 
 	std::map<std::string, Sprite*> _sprites;
 	float accumulator;
+	int _heart; //life
 	RenderableObject* _shadow;
 
 public:
@@ -23,7 +24,10 @@ public:
 	
 	//setter of scheduling parameters such as sawn delay, collidable flag ecc...
 	void set_schedule_param();
+	void hurt();
+	void wobble(float dt);
 
+	virtual bool collidableWith(CollidableObject* obj) override;
 	virtual void update(float dt) override;
 	virtual bool collision(CollidableObject* with, Direction fromDir) override;
 	virtual std::string name() override { return strprintf("Duke[%d]", _id); }

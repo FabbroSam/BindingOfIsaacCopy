@@ -9,6 +9,7 @@
 #include "Isaac.h"
 #include "Enemy.h"
 #include "Fly.h"
+#include "Duke.h"
 #include "Poop.h"
 using namespace agp;
 
@@ -136,12 +137,14 @@ bool Tear::collidableWith(CollidableObject* obj)
     Enemy* enemy = dynamic_cast<Enemy*>(obj);
     Poop* poop = dynamic_cast<Poop*>(obj);
     Fly* fly = dynamic_cast<Fly*>(obj);
+    Duke* duke = dynamic_cast<Duke*>(obj);
     if (!isaac)
     {
         if (enemy) // se incontra un nemico colpiscilo
         {  
             destroy(enemy);
             fly->hurt();
+            duke->hurt();
         }
         if (poop)
         {
