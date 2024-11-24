@@ -80,7 +80,7 @@ void HUD::refreshHearts()
 {
 	int fullHearts = _halfHearts / 2;
 	int halfHearts = _halfHearts % 2;
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		if (i < fullHearts)
 			_heartIcons[i]->setSprite(SpriteFactory::instance()->get("hud_heart_red"));

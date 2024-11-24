@@ -212,6 +212,8 @@ void GameScene::event(SDL_Event& evt)
 		_isaac->die();
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_C && !evt.key.repeat)
 		toggleColliders();
+	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_V && !evt.key.repeat)
+		Game::instance()->toggleBorders();
 	else if (evt.type == SDL_MOUSEBUTTONDOWN)
 	{
 		PointF mousePoint(float(evt.button.x), float(evt.button.y));
