@@ -9,6 +9,7 @@
 #include "Isaac.h"
 #include "Enemy.h"
 #include "Fly.h"
+#include "Poop.h"
 using namespace agp;
 
 
@@ -16,8 +17,9 @@ Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, flo
     : DynamicObject(scene, RectF(pos.x, pos.y, 1.2f, 1.2f), nullptr, 6)
 {
 
-    _sprites["tear"] = SpriteFactory::instance()->get("tears_default");
-    _sprites["tears_explosion"] = SpriteFactory::instance()->get("tears_explosion");
+    _sprites["tear"] = SpriteFactory::instance()->get("tear_default");
+    _sprites["tear_explosion"] = SpriteFactory::instance()->get("tear_explosion");
+    _sprites["tear_wet"] = SpriteFactory::instance()->get("tear_wet");
     _sprites["shadow"] = SpriteFactory::instance()->get("shadow");
     _sprite = _sprites["tear"];
 
@@ -102,9 +104,15 @@ void Tear::destroy(CollidableObject* obj)
 {
     //if(obj)
     //    obj->setFocused(true);
+    
+    float newX = _rect.pos.x + (static_cast<float>(rand() % 15000 - 5000) / 9000.0f);
+    float newY = _rect.pos.y + (static_cast<float>(rand() % 15000 - 5000) / 9000.0f);
+    new RenderableObject(_scene, RectF(newX, newY, (rand() % 20 + 10) / 100.0f, (rand() % 20 + 10) / 100.0f), _sprites["tear_wet"], 2);
+    new RenderableObject(_scene, RectF(newX, newY, (rand() % 20 + 10) / 100.0f, (rand() % 20 + 10) / 100.0f), _sprites["tear_wet"], 2);
+    new RenderableObject(_scene, RectF(newX, newY, (rand() % 20 + 10) / 100.0f, (rand() % 20 + 10) / 100.0f), _sprites["tear_wet"], 2);
 
     schedule("explosion", 0.01f, [this]() {
-        _sprite = _sprites["tears_explosion"];
+        _sprite = _sprites["tear_explosion"];
         _rect.size = {1.8f, 1.8f};
         _rect.pos += {-0.4f, -0.4f};
         _vel = { 0.0f,0.0f };
@@ -126,6 +134,7 @@ bool Tear::collidableWith(CollidableObject* obj)
 {
     Isaac* isaac = dynamic_cast<Isaac*>(obj);
     Enemy* enemy = dynamic_cast<Enemy*>(obj);
+    Poop* poop = dynamic_cast<Poop*>(obj);
     Fly* fly = dynamic_cast<Fly*>(obj);
     if (!isaac)
     {
@@ -134,8 +143,12 @@ bool Tear::collidableWith(CollidableObject* obj)
             destroy(enemy);
             fly->hurt();
         }
-
-        if (obj->sprite())
+        if (poop)
+        {
+            destroy(poop);
+            poop->destroy();
+        }
+        else if (obj->sprite())
         {
             if (!obj->sprite()->name().find("upWall"))
                 destroy(obj);

@@ -87,3 +87,6 @@ public:
 	
 
 };
+
+float tCoordX(float x, float w);
+float tCoordY(float y, float h);

@@ -14,6 +14,7 @@
 #include "Game.h"
 #include "Tear.h"
 #include "Scene.h"
+#include "Coin.h"
 #include <iostream>
 
 using namespace agp;
@@ -58,8 +59,8 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_sprites["shadow"] = SpriteFactory::instance()->get("shadow");
 	_sprite = _sprites["headFront"];
 
-	_body = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["bodyFront"], 5);
-	_shadow = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["shadow"], 4);
+	_body = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["bodyFront"], 8);
+	_shadow = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["shadow"], 7);
 }
 
 void Isaac::update(float dt) {

@@ -13,7 +13,8 @@
 #include <algorithm>
 #include <random>
 #include "Altar.h"
-
+#include "Rock.h"
+#include "Poop.h"
 using namespace agp;
 
 Room::Room(Scene* scene,
@@ -149,7 +150,8 @@ void Room::Draw()
 	else if (_roomTypeLeft == RoomType::EMPTY)
 		new StaticObject(_scene, rect, spriteLoader->get("wall"));
 
-	if (_roomType == RoomType::INITIAL) {
+	if (_roomType == RoomType::INITIAL)
+	{
 		new RenderableObject(_scene, RectF(2.25f, 4.4f, 11.5f, 3.2f), spriteLoader->get("controls"));
 	}
 	else if (_roomType == RoomType::TREASURE)
@@ -166,18 +168,40 @@ void Room::Draw()
 	}
 	else if (_roomType == RoomType::NORMAL)
 	{
-		//ROCKS
-		float vec[4][8][2] = { {{3,1.8f},{2,2.8f},{2,7.8f},{3,8.8f},{12,1.8f},{12.9f,2.8f},{12.9f,7.8f},{12,8.8f} },
-								{{5,4.2f},{6,4.2f},{7,4.2f},{8,4.2f},{6,6.5f},{7,6.5f},{8,6.5f},{9,6.5f}},
-								{{6.4f,4.6f},{7.4f,4.6f},{8.4f,4.6f},{6.4f,5.4f},{8.4f,5.4f},{6.4f,6.2f},{7.4f,6.2f},{8.4f,6.2f}},
-								{{7.4f,4.2f},{8,4.2f},{3.4f,4.2f},{4,4.2f}, {5,6.5f},{9,6.5f},{11,8.4f},{9,6.5f}} };
-		int num = rand() % 4;
-		for (int i = 0; i < 8; i++)
+		//ROCKS && POOPS
+		if (rand() % 2 == 0)
 		{
-			new StaticObject(_scene, RectF(_x + vec[num][i][0], _y + vec[num][i][1], 1.4f, 1.2f), spriteLoader->get("rock"), 2);
+			float vec[4][2] = { {1.9f,1.63f},{16 - 2 - 1.3f,1.63f},{1.9f,12 - 2 - 1.4f},{16 - 2 - 1.3f,12 - 2 - 1.4f} };
+			for (int i = 0; i < 4; i++)
+				new Rock(_scene, { _x + vec[i][0], _y + vec[i][1] });
+			int cases = rand() % 2;
+			if (cases == 0)
+			{
+				float vec1[8][2] = { {1,0},{1.8f,0.8f},{1.8f,-0.8f},{2.6f,0},{-1,0},{-1.8f,0.8f},{-1.8f,-0.8f},{-2.6f,0} };
+				for (int i = 0; i < 8; i++)
+					new Rock(_scene, { vec1[i][0] * 1.4f + _x + 8 - 1.4f / 2, vec1[i][1] * 1.4f + _y + 6 + 0 - 1.4f / 2 });
+			}
+			if (cases == 1)
+				for (int i = 0; i < 8; i++)
+					new Rock(_scene, { (rand() % 5 - 2) * 1.4f + _x + 8 - 1.4f / 2, (rand() % 5 - 2) * 1.4f + _y + 6 + 0 - 1.4f / 2 });
+		}
+		else
+		{
+			float vec[4][2] = { {1.9f,1.63f},{16 - 2 - 1.3f,1.63f},{1.9f,12 - 2 - 1.4f},{16 - 2 - 1.3f,12 - 2 - 1.4f} };
+			for (int i = 0; i < 4; i++)
+				new Poop(_scene, { _x + vec[i][0], _y + vec[i][1] });
+			int cases = rand() % 2;
+			if (cases == 0)
+			{
+				float vec1[8][2] = { {1,0},{1.8f,0.8f},{1.8f,-0.8f},{2.6f,0},{-1,0},{-1.8f,0.8f},{-1.8f,-0.8f},{-2.6f,0} };
+				for (int i = 0; i < 8; i++)
+					new Poop(_scene, { vec1[i][0] * 1.4f + _x + 8 - 1.4f / 2, vec1[i][1] * 1.4f + _y + 6 + 0 - 1.4f / 2 });
+			}
+			if (cases == 1)
+				for (int i = 0; i < 8; i++)
+					new Poop(_scene, { (rand() % 5 - 2) * 1.4f + _x + 8 - 1.4f / 2, (rand() % 5 - 2) * 1.4f + _y + 6 + 0 - 1.4f / 2 });
 		}
 	}
-
 	if (_roomType == RoomType::INITIAL || _roomType == RoomType::NORMAL)
 	{
 		// PROPS
@@ -185,13 +209,13 @@ void Room::Draw()
 		new RenderableObject(_scene, RectF(_x + 2 + (rand() % 2 ? rand() % 6 : 2), _y + 6 + (rand() % 2 ? rand() % 5 : 1), 1, 1), spriteLoader->get("basement_props"), 1);
 		new RenderableObject(_scene, RectF(_x + 8 + (rand() % 8 ? rand() % 6 : 2), _y + 2 + (rand() % 2 ? rand() % 5 : 1), 1, 1), spriteLoader->get("basement_props"), 1);
 		new RenderableObject(_scene, RectF(_x + 8 + (rand() % 8 ? rand() % 6 : 2), _y + 6 + (rand() % 2 ? rand() % 5 : 1), 1, 1), spriteLoader->get("basement_props"), 1);
-		
+
 		// OVERLAY
-		new RenderableObject(_scene, RectF(_x, _y,16,12), spriteLoader->get("basement_overlay"), 1);
+		new RenderableObject(_scene, RectF(_x, _y, 16, 12), spriteLoader->get("basement_overlay"), 3);
 	}
 
 	//SHADING
-	new RenderableObject(_scene, RectF(_x, _y, 16, 12), spriteLoader->get("shading"), 2);
+	new RenderableObject(_scene, RectF(_x, _y - 0.5f, 16, 13), spriteLoader->get("shading"), 2);
 }
 
 void Room::openCloseDoor()
@@ -354,4 +378,14 @@ void Basement::generateRooms(Scene* world)
 	//	std::cout << std::endl;
 	//}
 
+}
+
+float tCoordX(float x, float w)
+{
+	return x * w + 8 - w / 2;
+}
+
+float tCoordY(float y, float h)
+{
+	return y * h + 6 - h / 2;
 }

@@ -11,12 +11,13 @@
 
 using namespace agp;
 
-AnimatedSprite::AnimatedSprite(SDL_Texture* spritesheet, const std::vector<RectI>& frames, float FPS, std::string name) 
+AnimatedSprite::AnimatedSprite(SDL_Texture* spritesheet, const std::vector<RectI>& frames, float FPS, std::string name, bool loop) 
 	: Sprite(spritesheet, frames[0], name)
 {
 	_frames = frames;
 	_FPS = FPS;
 	_frameIterator = 0;
+	_loop = loop;
 }
 
 void AnimatedSprite::update(float dt)
@@ -25,6 +26,9 @@ void AnimatedSprite::update(float dt)
 
 	// update current frame based on frame rate and delta time
 	_frameIterator += _FPS * dt;
+
+	if (!_loop && static_cast<int>(_frameIterator) >= _frames.size())
+		return;
 
 	// wrap current frame if needed
 	while (_frameIterator >= _frames.size())
