@@ -13,11 +13,8 @@ class agp::Fly : public Enemy
 {
 protected:
 
-	int _heart;
 	std::map<std::string, Sprite*> _sprites;
 
-	float _ampl = 0;
-	float _freq = 0;
 	float _accumulator;
 
 
@@ -25,10 +22,10 @@ public:
 
 	Fly(Scene* scene, const PointF& pos, float _spawnDelay);
 
-	virtual void set_schedule_param();
-
-	virtual void hurt() override;
-
+	virtual void spawn() {};
+	virtual void move();
+	virtual void hit(float damage, Vec2Df _dir);
+	virtual void die();
 
 	virtual void update(float dt) override;
 	virtual bool collidableWith(CollidableObject* obj) override;

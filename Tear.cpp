@@ -142,7 +142,7 @@ bool Tear::collidableWith(CollidableObject* obj)
         if (enemy) // se incontra un nemico colpiscilo
         {  
             destroy(enemy);
-            enemy->hurt();
+            enemy->hit(0.5f,_vel);
            
         }
         if (poop)

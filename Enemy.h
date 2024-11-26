@@ -20,35 +20,31 @@ namespace agp
 // - base class for all enemies
 class agp::Enemy : public DynamicObject
 {
-	protected:
+protected:
 
-		bool _smashable;
-		bool _dying;
-		Direction _facingDir;
-		float _spawnDelay;
-		RenderableObject* _shadow;
-		RenderableObject* _poof;
+	float _life;
+	bool _hitable;
+	bool _dying;
+	bool _movable;
+	float _spawnDelay;
+	RenderableObject* _shadow;
+	RenderableObject* _poof;
 
-	public:
 
-		Enemy(Scene* scene, const RectF& rect, Sprite* sprite,float _spawnDelay, int layer = 0);
+public:
 
-		Direction facingDir() { return _facingDir; }
+	Enemy(Scene* scene, const RectF& rect, Sprite* sprite, float _spawnDelay, int layer = 0);
 
-		// actions
-		//virtual void stomp();					// isaac jumps on top of the enemy
-		//virtual void kick(bool right = true);	// isaac kicks from one side
-		//virtual void impulse(float dt, Direction fromDir);
-		virtual void smash();					// hit by invincible isaac, fireball, shell, or block bump
-		virtual void hurt()=0;
-		// extends logic collision (+smashed, +hurt Isaac)
-		virtual bool collision(CollidableObject* with, Direction fromDir) override;
+	// actions
+	virtual void spawn() = 0;
+	virtual void move() = 0;
+	virtual void hit(float damage, Vec2Df _dir = {0,0}) = 0;
+	virtual void die() = 0;
 
-		virtual std::string name() override { return strprintf("Enemy[%d]", _id); }
+
+	// extends logic collision (+smashed, +hurt Isaac)
+	virtual bool collision(CollidableObject* with, Direction fromDir) override;
+	virtual bool collidableWith(CollidableObject* obj) override;
+
+	virtual std::string name() override { return strprintf("Enemy[%d]", _id); }
 };
-
-
-
-
-
-

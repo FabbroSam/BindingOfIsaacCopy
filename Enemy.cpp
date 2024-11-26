@@ -2,6 +2,8 @@
 #include "Isaac.h"
 #include "Audio.h"
 #include "Scene.h"
+#include "Tear.h"
+#include "StaticObject.h"
 #include "SpriteFactory.h"
 
 using namespace agp;
@@ -9,28 +11,28 @@ using namespace agp;
 Enemy::Enemy(Scene* scene, const RectF& rect, Sprite* sprite, float spawnDelay, int layer)
 	: DynamicObject(scene, rect, sprite, layer)
 {
-	_smashable = true;
+	_hitable = true;
 	_dying = false;
-	_visible = false;
-	_facingDir = Direction::LEFT;
 	_spawnDelay = spawnDelay;
-	
+	_visible = false;
+
 	_shadow = new RenderableObject(_scene, _rect, SpriteFactory::instance()->get("shadow"), 4);
 	_shadow->setVisible(false);
-	
+
 
 	schedule("poofAppearing", 0.6f, [this]()
 		{
 			_poof = new RenderableObject(_scene, _rect, SpriteFactory::instance()->get("poof"), 6);
-			_poof->setRect(_rect * Vec2Df(1.7f, 1.7f)+Vec2Df(-0.3f,-0.7f));
-			
+			_poof->setRect(_rect * Vec2Df(1.7f, 1.7f) + Vec2Df(-0.3f, -0.7f));
+
 			schedule("enemyAppearing", 0.4f, [this]() //it appears after the poof
 				{
 					this->setVisible(true);
 					_shadow->setVisible(true);
+					_movable = true;
 				}
 			);
-		}
+		} 
 	);
 
 	schedule("poofDisappearing", 1.1f, [this]() // poof disappearing delay = enemy appearing delay + poof appearing delay
@@ -38,33 +40,41 @@ Enemy::Enemy(Scene* scene, const RectF& rect, Sprite* sprite, float spawnDelay, 
 			_scene->killObject(_poof);
 		}
 	);
-	
 }
 
 bool Enemy::collision(CollidableObject* with, Direction fromDir)
 {
-	Isaac* isaac = dynamic_cast<Isaac*>(with);
+	// gestione delle collisioni, oggetto per oggetto
+
+	Isaac* isaac = with->to<Isaac*>();
+	StaticObject* stobj = with->to<StaticObject*>();
+
+	if (stobj)
+		return true;
 
 	if (isaac)
 	{
-		if (_smashable && isaac->invincible())
-			smash();
-		else
-			isaac->hurt();
-
+		isaac->hurt();
 		return true;
 	}
 
 	return false;
 }
 
-void Enemy::smash()
+bool Enemy::collidableWith(CollidableObject* obj)
 {
-	_dying = true;
-	_vel.y = -8;
-	_collidable = false;
-	_flip = SDL_FLIP_VERTICAL;
-	Audio::instance()->playSound("kick");
+	// usare questo metodo per impedire collisioni con alcuni oggetti
+	//	if (obj->to<Tear*>())
+	//		return false;
 
-	schedule("die-smash", 2, [this]() {_scene->killObject(this); });
+
+	// default: collisione possibile con tutti gli oggetti
+	return true;
+}
+
+void Enemy::hit(float damage, Vec2Df _dir)
+{
+	_life -= damage;
+	if (_life <= 0)
+		die();
 }

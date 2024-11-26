@@ -581,8 +581,8 @@ Sprite* SpriteFactory::get(const std::string& id)
 
 	else if (id == "fly")
 	{
-		rects.push_back(moveBy(RectF(0, 0, 30, 30), 0, 0, 30, 30));
-		rects.push_back(moveBy(RectF(0, 0, 30, 30), 1, 0, 30, 30));
+		rects.push_back(moveBy(RectF(0, 0, 31, 31), 0, 0, 31, 31));
+		rects.push_back(moveBy(RectF(0, 0, 31, 31), 1, 0, 31, 31));
 		return new AnimatedSprite(_spriteSheets["fly"], rects, 30, "fly");
 	}
 

@@ -38,23 +38,8 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 
 	_accumulator = 0;
 
-
-	schedule("dukeSpawn", _spawnDelay, [this]() {
-		set_schedule_param();
-		}
-	);
-
 }
 
-void Duke::set_schedule_param() 
-{
-	_visible = true;
-	_collidable = true;
-	_compenetrable = true;
-	_x_dir = Direction::RIGHT;
-	_y_dir = Direction::UP;
-	//_blood->setVisible(false);
-}
 
 bool Duke::collision(CollidableObject* with, Direction fromDir)
 {
@@ -120,7 +105,7 @@ bool Duke::collidableWith(CollidableObject* obj)
 	return true;
 }
 
-void Duke::hurt()
+void Duke::hit(float damage, Vec2Df _dir)
 {
 	_heart -= 1;
 	if (_heart == 0)
