@@ -28,10 +28,10 @@ Audio::Audio()
 	if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 512))
 		throw Mix_GetError();
 
-	setVolumeSfx(5);
-	_volumeSfx = 5;
-	setVolumeMusic (5);
-	_volumeMusic = 5;
+	setVolumeSfx(8);
+	_volumeSfx = 8;
+	setVolumeMusic (3);
+	_volumeMusic = 3;
 
 
 	auto soundFiles = getFilesInDirectory("../sounds");
@@ -80,7 +80,7 @@ void Audio::playSound(const std::string& id, int loops)
 	Mix_PlayChannel(-1, _sounds[id], loops);
 }
 
-void Audio::playMusic(const std::string& id, int loops)
+void Audio::playMusic(const std::string& id, bool enqueue, int loops)
 {
 	if (_musics.find(id) == _musics.end())
 	{
@@ -88,8 +88,31 @@ void Audio::playMusic(const std::string& id, int loops)
 		return;
 	}
 
-	Mix_PlayMusic(_musics[id], loops);
+	if (!enqueue)
+	{
+		Mix_PlayMusic(_musics[id], loops);
+		Mix_HookMusicFinished(onMusicFinished);
+	}
+	else
+		_musicQueue.push_back(id);
+
 }
+
+void Audio::onMusicFinished()
+{
+	std::cout << "ok" << std::endl;
+	Audio* instance = Audio::instance();
+	if (!instance->_musicQueue.empty())
+	{
+		std::string nextMusic = instance->_musicQueue.front();
+		instance->_musicQueue.pop_front();
+
+
+		Mix_PlayMusic(instance->_musics[nextMusic], -1); //la musica riprodotta in coda avrà un loop infinito, metodo utile solo per una canzone in loop
+		Mix_HookMusicFinished(onMusicFinished);			 // Per avere una coda più lunga bisogna creare una nuova funzione "enqueueMusic" che aggiunge alla coda
+	}													// e in questa funzione aggiunge un "if coda != 0: riproduci canzone successiva" 
+}
+
 
 void Audio::resumeMusic()
 {

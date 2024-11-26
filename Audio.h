@@ -12,6 +12,7 @@
 #include "SDL_mixer.h"
 #include <map>
 #include <string>
+#include <list>
 
 namespace agp
 {
@@ -27,6 +28,7 @@ class agp::Audio
 
 		std::map< std::string, Mix_Chunk*> _sounds;
 		std::map< std::string, Mix_Music*> _musics;
+		std::list<std::string> _musicQueue;
 
 		int _volumeSfx;
 		int _volumeMusic;
@@ -42,7 +44,7 @@ class agp::Audio
 
 		// controls
 		void playSound(const std::string & id, int loops = 0);
-		void playMusic(const std::string& id, int loops = -1);
+		void playMusic(const std::string& id, bool enqueue = false, int loops = -1);
 		void resumeMusic();
 		void pauseMusic();
 		void haltMusic();
@@ -54,4 +56,6 @@ class agp::Audio
 		void upVolumeMusic();
 		void downVolumeMusic();
 		const int& volumeMusic() { return _volumeMusic; };
+
+		static void onMusicFinished();
 };

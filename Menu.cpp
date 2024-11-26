@@ -13,6 +13,7 @@
 #include "Game.h"
 #include "Window.h"
 #include "Audio.h"
+#include "Game.h"
 #include <iostream>
 
 using namespace agp;
@@ -21,7 +22,7 @@ MenuItem::MenuItem(Menu* container, int index, float height, const std::string& 
 	: RenderableObject(container,
 		RectF(
 			container->menuRect().left() + 0.8f + 0.1f * index,
-			container->menuRect().top()  + 0.3f + 0.5f * index,
+			container->menuRect().top()  + 0.3f  + (0.5f + 0.95f) * index,
 			container->menuRect().size.x, 
 			height),
 		SpriteFactory::instance()->get(text))
@@ -37,7 +38,7 @@ MenuItem::MenuItem(Menu* container, int index, float height, const std::string& 
 	_menuArrow = new RenderableObject(container,
 		RectF(
 			container->menuRect().left() + 0.0f + 0.1f * index,
-			container->menuRect().top() + 0.3f + 0.5f * index,
+			container->menuRect().top() + 0.3f + (0.5f + 0.95f) * index,
 			1.0f, height),
 		SpriteFactory::instance()->get("menu_arrow"));
 	_menuArrow->setVisible(false);
@@ -54,7 +55,7 @@ MenuItem::MenuItem(Menu* container, int index, float height, const std::string& 
 		_volume = new RenderableObject(container,
 			RectF(
 				container->menuRect().left() + 4.0f + 0.1f * index,
-				container->menuRect().top() + 0.3f + 0.5f * index,
+				container->menuRect().top() + 0.3f + (0.5f + 0.95f) * index,
 				container->menuRect().size.x,
 				height),
 			SpriteFactory::instance()->get(spriteName));
@@ -78,14 +79,14 @@ MenuItem::MenuItem(Menu* container, int index, float height, const std::string& 
 		_vsync1 = new RenderableObject(container,
 			RectF(
 				container->menuRect().left() + 4.0f + 0.1f * index,
-				container->menuRect().top() + 0.3f + 0.5f * index,
+				container->menuRect().top() + 0.3f + (0.5f + 0.95f) * index,
 				container->menuRect().size.x,
 				height),
 			SpriteFactory::instance()->get(_text));
 		_vsync2 = new RenderableObject(container,
 			RectF(
-				container->menuRect().left() + 5.0f + 0.1f * index,
-				container->menuRect().top() + 0.3f + 0.5f * index,
+				container->menuRect().left() + (5.0f + 1) + 0.1f * index,
+				container->menuRect().top() + 0.3f + (0.5f + 0.95f) * index,
 				container->menuRect().size.x,
 				height),
 			SpriteFactory::instance()->get(text2));
@@ -156,26 +157,22 @@ void Menu::event(SDL_Event& evt)
 	{
 		if (evt.key.keysym.scancode == SDL_SCANCODE_DOWN)
 		{
-			Audio::instance()->playSound("fireball");
 			_items[_itemSelected]->setSelected(false);
 			_itemSelected = (_itemSelected + 1) % int(_items.size());
 			_items[_itemSelected]->setSelected(true);
 		}
 		else if (evt.key.keysym.scancode == SDL_SCANCODE_UP)
 		{
-			Audio::instance()->playSound("fireball");
 			_items[_itemSelected]->setSelected(false);
 			_itemSelected = (_itemSelected - 1) < 0 ? int(_items.size()) - 1 : _itemSelected - 1;
 			_items[_itemSelected]->setSelected(true);
 		}
 		else if (evt.key.keysym.scancode == SDL_SCANCODE_RETURN)
 		{
-			Audio::instance()->playSound("kick");
 			_items[_itemSelected]->run();
 		}
 		else if (_closable && (evt.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
 		{
-			Audio::instance()->playSound("smash");
 			Game::instance()->popSceneLater();
 		}
 		else if (evt.key.keysym.scancode == SDL_SCANCODE_RIGHT)
@@ -192,44 +189,53 @@ void Menu::event(SDL_Event& evt)
 				_items[_itemSelected]->run(SDL_SCANCODE_LEFT);
 			}
 		}
+		else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_V && !evt.key.repeat)
+			Game::instance()->toggleBorders();
 	}
 }
 
 Menu* Menu::mainMenu()
 {
-	Menu* menu = new Menu({ 5.2f, 3.2f }, 3.5f, 0, false);
+	Menu* menu = new Menu({ 4.6f, 2.2f }, 5.5f, 0, false);
 
-	new RenderableObject(menu, RectF(0, 2, 16, 8), SpriteFactory::instance()->get("menu_background"), -1);
-	new RenderableObject(menu, RectF(0, -8, 16, 10), SpriteFactory::instance()->get("menu_emptybg"), -1);
-	new RenderableObject(menu, RectF(0, 10, 16, 10), SpriteFactory::instance()->get("menu_emptybg"), -1);
+	new RenderableObject(menu, RectF(-2, 2 - 3, 16+4, 8 + 6), SpriteFactory::instance()->get("menu_background"), -1);
 	new RenderableObject(menu, RectF(0, 0, 16, 12), SpriteFactory::instance()->get("menu_overlay"), -1);
 	new RenderableObject(menu, RectF(-6, 5, 21, 15), SpriteFactory::instance()->get("menu_shading"), -1);
 
-	menu->addItem("menu_new_run", 1.0f, [](SDL_Scancode code)
+	menu->addItem("menu_new_run", 1.0f + 1, [](SDL_Scancode code)
 	{
 		Game::instance()->popSceneLater();
-		//Audio::instance()->playMusic("overworld");
+		Audio::instance()->playMusic("diptera sonata intro", false, 1);
+		Audio::instance()->playMusic("diptera sonata(basement)",true);
 	});
-	menu->addItem("menu_options", 1.0f, [menu](SDL_Scancode code)
+	menu->addItem("menu_options", 1.0f + 1, [menu](SDL_Scancode code)
 	{
 		Menu* nestedMenu = new Menu(menu);
-		new RenderableObject(nestedMenu, RectF(3.4f, 1.8f, 10.2f, 8.4f), SpriteFactory::instance()->get("menu_options_menu"), -1);
-			
-		nestedMenu->addItem("menu_options_sfx", 1.2f, [nestedMenu](SDL_Scancode code)
+		new RenderableObject(nestedMenu, RectF(-2, 2 - 3, 16 + 4, 8 + 6), SpriteFactory::instance()->get("menu_emptybg"), -1);
+		new RenderableObject(nestedMenu, RectF(3.4f, -0.1f, 10.2f, 11.6f), SpriteFactory::instance()->get("menu_options_menu"), -1);
+		new RenderableObject(nestedMenu, RectF(0, 0, 16, 12), SpriteFactory::instance()->get("menu_overlay"), -1);
+		new RenderableObject(nestedMenu, RectF(-6, 5, 21, 15), SpriteFactory::instance()->get("menu_shading"), -1);
+
+		nestedMenu->addItem("menu_options_sfx", 1.2f + 1, [nestedMenu](SDL_Scancode code)
 			{
 				if (nestedMenu->itemAt(0)->volume())
 				{
 					if (code == SDL_SCANCODE_RIGHT)
+					{
 						Audio::instance()->upVolumeSfx();
+						Audio::instance()->playSound("plop");
+					}
 					else if (code == SDL_SCANCODE_LEFT)
+					{
 						Audio::instance()->downVolumeSfx();
-
+						Audio::instance()->playSound("plop");
+					}
 					int volume = Audio::instance()->volumeSfx();
 					std::string spriteName = "menu_options_" + std::to_string(volume);
 					nestedMenu->itemAt(0)->volume()->setSprite(SpriteFactory::instance()->get(spriteName));
 				}
 			}, true);
-		nestedMenu->addItem("menu_options_music", 1.2f, [nestedMenu](SDL_Scancode code)
+		nestedMenu->addItem("menu_options_music", 1.2f + 1, [nestedMenu](SDL_Scancode code)
 			{
 				if (nestedMenu->itemAt(1)->volume())
 				{
@@ -244,7 +250,7 @@ Menu* Menu::mainMenu()
 				}
 			}, true);
 
-		nestedMenu->addItem("menu_options_vsync", 1.2f, [nestedMenu](SDL_Scancode code)
+		nestedMenu->addItem("menu_options_vsync", 1.2f + 1, [nestedMenu](SDL_Scancode code)
 			{
 				SDL_RendererInfo info;
 				SDL_GetRendererInfo(Game::instance()->window()->renderer(), &info);
@@ -263,43 +269,47 @@ Menu* Menu::mainMenu()
 			}, false, true);
 		Game::instance()->pushScene(nestedMenu);
 	});
-	menu->addItem("menu_exit", 1.2f, [](SDL_Scancode code) {Game::instance()->quit(); });
+	menu->addItem("menu_exit", 1.2f + 1, [](SDL_Scancode code) {Game::instance()->quit(); });
 
 	return menu;
 }
 
 Menu* Menu::pauseMenu()
 {
-	Menu* menu = new Menu({ 5.2f, 3.2f}, 3.5f, 0, false);
+	Menu* menu = new Menu({ 4.6f, 1.2f }, 5.5f, 0, false);
 
 	menu->setBackgroundColor({ 0,0,0, 130});
-	new RenderableObject(menu, RectF(3.4f, 1.8f, 10.2f, 8.4f), SpriteFactory::instance()->get("menu_options_menu_dark"), -1);
+	new RenderableObject(menu, RectF(3.4f, -0.1f, 10.2f, 11.6f), SpriteFactory::instance()->get("menu_options_menu_dark"), -1);
 
-	menu->addItem("menu_options_resume", 1.0f, [](SDL_Scancode code)
+	menu->addItem("menu_options_resume", 1.0f + 1, [](SDL_Scancode code)
 		{
 			Game::instance()->popSceneLater();
-			//Audio::instance()->playMusic("overworld");
 		});
-	menu->addItem("menu_options_reset", 1.0f, [](SDL_Scancode code)
+	menu->addItem("menu_options_reset", 1.0f + 1, [](SDL_Scancode code)
 		{
 			Game::instance()->reset();
 		});
 
-	menu->addItem("menu_options_sfx", 1.2f, [menu](SDL_Scancode code)
+	menu->addItem("menu_options_sfx", 1.2f + 1, [menu](SDL_Scancode code)
 		{
 			if (menu->itemAt(2)->volume())
 			{
 				if (code == SDL_SCANCODE_RIGHT)
+				{
 					Audio::instance()->upVolumeSfx();
+					Audio::instance()->playSound("plop");
+				}
 				else if (code == SDL_SCANCODE_LEFT)
+				{
 					Audio::instance()->downVolumeSfx();
-
+					Audio::instance()->playSound("plop");
+				}
 				int volume = Audio::instance()->volumeSfx();
 				std::string spriteName = "menu_options_" + std::to_string(volume);
 				menu->itemAt(2)->volume()->setSprite(SpriteFactory::instance()->get(spriteName));
 			}
 		}, true);
-	menu->addItem("menu_options_music", 1.2f, [menu](SDL_Scancode code)
+	menu->addItem("menu_options_music", 1.2f + 1, [menu](SDL_Scancode code)
 		{
 			if (menu->itemAt(3)->volume())
 			{
@@ -315,7 +325,7 @@ Menu* Menu::pauseMenu()
 		}, true);
 
 
-	menu->addItem("menu_options_vsync", 1.2f, [menu](SDL_Scancode code)
+	menu->addItem("menu_options_vsync", 1.2f + 1, [menu](SDL_Scancode code)
 		{
 			SDL_RendererInfo info;
 			SDL_GetRendererInfo(Game::instance()->window()->renderer(), &info);
@@ -333,7 +343,7 @@ Menu* Menu::pauseMenu()
 			}
 		}, false, true);
 
-	menu->addItem("menu_options_exit", 1.4f, [](SDL_Scancode code) {Game::instance()->quit(); });
+	menu->addItem("menu_options_exit", 1.4f + 1, [](SDL_Scancode code) {Game::instance()->quit(); });
 
 	return menu;
 }
@@ -343,17 +353,18 @@ Menu* Menu::startMenu()
 {
 	Menu* menu = new Menu({ 5.2f, 3.2f }, 3.5f, 0, true);
 
-	new RenderableObject(menu, RectF(0, 2, 16, 8), SpriteFactory::instance()->get("menu_title"), 1);
-	new RenderableObject(menu, RectF(0, -8, 16, 10), SpriteFactory::instance()->get("menu_emptybg"), 1);
-	new RenderableObject(menu, RectF(0, 10, 16, 10), SpriteFactory::instance()->get("menu_emptybg"), 1);
-	
-	new RenderableObject(menu, RectF(5.3f, 4.1f, 5, 5), SpriteFactory::instance()->get("menu_title_start"), 1);
-	new RenderableObject(menu, RectF(0, 1, 16, 4), SpriteFactory::instance()->get("menu_title_angel"),1);
-	
+	new RenderableObject(menu, RectF(-2, 2 - 3, 16 + 4, 8 + 6), SpriteFactory::instance()->get("menu_title"), 1);
+	new RenderableObject(menu, RectF(4.4f, 4.1f, 7, 7), SpriteFactory::instance()->get("menu_title_start"), 1);
+	new RenderableObject(menu, RectF(-0.5, 0, 17, 5), SpriteFactory::instance()->get("menu_title_angel"),1);
+	new RenderableObject(menu, RectF(0, 0, 16, 12), SpriteFactory::instance()->get("menu_overlay"), 1);
+	new RenderableObject(menu, RectF(-6, 5, 21, 15), SpriteFactory::instance()->get("menu_shading"), 1);
+
+	Audio::instance()->playMusic("title screen intro");
+
 	menu->addItem(" ", 1.0f, [](SDL_Scancode code)
 		{
+			Audio::instance()->playSound("book page turn");
 			Game::instance()->popSceneLater();
-			//Audio::instance()->playMusic("overworld");
 		});
 	Game::instance()->pushScene(Menu::mainMenu());
 	return menu;

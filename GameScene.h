@@ -40,7 +40,8 @@ class agp::GameScene : public Scene
 		bool _run_pressed;
 
 		bool _collidersVisible;
-	
+		bool _bordersVisible;
+
 		float _cameraZoomVel;		// camera zoom velocity (in [0,1] relative scale units)
 		bool _right_pressed;
 		bool _left_pressed;

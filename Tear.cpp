@@ -119,6 +119,7 @@ void Tear::destroy(CollidableObject* obj)
         _vel = { 0.0f,0.0f };
         _collidable = false;
         _shadow->setVisible(false);
+        Audio::instance()->playSound("tear block");
         }, 0, false);
     schedule("die", 0.4f, [this]() {
         kill();

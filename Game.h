@@ -38,6 +38,8 @@ class agp::Game
 		UIMonster* _uiMonster;
 		HUD* _hud;
 
+		bool _bordersVisible;
+
 		// helper functions
 		void init();
 		void destroy();
@@ -69,6 +71,10 @@ class agp::Game
 
 		// runs the game loop until the game is over
 		void run();
+
+		//utility build graphic
+		bool bordersVisible() { return _bordersVisible; }
+		void toggleBorders() { _bordersVisible = !_bordersVisible; }
 
 		// game change states
 		void freeze(bool on);

@@ -20,7 +20,7 @@
 using namespace agp;
 
 Isaac::Isaac(Scene* scene, const PointF& pos)
-	: DynamicObject(scene, RectF(pos.x + 1 / 16.0f, pos.y, 1.2f, 1.4f), nullptr, 6)
+	: DynamicObject(scene, RectF(pos.x + 1 / 16.0f, pos.y, 1.2f, 1.4f), nullptr, 9)
 {
 	_collider.adjust(0.3f, 1.1f, -0.3f, 0.2f);
 

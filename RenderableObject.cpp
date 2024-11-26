@@ -9,6 +9,7 @@
 
 #include "RenderableObject.h"
 #include "Scene.h"
+#include "Game.h"
 #include <iostream>
 using namespace agp;
 
@@ -55,9 +56,9 @@ void RenderableObject::draw(SDL_Renderer* renderer, Transform camera)
 		SDL_RenderFillRectF(renderer, &drawRect);
 	}
 
-	if (_borderColor.a)
+	if (Game::instance()->bordersVisible())
 	{
-		SDL_SetRenderDrawColor(renderer, _borderColor.r, _borderColor.g, _borderColor.b, _borderColor.a);
+		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 		SDL_RenderDrawRectF(renderer, &drawRect);
 	}
 

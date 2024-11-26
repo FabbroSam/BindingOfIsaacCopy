@@ -3,6 +3,7 @@
 #include "View.h"
 #include "Game.h"
 #include "Scheduler.h"
+#include "Audio.h"
 #include <iostream>
 #include <cmath> 
 
@@ -101,6 +102,7 @@ void UIMonster::setActiveUIMonster()
 {
 	if (_show)
 	{
+		Audio::instance()->playMusic("basic boss fight");
 		_show = false;
 		_active = false;
 		setBackgroundColor({ 0,0,0,0 });
@@ -114,6 +116,7 @@ void UIMonster::setActiveUIMonster()
 	}
 	else
 	{
+		Audio::instance()->playMusic("boss fight intro jingle v2.1", false, 1);
 		_show = true;
 		_active = true;
 		setBackgroundColor({ 0,0,0 });
