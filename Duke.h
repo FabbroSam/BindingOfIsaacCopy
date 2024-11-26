@@ -14,9 +14,11 @@ class agp::Duke : public Enemy
 protected:
 
 	std::map<std::string, Sprite*> _sprites;
-	float accumulator;
+	float _accumulator;
+	float _wobbleAccumulator;
 	int _heart; //life
-	RenderableObject* _shadow;
+	bool _wobbling;
+	RenderableObject* _blood;
 
 public:
 	
@@ -24,7 +26,7 @@ public:
 	
 	//setter of scheduling parameters such as sawn delay, collidable flag ecc...
 	void set_schedule_param();
-	void hurt();
+	virtual void hurt() override;
 	void wobble(float dt);
 
 	virtual bool collidableWith(CollidableObject* obj) override;

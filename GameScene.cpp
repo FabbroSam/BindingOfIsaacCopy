@@ -187,12 +187,13 @@ void GameScene::update(float timeToSimulate)
 		{
 			if (_vsMonster)
 			{			
-				Game::instance()->uiMonster()->setActiveUIMonster();
+				//Game::instance()->uiMonster()->setActiveUIMonster();
 				_vsMonster = false;
 
-				new Duke(this, PointF(this->room()->rect().pos.x + 2, this->room()->rect().pos.y + 2), 1.5f);
-					//_room->openCloseDoor();
+				new Duke(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 2.5f);
+			
 					//_room->offLightDoor();
+				//Game::instance()->popSceneLater();
 			}
 		}
 

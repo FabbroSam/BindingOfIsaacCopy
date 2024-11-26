@@ -26,6 +26,8 @@ class agp::Enemy : public DynamicObject
 		bool _dying;
 		Direction _facingDir;
 		float _spawnDelay;
+		RenderableObject* _shadow;
+		RenderableObject* _poof;
 
 	public:
 
@@ -36,10 +38,17 @@ class agp::Enemy : public DynamicObject
 		// actions
 		//virtual void stomp();					// isaac jumps on top of the enemy
 		//virtual void kick(bool right = true);	// isaac kicks from one side
+		//virtual void impulse(float dt, Direction fromDir);
 		virtual void smash();					// hit by invincible isaac, fireball, shell, or block bump
-
+		virtual void hurt()=0;
 		// extends logic collision (+smashed, +hurt Isaac)
 		virtual bool collision(CollidableObject* with, Direction fromDir) override;
 
 		virtual std::string name() override { return strprintf("Enemy[%d]", _id); }
 };
+
+
+
+
+
+

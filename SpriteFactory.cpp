@@ -101,6 +101,9 @@ SpriteFactory::SpriteFactory()
 	// SHADOW______da fixare trasparenza
 	_spriteSheets["shadow"] = loadTexture(renderer, "../sprites/shadow.png", { 147, 187, 236});
 
+	// POOF EFFECT
+	_spriteSheets["poof"] = loadTexture(renderer, "../sprites/poof.png", { 147, 187, 236 });
+
 	std::vector<RectI> vecRect;
 	SDL_Texture* base = loadTextureSequence(renderer, "../image", vecRect, Point(0, 0), Point(52, 52));
 	RectI src(0, 0, 180, 180);
@@ -600,17 +603,49 @@ Sprite* SpriteFactory::get(const std::string& id)
 
 	else if (id == "bloodExplotion")
 	{
-		rects.push_back(moveBy(RectF(0, 0, 144, 103), 0, 0, 144, 103));
-		rects.push_back(moveBy(RectF(0, 0, 144, 103), 1, 0, 144, 103));
-		rects.push_back(moveBy(RectF(0, 0, 144, 103), 2, 0, 144, 103));
-		rects.push_back(moveBy(RectF(0, 0, 144, 103), 3, 0, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 100), 0, 0, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 100), 1, 0, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 100), 2, 0, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 100), 0, 1, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 100), 1, 1, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 100), 2, 1, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 120), 0, 2, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 120), 1, 2, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 120), 2, 2, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 120), 0, 3, 144, 103));
 
-		return new AnimatedSprite(_spriteSheets["bloodExplotion"], rects, 28, "bloodExplotion");
+		return new AnimatedSprite(_spriteSheets["bloodExplotion"], rects, 19, "bloodExplotion");
 		}
+	
+	else if (id == "blood")
+	{
+		return new Sprite(_spriteSheets["bloodExplotion"], RectF(0, 220, 147, 100), "blood");
+	}
+
 
 	else if (id == "shadow")
 	{
 		return new Sprite(_spriteSheets["shadow"], RectF(0, 0, 120, 49), "shadow", SDL_FLIP_NONE, 75);
+	}
+
+	else if (id == "poof")
+	{
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 0, 0, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 1, 0, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 2, 0, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 3, 0, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 0, 1, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 1, 1, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 2, 1, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 3, 1, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 100), 0, 2, 64, 100));
+		rects.push_back(moveBy(RectF(0, 0, 64, 100), 1, 2, 64, 100));
+		rects.push_back(moveBy(RectF(0, 0, 64, 100), 2, 2, 64, 100));
+		rects.push_back(moveBy(RectF(0, 0, 64, 100), 3, 2, 64, 100));
+		rects.push_back(moveBy(RectF(0, 0, 64, 100), 0, 3, 64, 100));
+		rects.push_back(moveBy(RectF(0, 0, 64, 100), 1, 3, 64, 100));
+		rects.push_back(moveBy(RectF(0, 0, 64, 100), 2, 3, 64, 100));
+		return new  AnimatedSprite(_spriteSheets["poof"], rects, 20, "poof");
 	}
 	else
 	{

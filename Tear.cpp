@@ -136,15 +136,13 @@ bool Tear::collidableWith(CollidableObject* obj)
     Isaac* isaac = dynamic_cast<Isaac*>(obj);
     Enemy* enemy = dynamic_cast<Enemy*>(obj);
     Poop* poop = dynamic_cast<Poop*>(obj);
-    Fly* fly = dynamic_cast<Fly*>(obj);
-    Duke* duke = dynamic_cast<Duke*>(obj);
     if (!isaac)
     {
         if (enemy) // se incontra un nemico colpiscilo
         {  
             destroy(enemy);
-            fly->hurt();
-            duke->hurt();
+            enemy->hurt();
+           
         }
         if (poop)
         {
