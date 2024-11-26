@@ -9,6 +9,7 @@
 #include "Isaac.h"
 #include "Enemy.h"
 #include "Fly.h"
+#include "Duke.h"
 #include "Poop.h"
 using namespace agp;
 
@@ -136,31 +137,27 @@ bool Tear::collision(CollidableObject* with, Direction fromDir)
 
 bool Tear::collidableWith(CollidableObject* obj)
 {
-    //Isaac* isaac = dynamic_cast<Isaac*>(obj);
-    //Enemy* enemy = dynamic_cast<Enemy*>(obj);
-    //Poop* poop = dynamic_cast<Poop*>(obj);
-    //Fly* fly = dynamic_cast<Fly*>(obj);
-    //if (!isaac)
-    //{
-    //    if (enemy) // se incontra un nemico colpiscilo
-    //    {  
-    //        destroy(enemy);
-    //        fly->hurt();
-    //    }
-    //    if (poop)
-    //    {
-    //        destroy(poop);
-    //        poop->destroy();
-    //    }
-    //    else if (obj->sprite())
-    //    {
-    //        if (!obj->sprite()->name().find("upWall"))
-    //            destroy(obj);
-    //    }
-    //}
-    //return false;
-
-    return obj->to<Enemy*>();
-
+    Isaac* isaac = dynamic_cast<Isaac*>(obj);
+    Enemy* enemy = dynamic_cast<Enemy*>(obj);
+    Poop* poop = dynamic_cast<Poop*>(obj);
+    if (!isaac)
+    {
+        if (enemy) // se incontra un nemico colpiscilo
+        {  
+            destroy(enemy);
+            enemy->hit(0.5f,_vel);
+           
+        }
+        if (poop)
+        {
+            destroy(poop);
+            poop->destroy();
+        }
+        else if (obj->sprite())
+        {
+            if (!obj->sprite()->name().find("upWall"))
+                destroy(obj);
+        }
+    }
 
 }

@@ -95,9 +95,14 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["duke"] = loadTexture(renderer, "../sprites/duke.png", { 147, 187, 236 });
 	_spriteSheets["fly"] = loadTexture(renderer, "../sprites/fly.png", { 147, 187, 236 });
 
+	//BLOOD EXPLOTION
+	_spriteSheets["bloodExplotion"] = loadTexture(renderer, "../sprites/bloodExplotion.png", { 147, 187, 236 });
 
 	// SHADOW______da fixare trasparenza
 	_spriteSheets["shadow"] = loadTexture(renderer, "../sprites/shadow.png", { 147, 187, 236});
+
+	// POOF EFFECT
+	_spriteSheets["poof"] = loadTexture(renderer, "../sprites/poof.png", { 147, 187, 236 });
 
 	std::vector<RectI> vecRect;
 	SDL_Texture* base = loadTextureSequence(renderer, "../image", vecRect, Point(0, 0), Point(52, 52));
@@ -576,8 +581,8 @@ Sprite* SpriteFactory::get(const std::string& id)
 
 	else if (id == "fly")
 	{
-		rects.push_back(moveBy(RectF(0, 0, 30, 30), 0, 0, 30, 30));
-		rects.push_back(moveBy(RectF(0, 0, 30, 30), 1, 0, 30, 30));
+		rects.push_back(moveBy(RectF(0, 0, 31, 31), 0, 0, 31, 31));
+		rects.push_back(moveBy(RectF(0, 0, 31, 31), 1, 0, 31, 31));
 		return new AnimatedSprite(_spriteSheets["fly"], rects, 30, "fly");
 	}
 
@@ -593,12 +598,54 @@ Sprite* SpriteFactory::get(const std::string& id)
 		rects.push_back(moveBy(RectF(0, 128, 62,61), 3, 0, 62, 61));
 		rects.push_back(moveBy(RectF(0, 193, 62, 61), 0, 0, 62, 61));
 		rects.push_back(moveBy(RectF(0, 193, 62, 61), 1, 0, 62, 61));
-		return new AnimatedSprite(_spriteSheets["fly"], rects, 27, "fly");
+		return new AnimatedSprite(_spriteSheets["fly"], rects, 28, "fly");
 	}
+
+	else if (id == "bloodExplotion")
+	{
+		rects.push_back(moveBy(RectF(0, 0, 145, 100), 0, 0, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 100), 1, 0, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 100), 2, 0, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 100), 0, 1, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 100), 1, 1, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 100), 2, 1, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 120), 0, 2, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 120), 1, 2, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 120), 2, 2, 144, 103));
+		rects.push_back(moveBy(RectF(0, 0, 145, 120), 0, 3, 144, 103));
+
+		return new AnimatedSprite(_spriteSheets["bloodExplotion"], rects, 19, "bloodExplotion");
+		}
+	
+	else if (id == "blood")
+	{
+		return new Sprite(_spriteSheets["bloodExplotion"], RectF(0, 220, 147, 100), "blood");
+	}
+
 
 	else if (id == "shadow")
 	{
 		return new Sprite(_spriteSheets["shadow"], RectF(0, 0, 120, 49), "shadow", SDL_FLIP_NONE, 75);
+	}
+
+	else if (id == "poof")
+	{
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 0, 0, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 1, 0, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 2, 0, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 3, 0, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 0, 1, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 1, 1, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 2, 1, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 3, 1, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 100), 0, 2, 64, 100));
+		rects.push_back(moveBy(RectF(0, 0, 64, 100), 1, 2, 64, 100));
+		rects.push_back(moveBy(RectF(0, 0, 64, 100), 2, 2, 64, 100));
+		rects.push_back(moveBy(RectF(0, 0, 64, 100), 3, 2, 64, 100));
+		rects.push_back(moveBy(RectF(0, 0, 64, 100), 0, 3, 64, 100));
+		rects.push_back(moveBy(RectF(0, 0, 64, 100), 1, 3, 64, 100));
+		rects.push_back(moveBy(RectF(0, 0, 64, 100), 2, 3, 64, 100));
+		return new  AnimatedSprite(_spriteSheets["poof"], rects, 20, "poof");
 	}
 	else
 	{
