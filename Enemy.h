@@ -22,24 +22,26 @@ class agp::Enemy : public DynamicObject
 {
 	protected:
 
-		bool _smashable;
+		float _life;
+		bool _hitable;
 		bool _dying;
-		Direction _facingDir;
+		bool _movable;
 		float _spawnDelay;
 
 	public:
 
 		Enemy(Scene* scene, const RectF& rect, Sprite* sprite,float _spawnDelay, int layer = 0);
 
-		Direction facingDir() { return _facingDir; }
-
 		// actions
-		//virtual void stomp();					// isaac jumps on top of the enemy
-		//virtual void kick(bool right = true);	// isaac kicks from one side
-		virtual void smash();					// hit by invincible isaac, fireball, shell, or block bump
+		virtual void spawn() = 0;
+		virtual void move() = 0;
+		virtual void hit() = 0;
+		virtual void die() = 0;
+
 
 		// extends logic collision (+smashed, +hurt Isaac)
 		virtual bool collision(CollidableObject* with, Direction fromDir) override;
+		virtual bool collidableWith(CollidableObject* obj) override;
 
 		virtual std::string name() override { return strprintf("Enemy[%d]", _id); }
 };

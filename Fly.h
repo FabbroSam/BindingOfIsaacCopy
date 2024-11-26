@@ -25,11 +25,13 @@ public:
 
 	virtual void set_schedule_param();
 
-	void hurt();
-
+	virtual void spawn() {};
+	virtual void move() {};
+	virtual void hit();
+	virtual void die() {};
 
 	virtual void update(float dt) override;
-	virtual bool collidableWith(CollidableObject* obj) override;
+	//virtual bool collidableWith(CollidableObject* obj) override;
 	virtual bool collision(CollidableObject* with, Direction fromDir) override;
 	virtual std::string name() override { return strprintf("Fly[%d]", _id); }
 };

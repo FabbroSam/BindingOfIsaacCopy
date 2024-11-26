@@ -22,10 +22,27 @@ using namespace agp;
 Isaac::Isaac(Scene* scene, const PointF& pos)
 	: DynamicObject(scene, RectF(pos.x + 1 / 16.0f, pos.y, 1.2f, 1.4f), nullptr, 9)
 {
-	_collider.adjust(0.3f, 1.1f, -0.3f, 0.2f);
 
+	_sprites["headFront"] = SpriteFactory::instance()->get("isaac_headFront");
+	_sprites["headFrontShoot"] = SpriteFactory::instance()->get("isaac_headFrontShoot");
+	_sprites["headBack"] = SpriteFactory::instance()->get("isaac_headBack");
+	_sprites["headBackShoot"] = SpriteFactory::instance()->get("isaac_headBackShoot");
+	_sprites["headRight"] = SpriteFactory::instance()->get("isaac_headRight");
+	_sprites["headRightShoot"] = SpriteFactory::instance()->get("isaac_headRightShoot");
+	_sprites["bodyFront"] = SpriteFactory::instance()->get("isaac_bodyFront");
+	_sprites["walkDown"] = SpriteFactory::instance()->get("isaac_walkDown");
+	_sprites["walkRight"] = SpriteFactory::instance()->get("isaac_walkRight");
+	_sprites["skid"] = SpriteFactory::instance()->get("isaac_skid");
+	_sprites["jump"] = SpriteFactory::instance()->get("isaac_jump");
+	_sprites["die"] = SpriteFactory::instance()->get("isaac_die");
+	_sprites["shadow"] = SpriteFactory::instance()->get("shadow");
+	_sprite = _sprites["headFront"];
+
+
+	_body = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["bodyFront"], 8);
+	_shadow = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["shadow"], 7);
+	_collider.adjust(0.3f, 1.1f, -0.3f, 0.2f);
 	_walking = false;
-	_jumping = false;
 	_running = false;
 	_dying = false;
 	_dead = false;
@@ -44,23 +61,7 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_x_vel_last_nonzero = 0;
 	_y_vel_last_nonzero = 0;
 
-	_sprites["headFront"] = SpriteFactory::instance()->get("isaac_headFront");
-	_sprites["headFrontShoot"] = SpriteFactory::instance()->get("isaac_headFrontShoot");
-	_sprites["headBack"] = SpriteFactory::instance()->get("isaac_headBack");
-	_sprites["headBackShoot"] = SpriteFactory::instance()->get("isaac_headBackShoot");
-	_sprites["headRight"] = SpriteFactory::instance()->get("isaac_headRight");
-	_sprites["headRightShoot"] = SpriteFactory::instance()->get("isaac_headRightShoot");
-	_sprites["bodyFront"] = SpriteFactory::instance()->get("isaac_bodyFront");
-	_sprites["walkDown"] = SpriteFactory::instance()->get("isaac_walkDown");
-	_sprites["walkRight"] = SpriteFactory::instance()->get("isaac_walkRight");
-	_sprites["skid"] = SpriteFactory::instance()->get("isaac_skid");
-	_sprites["jump"] = SpriteFactory::instance()->get("isaac_jump");
-	_sprites["die"] = SpriteFactory::instance()->get("isaac_die");
-	_sprites["shadow"] = SpriteFactory::instance()->get("shadow");
-	_sprite = _sprites["headFront"];
 
-	_body = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["bodyFront"], 8);
-	_shadow = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["shadow"], 7);
 }
 
 void Isaac::update(float dt) {

@@ -100,7 +100,6 @@ void Audio::playMusic(const std::string& id, bool enqueue, int loops)
 
 void Audio::onMusicFinished()
 {
-	std::cout << "ok" << std::endl;
 	Audio* instance = Audio::instance();
 	if (!instance->_musicQueue.empty())
 	{

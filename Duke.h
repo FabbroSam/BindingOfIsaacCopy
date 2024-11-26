@@ -21,6 +21,11 @@ public:
 	
 	Duke(Scene* scene, const PointF& pos, float _spawnDelay);
 	
+	virtual void spawn() {};
+	virtual void move() {};
+	virtual void hit() {};
+	virtual void die() {};
+
 	//setter of scheduling parameters such as sawn delay, collidable flag ecc...
 	void set_schedule_param();
 

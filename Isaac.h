@@ -22,6 +22,7 @@ class agp::Isaac : public DynamicObject
 {
 	private:
 
+
 		RenderableObject* _body;
 		RenderableObject* _shadow;
 		bool _walking;
@@ -31,6 +32,7 @@ class agp::Isaac : public DynamicObject
 		bool _dying;
 		bool _dead;
 		
+
 		float _shootAnimationTime = 0.1f;
 		float _shootTimer = 0.5f;
 		float _shootCooldown = 0.4f;

@@ -6,6 +6,7 @@
 #include <iostream>
 #include "Room.h"
 #include "Tear.h"
+#include "StaticObject.h"
 
 using namespace agp;
 
@@ -51,7 +52,7 @@ void Fly::set_schedule_param()
 
 void::Fly::update(float dt)
 {
-	Enemy::update(dt);
+	CollidableObject::update(dt);
 
 	_shadow->setRect(_rect * Vec2Df(0.35f, 0.15f) + Vec2Df(0.44f, 1.5f));
 
@@ -75,24 +76,26 @@ void::Fly::update(float dt)
 
 bool Fly::collision(CollidableObject* with, Direction fromDir)
 {
+	Enemy::collision(with, fromDir);
 
+	StaticObject* sobj = with->to<StaticObject*>();
 	if (with->name().find("Static") == 0) {
 
 		if (fromDir == Direction::RIGHT || fromDir == Direction::LEFT)
 			_x_dir = inverse(fromDir);
 		else
 			_y_dir = inverse(fromDir);
-
+		return true;
 	}
-	return true;
+	return false;
 }
 
-bool Fly::collidableWith(CollidableObject* obj)
-{
-	return true;
-}
+//bool Fly::collidableWith(CollidableObject* obj)
+//{
+//	return true;
+//}
 
-void Fly::hurt()
+void Fly::hit()
 {
 	heart += 1;
 	if (heart > 2)
