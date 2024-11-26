@@ -199,8 +199,6 @@ Menu* Menu::mainMenu()
 	Menu* menu = new Menu({ 4.6f, 2.2f }, 5.5f, 0, false);
 
 	new RenderableObject(menu, RectF(-2, 2 - 3, 16+4, 8 + 6), SpriteFactory::instance()->get("menu_background"), -1);
-	//new RenderableObject(menu, RectF(0, -8, 16, 10), SpriteFactory::instance()->get("menu_emptybg"), -1);
-	//new RenderableObject(menu, RectF(0, 10, 16, 10), SpriteFactory::instance()->get("menu_emptybg"), -1);
 	new RenderableObject(menu, RectF(0, 0, 16, 12), SpriteFactory::instance()->get("menu_overlay"), -1);
 	new RenderableObject(menu, RectF(-6, 5, 21, 15), SpriteFactory::instance()->get("menu_shading"), -1);
 
@@ -215,7 +213,9 @@ Menu* Menu::mainMenu()
 		Menu* nestedMenu = new Menu(menu);
 		new RenderableObject(nestedMenu, RectF(-2, 2 - 3, 16 + 4, 8 + 6), SpriteFactory::instance()->get("menu_emptybg"), -1);
 		new RenderableObject(nestedMenu, RectF(3.4f, -0.1f, 10.2f, 11.6f), SpriteFactory::instance()->get("menu_options_menu"), -1);
-			
+		new RenderableObject(nestedMenu, RectF(0, 0, 16, 12), SpriteFactory::instance()->get("menu_overlay"), -1);
+		new RenderableObject(nestedMenu, RectF(-6, 5, 21, 15), SpriteFactory::instance()->get("menu_shading"), -1);
+
 		nestedMenu->addItem("menu_options_sfx", 1.2f + 1, [nestedMenu](SDL_Scancode code)
 			{
 				if (nestedMenu->itemAt(0)->volume())
@@ -353,12 +353,11 @@ Menu* Menu::startMenu()
 {
 	Menu* menu = new Menu({ 5.2f, 3.2f }, 3.5f, 0, true);
 
-	new RenderableObject(menu, RectF(0, 2, 16, 8), SpriteFactory::instance()->get("menu_title"), 1);
-	new RenderableObject(menu, RectF(0, -8, 16, 10), SpriteFactory::instance()->get("menu_emptybg"), 1);
-	new RenderableObject(menu, RectF(0, 10, 16, 10), SpriteFactory::instance()->get("menu_emptybg"), 1);
-	
-	new RenderableObject(menu, RectF(5.3f, 4.1f, 5, 5), SpriteFactory::instance()->get("menu_title_start"), 1);
-	new RenderableObject(menu, RectF(0, 1, 16, 4), SpriteFactory::instance()->get("menu_title_angel"),1);
+	new RenderableObject(menu, RectF(-2, 2 - 3, 16 + 4, 8 + 6), SpriteFactory::instance()->get("menu_title"), 1);
+	new RenderableObject(menu, RectF(4.4f, 4.1f, 7, 7), SpriteFactory::instance()->get("menu_title_start"), 1);
+	new RenderableObject(menu, RectF(-0.5, 0, 17, 5), SpriteFactory::instance()->get("menu_title_angel"),1);
+	new RenderableObject(menu, RectF(0, 0, 16, 12), SpriteFactory::instance()->get("menu_overlay"), 1);
+	new RenderableObject(menu, RectF(-6, 5, 21, 15), SpriteFactory::instance()->get("menu_shading"), 1);
 
 	Audio::instance()->playMusic("title screen intro");
 
