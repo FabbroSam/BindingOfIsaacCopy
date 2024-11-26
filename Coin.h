@@ -22,5 +22,5 @@ public:
     void destroy(CollidableObject* isaac);
 
     void update(float dt) override;
-    bool collidableWith(CollidableObject* obj) override;
+    virtual bool collision(CollidableObject* with, Direction fromDir) override;
 };

@@ -20,7 +20,7 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 	_x_dir = Direction:: NONE;
 	_y_dir = Direction::NONE;
 	
-	_collider.adjust(0.6, 0.3f, -0.6f, -0.6);
+	_collider.adjust(0.6f, 0.3f, -0.6f, -0.6f);
 
 	_sprites["duke_1"] = SpriteFactory::instance()->get("duke_1");
 	_sprites["duke_2"] = SpriteFactory::instance()->get("duke_2");

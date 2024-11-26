@@ -9,10 +9,7 @@ namespace agp
 }
 
 class agp::Altar : public CollidableObject{
-	public:
-		Altar(Scene* scene, const RectF& rect, Sprite* sprite, int layer = 0, float angle = 0, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
-		virtual bool collision(CollidableObject* with, Direction fromDir) override;
 
 private:
 	float _x_dec_rel = 0.5f;
@@ -23,4 +20,9 @@ private:
 	float _radialDistance = 0;
 	float _reactionForce = 5.0f;
 	Vec2Df _originalPosition;
+
+public:
+	Altar(Scene* scene, const RectF& rect, Sprite* sprite, int layer = 0, float angle = 0, SDL_RendererFlip flip = SDL_FLIP_NONE);
+
+	virtual bool collision(CollidableObject* with, Direction fromDir) override;
 };

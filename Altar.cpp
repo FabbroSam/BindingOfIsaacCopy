@@ -5,7 +5,7 @@
 using namespace agp;
 
 Altar::Altar(Scene* scene, const RectF& rect, Sprite* sprite, int layer, float angle, SDL_RendererFlip flip)
-		: CollidableObject(scene, rect, sprite, layer, angle, flip){
+		: CollidableObject(scene, rect, sprite, layer){
     _originalPosition = _rect.pos;
 }
 

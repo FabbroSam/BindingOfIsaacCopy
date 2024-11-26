@@ -44,7 +44,6 @@ public:
 
 	// extends logic collision (+smashed, +hurt Isaac)
 	virtual bool collision(CollidableObject* with, Direction fromDir) override;
-	virtual bool collidableWith(CollidableObject* obj) override;
 
 	virtual std::string name() override { return strprintf("Enemy[%d]", _id); }
 };

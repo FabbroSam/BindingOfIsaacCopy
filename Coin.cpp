@@ -17,6 +17,7 @@ Coin::Coin(Scene* scene, const PointF& pos, int layer)
     _sprite = _sprites["item_coin"];
 
     _collidable = true;
+    _compenetrable = true;
 
     // physics
     const double PI = 3.1415926535897932384650288;
@@ -48,18 +49,20 @@ void Coin::update(float dt)
     else
     {
         _rect.pos.x += _vel.x * dt;
-        _rect.pos.y += (50 * pow(dt, 2)) / 2 + _vel.y * dt;
+        _rect.pos.y += (50.0f * static_cast<float>(pow(dt, 2))) / 2.0f + _vel.y * dt;
         _vel.y += 100 * dt;
     }
 }
 
-bool Coin::collidableWith(CollidableObject* obj)
+bool Coin::collision(CollidableObject* with, Direction fromDir)
+
 {
-    Isaac* isaac = dynamic_cast<Isaac*>(obj);
+    Isaac* isaac = dynamic_cast<Isaac*>(with);
     if (isaac && _collidable)
     {   
         Game::instance()->hud()->addCoins();
         destroy(isaac);
+        return true;
     }
 
     return false;

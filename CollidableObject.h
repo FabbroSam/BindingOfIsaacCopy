@@ -28,7 +28,7 @@ class agp::CollidableObject : public MovableObject
 		bool _collidable;
 		bool _compenetrable;
 		const Color _colliderColor = { 255, 255, 0, 255 };
-
+		
 		// collision detection/resolution
 		virtual void resolveCollisions(float dt);
 

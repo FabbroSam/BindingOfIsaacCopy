@@ -44,40 +44,19 @@ Enemy::Enemy(Scene* scene, const RectF& rect, Sprite* sprite, float spawnDelay, 
 
 bool Enemy::collision(CollidableObject* with, Direction fromDir)
 {
-	// gestione delle collisioni, oggetto per oggetto
 
 	Isaac* isaac = with->to<Isaac*>();
-	StaticObject* stobj = with->to<StaticObject*>();
-
-	if (stobj)
-		return true;
-
-	Isaac* isaac = with->to<Isaac*>();
-	Tear * tear = with->to<Tear*>();
 	if (isaac)
 	{
 		isaac->hurt();
 		return true;
 	}
-	if (tear)
-	{
-		if (_hitable)
-			hit();
-	}
 
+	StaticObject* stobj = with->to<StaticObject*>();
+	if (stobj)
+		return true;
 
 	return false;
-}
-
-bool Enemy::collidableWith(CollidableObject* obj)
-{
-	// usare questo metodo per impedire collisioni con alcuni oggetti
-	//	if (obj->to<Tear*>())
-	//		return false;
-
-
-	// default: collisione possibile con tutti gli oggetti
-	return true;
 }
 
 void Enemy::hit(float damage, Vec2Df _dir)

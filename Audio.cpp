@@ -28,10 +28,10 @@ Audio::Audio()
 	if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 512))
 		throw Mix_GetError();
 
-	setVolumeSfx(8);
-	_volumeSfx = 8;
-	setVolumeMusic (3);
-	_volumeMusic = 3;
+	setVolumeSfx(0);
+	_volumeSfx = 0;
+	setVolumeMusic (0);
+	_volumeMusic = 0;
 
 
 	auto soundFiles = getFilesInDirectory("../sounds");
