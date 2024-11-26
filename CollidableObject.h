@@ -56,7 +56,7 @@ class agp::CollidableObject : public MovableObject
 		// defines logic collision, i.e. what to do when two objects collide
 		// from a game logic perspective (e.g. player dies if hit by enemy)
 		// returns true if logic collision is resolved, false otherwise
-		virtual bool collision(CollidableObject* with, Direction fromDir) { return true; }
+		virtual bool collision(CollidableObject* with, Direction fromDir) { return true;};
 
 		// euclidean distance between colliders
 		virtual float distance(CollidableObject* obj) const;
