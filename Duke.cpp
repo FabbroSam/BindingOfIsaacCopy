@@ -5,6 +5,9 @@
 #include <random>
 #include <iostream>
 #include "Room.h"
+#include "Isaac.h"
+#include "Tear.h"
+#include "StaticObject.h"
 
 
 using namespace agp;
@@ -15,44 +18,35 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 	//_rect = RectF(pos.x, pos.y, 77/16, 66/12);
 	//setCollider(pos.x, pos.y, 77/16, 66/12);
 
-	_heart = 3;
-
-	_x_dir = Direction:: NONE;
-	_y_dir = Direction::NONE;
 	
 	_collider.adjust(0.6f, 0.3f, -0.6f, -0.6f);
+	_visible = false;
+	_collidable = true;
+	_compenetrable = false;
 
 	_sprites["duke_1"] = SpriteFactory::instance()->get("duke_1");
 	_sprites["duke_2"] = SpriteFactory::instance()->get("duke_2");
 	_sprites["duke_3"] = SpriteFactory::instance()->get("duke_3");
 	_sprites["duke_4"] = SpriteFactory::instance()->get("duke_4");
 
+	_sprites["blood"] = SpriteFactory::instance()->get("blood");
 	_sprites["bloodExplotion"] = SpriteFactory::instance()->get("bloodExplotion");
 
-	_visible = false;
-	_collidable = false;
-	_compenetrable = false;
-
+	//phisic
 	_x_vel_max = 1.2f;
 	_y_vel_max = 1.2f;
+	_x_dir = rand() %2 ? Direction::RIGHT : Direction::LEFT;
+	_y_dir = rand() % 2 ? Direction::DOWN : Direction::UP;
+	_x_acc = 10.0f;
+	_y_acc = 10.0f;
+	_x_dec_rel = 0;
+	_y_dec_rel = 0;
+
+	//game parameters
+	_life = 3.0f;
 
 	_accumulator = 0;
 
-}
-
-
-bool Duke::collision(CollidableObject* with, Direction fromDir)
-{
-	if (with->name().find("Static")==0) {
-		
-		if(fromDir==Direction::RIGHT||fromDir==Direction::LEFT)
-			_x_dir = inverse(fromDir);
-		else
-			_y_dir = inverse(fromDir);
-
-	}
-	
-	return true;
 }
 
 
@@ -95,36 +89,45 @@ void Duke::wobble(float dt)
 
 	if (_wobbleAccumulator >= convDuration)
 	{
-		_wobbleAccumulator = convDuration; 
+		_wobbleAccumulator = 0; 
 	}
 }
 
-
-bool Duke::collidableWith(CollidableObject* obj)
-{
-	return true;
-}
 
 void Duke::hit(float damage, Vec2Df _dir)
 {
-	_heart -= 1;
-	if (_heart == 0)
-	{
-		_sprite = _sprites["bloodExplotion"];
-		_dying = true;
-		_x_dir = Direction::NONE;
-		_y_dir = Direction::NONE;
-		_scene->killObject(_shadow);
+	Enemy::hit(damage);
 
-		if (!isSchedule("dyingDukeAnimation")) 
-			schedule("dyingDukeAnimation", 0.45f, [this]() 
+	if (_dir.x < 0)
+		_x_dir = Direction::LEFT;
+	else
+		_x_dir = Direction::RIGHT;
+
+	if (_dir.y < 0)
+		_y_dir = Direction::UP;
+	else
+		_y_dir = Direction::DOWN;
+}
+
+
+void Duke::die()
+{
+	_sprite = _sprites["bloodExplotion"];
+	_dying = true;
+
+	_vel = { 0,0 };
+
+	new RenderableObject(_scene, _rect, _sprites["blood"]);
+
+	if (!isSchedule("dyingDukeAnimation"))
+		schedule("dyingDukeAnimation", 0.45f, [this]()
 			{
-				
 				_scene->killObject(this);
+				_scene->killObject(_shadow);
 
 			}, 0, false);
-	}
 }
+
 
 void Duke::update(float dt)
 {
@@ -147,33 +150,33 @@ void Duke::update(float dt)
 	{
 		
 		if (_accumulator <= index[0]) {
-			_wobbling = true;
+			//_wobbling = true;
 			_sprite = _sprites["duke_1"];
 		}
 
 		else if (_accumulator <= (index[0] + index[1]))
 		{
 			_wobbling = true; 
-			wobble(dt);
+			//wobble(dt);
 			_sprite = _sprites["duke_2"];
 		}
 		else if (_accumulator <= (index[0] + index[1] + index[2]))
 		{
 			_wobbling = true;
-			wobble(dt);
+			//wobble(dt);
 			_sprite = _sprites["duke_3"];
 		}
 		else if (_accumulator <= (index[0] + 4 * index[1] + index[2]))
 		{
 			_wobbling = true;
-			wobble(dt);
+			//wobble(dt);
 			_sprite = _sprites["duke_2"];
 			
 		}
 		else if (_accumulator <= (index[0] + index[1] + index[2] + index[3]))
 		{
 			_wobbling = true;
-			wobble(dt);
+			//wobble(dt);
 			_sprite = _sprites["duke_4"];
 			
 		}
@@ -184,4 +187,19 @@ void Duke::update(float dt)
 		}
 	}
 
+}
+
+bool Duke::collision(CollidableObject* with, Direction fromDir)
+{
+	Enemy::collision(with,fromDir);
+
+	if (with->to<StaticObject*>())
+	{
+		if (fromDir == Direction::UP || fromDir == Direction::DOWN)
+			_y_dir = inverse(_y_dir);
+
+		else if (fromDir == Direction::LEFT || fromDir == Direction::RIGHT)
+			_x_dir = inverse(_x_dir);
+	}
+	return true;
 }

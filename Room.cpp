@@ -15,6 +15,7 @@
 #include "Altar.h"
 #include "Rock.h"
 #include "Poop.h"
+#include "Fly.h"
 using namespace agp;
 
 Room::Room(Scene* scene,
@@ -170,6 +171,7 @@ void Room::Draw()
 
 	if (_roomType == RoomType::INITIAL)
 	{
+		new Fly(_scene, PointF( 3,3 ), 0);
 		new RenderableObject(_scene, RectF(2.25f, 4.4f, 11.5f, 3.2f), spriteLoader->get("controls"));
 	}
 	else if (_roomType == RoomType::TREASURE)
