@@ -16,7 +16,7 @@ Enemy::Enemy(Scene* scene, const RectF& rect, Sprite* sprite, float spawnDelay, 
 	_spawnDelay = spawnDelay;
 	_visible = false;
 	_movable = false;
-	_shadow = new RenderableObject(_scene, _rect, SpriteFactory::instance()->get("shadow"), 4);
+	_shadow = new RenderableObject(_scene, _rect, SpriteFactory::instance()->get("shadow"), 3);
 	_shadow->setVisible(false);
 
 

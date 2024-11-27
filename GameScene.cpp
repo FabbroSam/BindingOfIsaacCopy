@@ -201,7 +201,7 @@ void GameScene::spawnMobs()
 {
 	if (_room->type() == RoomType::NORMAL && _room->state() == RoomState::ACTIVE)
 	{
-		int amount = rand() % 6;
+		int amount = rand() % 6;			
 		if (amount)
 			_room->changeStateRoom();
 		else
@@ -219,10 +219,14 @@ void GameScene::spawnMobs()
 	{
 		if (_vsMonster)
 		{
-			Game::instance()->uiMonster()->setActiveUIMonster();
+			//Game::instance()->uiMonster()->setActiveUIMonster();
 			_vsMonster = false;
 
-			new Duke(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 2.5f);
+			new Duke(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 6.5f);
+			new Fly(this, PointF(this->room()->rect().center().x + 1, this->room()->rect().center().y - 1), 4.5f);
+			new Fly(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y - 1), 4.5f);
+			new Fly(this, PointF(this->room()->rect().center().x - 1, this->room()->rect().center().y), 4.5f);
+			new Fly(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y + 1), 4.5f);
 
 			_room->offLightDoor();
 		}
