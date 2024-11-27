@@ -638,14 +638,14 @@ Sprite* SpriteFactory::get(const std::string& id)
 		rects.push_back(moveBy(RectF(0, 0, 64, 66), 1, 1, 64, 66));
 		rects.push_back(moveBy(RectF(0, 0, 64, 66), 2, 1, 64, 66));
 		rects.push_back(moveBy(RectF(0, 0, 64, 66), 3, 1, 64, 66));
-		rects.push_back(moveBy(RectF(0, 0, 64, 100), 0, 2, 64, 100));
-		rects.push_back(moveBy(RectF(0, 0, 64, 100), 1, 2, 64, 100));
-		rects.push_back(moveBy(RectF(0, 0, 64, 100), 2, 2, 64, 100));
-		rects.push_back(moveBy(RectF(0, 0, 64, 100), 3, 2, 64, 100));
-		rects.push_back(moveBy(RectF(0, 0, 64, 100), 0, 3, 64, 100));
-		rects.push_back(moveBy(RectF(0, 0, 64, 100), 1, 3, 64, 100));
-		rects.push_back(moveBy(RectF(0, 0, 64, 100), 2, 3, 64, 100));
-		return new  AnimatedSprite(_spriteSheets["poof"], rects, 20, "poof");
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 0, 2, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 1, 2, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 2, 2, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 3, 2, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 0, 3, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 1, 3, 64, 66));
+		rects.push_back(moveBy(RectF(0, 0, 64, 66), 2, 3, 64, 66));
+		return new  AnimatedSprite(_spriteSheets["poof"], rects, 23, "poof");
 	}
 	else
 	{

@@ -47,6 +47,8 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_dying = false;
 	_dead = false;
 	_invincible = true;
+	//_compenetrable = false;
+
 
 	_x_acc = 1.8f;
 	_x_dec_rel = 5.0f;

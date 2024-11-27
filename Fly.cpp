@@ -9,6 +9,7 @@
 #include "Tear.h"
 #include "Rock.h"
 #include "Poop.h"
+#include "Isaac.h"
 
 using namespace agp;
 
@@ -20,7 +21,7 @@ Fly::Fly(Scene* scene, const PointF& pos, float spawnDelay)
 	_sprites["dyingFly"] = SpriteFactory::instance()->get("dyingFly");
 	_sprite = _sprites["fly"];
 
-	_collider.adjust(0.35f, 0.35f, -0.35f, 0.1f);
+	_collider.adjust(0.35f, 0.27f, -0.35f, 0.1f);
 	_visible = false;
 	_collidable = true;
 	_compenetrable = false;
@@ -50,8 +51,53 @@ void::Fly::update(float dt)
 
 	_shadow->setRect(_rect * Vec2Df(0.35f, 0.15f) + Vec2Df(0.4f, 0.9f));
 
-	if (_movable)
+	Isaac* isaac = static_cast<GameScene*>(_scene)->player();
+	
+	Vec2Df centerIsaac = isaac->rect().center();
+	Vec2Df centerFly = _rect.center();
+
+	float d = centerFly.distance(centerIsaac);
+	if (d < 2)
+	{
+		std::cout << "distance; " << d << std::endl;
+		followIsaac(centerIsaac);
+	}
+	else
+	{
 		move();
+	}
+
+
+
+
+
+}
+
+void Fly::followIsaac(Vec2Df pos)
+{
+	if (!_movable)
+	{
+		return;
+	}
+	_x_acc = 5;
+	_y_acc = 5;
+
+	_x_vel_max = 1.3f;
+	_y_vel_max = 1.3f;
+
+	if (pos.x < _rect.pos.x)
+	{
+		_x_dir = Direction::LEFT;
+	}
+	else
+		_x_dir = Direction::RIGHT;
+
+	if (pos.y -0.7f < _rect.pos.y)
+	{
+		_y_dir = Direction::UP;
+	}
+	else
+		_y_dir = Direction::DOWN;
 }
 
 bool Fly::collidableWith(CollidableObject* obj)
