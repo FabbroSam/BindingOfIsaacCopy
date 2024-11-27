@@ -70,7 +70,6 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 
 void Isaac::update(float dt) 
 {
-	std::cout << _x_dec_rel << std::endl;
 	// physics and overrides
 	DynamicObject::update(dt);
 

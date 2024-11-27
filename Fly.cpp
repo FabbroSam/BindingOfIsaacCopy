@@ -79,11 +79,6 @@ void::Fly::update(float dt)
 		move();
 	}
 
-
-
-
-
-
 }
 
 void Fly::followIsaac(Vec2Df pos)
@@ -127,12 +122,12 @@ void Fly::followIsaac(Vec2Df pos)
 	schedule("dirchange", 0.05f,[this,x_dir,y_dir]() {
 		if (x_dir != _x_dir)
 		{
-			_y_dir == Direction::NONE;
+			_y_dir = Direction::NONE;
 			_x_dir = x_dir;
 		}
 		else if (y_dir != _y_dir)
 		{
-			_x_dir == Direction::NONE;
+			_x_dir = Direction::NONE;
 			_y_dir = y_dir;
 		}
 		}, 0, false);
@@ -155,22 +150,22 @@ void Fly::move()
 		return;
 	}
 
-	_x_vel_max = 0.5f;
-	_y_vel_max = 0.5f;
-	_x_acc = 1;
-	_y_acc = 1;
+	_x_vel_max = 0.9f;
+	_y_vel_max = 0.9f;
+	_x_acc = 3;
+	_y_acc = 3;
 
-	schedule("movement", 0.2f, [this]() 
+	schedule("movement", 0.07f, [this]() 
 		{
-			_x_dir = rand() % 100 > 30 ? Direction::NONE : (rand() % 100 > 50 ? Direction::LEFT : Direction::RIGHT);
-			_y_dir = rand() % 100 > 30 ? Direction::NONE : (rand() % 100 > 50 ? Direction::UP : Direction::DOWN);
+			_x_dir = rand() % 100 > 20 ? Direction::NONE : (rand() % 100 > 50 ? Direction::LEFT : Direction::RIGHT);
+			_y_dir = rand() % 100 > 20 ? Direction::NONE : (rand() % 100 > 50 ? Direction::UP : Direction::DOWN);
 		},0,false);
+	//schedule("impulse", 0.1f, [this]()
+	//	{
+	//		_x_dir = _x_dir != Direction::NONE ? (rand() % 100 > 50 ? Direction::LEFT : Direction::RIGHT) : Direction::NONE;
+	//		_y_dir = _y_dir != Direction::NONE ? (rand() % 100 > 50 ? Direction::LEFT : Direction::RIGHT) : Direction::NONE;
+	//	}, 0, false);
 
-	schedule("impulse", 0.1f, [this]()
-		{
-			_x_dir = _x_dir != Direction::NONE ? (rand() % 100 > 50 ? Direction::LEFT : Direction::RIGHT) : Direction::NONE;
-			_y_dir = _y_dir != Direction::NONE ? (rand() % 100 > 50 ? Direction::LEFT : Direction::RIGHT) : Direction::NONE;
-		}, 0, false);
 }
 
 

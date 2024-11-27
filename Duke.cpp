@@ -8,6 +8,7 @@
 #include "Isaac.h"
 #include "Tear.h"
 #include "StaticObject.h"
+#include "Fly.h"
 
 
 using namespace agp;
@@ -44,8 +45,28 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 
 	_accumulator = 0;
 
+
+	spawnFly();
+	schedule("spawn_fly", 12.0f, [this]() {spawnFly();}, -1);
 }
 
+void Duke::spawnFly()
+{
+	_x_prev_dir = _x_dir;
+	_y_prev_dir = _y_dir;
+	_vel = { 0,0 };
+	_x_dir = Direction::NONE;
+	_y_dir = Direction::NONE;
+	schedule("change_dir", 0.4f, [this]() 
+		{ 	
+			new Fly(_scene, PointF(_rect.pos.x, _rect.pos.y), 4.5f);
+			new Fly(_scene, PointF(_rect.pos.x + _rect.size.x - 1, _rect.pos.y), 4.5f);
+			new Fly(_scene, PointF(_rect.pos.x, _rect.pos.y + _rect.size.y - 1), 4.5f);
+			new Fly(_scene, PointF(_rect.pos.x + _rect.size.x - 1, _rect.pos.y + _rect.size.y - 1), 4.5f);
+			_x_dir = _x_prev_dir;
+			_y_dir = _y_prev_dir;
+		});
+}
 
 void Duke::wobble(float dt)
 {
@@ -113,14 +134,12 @@ void Duke::die()
 
 	_vel = { 0,0 };
 
-	_scene->killObject(_shadow);
-
+	_shadow->setVisible(false);
 	_sprite = _sprites["bloodExplotion"];
 
 	if (!isSchedule("dyingDukeAnimation"))
 		schedule("dyingDukeAnimation", 0.37f, [this]()
 			{
-
 				setVisible(false);
 				new RenderableObject(_scene, _rect, _sprites["blood"], 6);
 				_scene->killObject(this);
@@ -202,5 +221,12 @@ bool Duke::collision(CollidableObject* with, Direction fromDir)
 		else if (fromDir == Direction::LEFT || fromDir == Direction::RIGHT)
 			_x_dir = inverse(_x_dir);
 	}
+	return true;
+}
+
+bool Duke::collidableWith(CollidableObject* obj)
+{
+	if (obj->to<Fly*>())
+		return false;
 	return true;
 }

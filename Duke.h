@@ -18,6 +18,8 @@ protected:
 	float _wobbleAccumulator;
 	bool _wobbling;
 	RenderableObject* _blood;
+	Direction _x_prev_dir;
+	Direction _y_prev_dir;
 
 public:
 
@@ -32,8 +34,10 @@ public:
 
 	//setter of scheduling parameters such as sawn delay, collidable flag ecc...
 	void wobble(float dt);
+	void spawnFly();
 
 	virtual void update(float dt) override;
+	virtual bool collidableWith(CollidableObject* obj) override;
 	virtual bool collision(CollidableObject* with, Direction fromDir) override;
 	virtual std::string name() override { return strprintf("Duke[%d]", _id); }
 };

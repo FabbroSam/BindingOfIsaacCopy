@@ -58,6 +58,8 @@ class agp::GameScene : public Scene
 
 		std::list<Object*> _enemiesInRoom;
 
+		Scheduler* _schedule;
+
 	public:
 
 		GameScene(const RectF& r, float dt);
