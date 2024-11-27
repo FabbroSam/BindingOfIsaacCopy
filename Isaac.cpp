@@ -36,8 +36,8 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_sprites["jump"] = SpriteFactory::instance()->get("isaac_jump");
 	_sprites["die"] = SpriteFactory::instance()->get("isaac_die");
 	_sprites["shadow"] = SpriteFactory::instance()->get("shadow");
+	_sprites["hurt"] = SpriteFactory::instance()->get("isaac_hurt");
 	_sprite = _sprites["headFront"];
-
 
 	_body = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["bodyFront"], 8);
 	_shadow = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["shadow"], 7);
@@ -45,6 +45,7 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_walking = false;
 	_running = false;
 	_dying = false;
+	_blinking = false;
 	_dead = false;
 	_invincible = true;
 	//_compenetrable = false;
@@ -73,6 +74,22 @@ void Isaac::update(float dt) {
 	_body->setRect(_rect + Vec2Df({ 0, 0.45f }));
 	_shadow->setRect(RectF(_rect.pos.x+0.3f, _rect.pos.y+1.4f, 0.6f, 0.22f));
 
+	if (_blinking) {
+		_blinkTimeElapsed += dt;
+		if (_blinkTimeElapsed >= 0.02f) {
+			_blinkTimeElapsed = 0.0f;
+			_body->setVisible(!_visible);
+			_visible = !_visible;
+			_blinkCount--;
+
+			if (_blinkCount <= 0) {
+				_blinking = false;
+				_body->setVisible(true);
+				_visible = true;
+				_blinkCount = 20;
+			}
+		}
+	}
 	// state logic
 	if (_vel.x != 0)
 		_x_vel_last_nonzero = _vel.x;
@@ -151,10 +168,15 @@ void Isaac::die()
 
 void Isaac::hurt()
 {
+	if (_hurt)
+		return;
+	_hurt = true;
+	_blinking = true;
 	schedule("hurt_isaac", 0.2f, [this]()
 		{
 			HUD* hud = Game::instance()->hud();
 			hud->subHalfHearts();
+			_hurt = false;
 			if (!hud->halfHearts())
 				die();
 		}, 0, false);
@@ -208,7 +230,13 @@ void Isaac::shoot(Direction dir) {
 
 void Isaac::setSprite()
 {
-	if (_walking)
+	if (_hurt)
+	{	
+		_sprite = _sprites["hurt"];
+		_body->setSprite(nullptr);
+		return;
+	}
+	else if (_walking)
 	{
 		if (_vel.y > 0) {
 			_sprite = _sprites["headFront"];

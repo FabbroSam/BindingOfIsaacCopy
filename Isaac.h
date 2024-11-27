@@ -29,6 +29,10 @@ class agp::Isaac : public DynamicObject
 		bool _running;
 		bool _jumping;
 		bool _invincible;
+		bool _hurt;
+		bool _blinking;
+		float _blinkTimeElapsed = 0.0f;
+		int _blinkCount = 20;
 		bool _dying;
 		bool _dead;
 		
@@ -70,6 +74,7 @@ class agp::Isaac : public DynamicObject
 		// scripted actions
 		virtual void die();
 		virtual void hurt();
+		void blink();
 
 		void shoot(Direction dir);
 

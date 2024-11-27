@@ -43,8 +43,9 @@ RenderableObject::RenderableObject(Scene* scene, const RectF& rect, Sprite* spri
 
 void RenderableObject::draw(SDL_Renderer* renderer, Transform camera)
 {
-	if (!_visible)
+	if (!_visible) {
 		return;
+	}
 
 	SDL_FRect drawRect = RectF(camera(_rect.tl()), camera(_rect.br())).toSDLf();
 
