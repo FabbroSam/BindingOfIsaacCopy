@@ -46,6 +46,7 @@ void Game::init()
 	std::cout << "**************************************************************" << std::endl;
 	std::cout << "************************** Comandi ***************************" << std::endl;
 	std::cout << "**************************************************************" << std::endl;
+	std::cout << "KEY i : invincibilità" << std::endl;
 	std::cout << "KEY c : mostra collider" << std::endl;
 	std::cout << "KEY v : mostra bordi di tutti i RenderableObject" << std::endl;
 	std::cout << "KEY o : apertura e chiusura delle porte" << std::endl;

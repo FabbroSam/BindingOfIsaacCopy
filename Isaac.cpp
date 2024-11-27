@@ -46,7 +46,7 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_blinking = false;
 	_hurt = false;
 	_dead = false;
-	_invincible = true;
+	_invincible = false;
 	_compenetrable = false;
 
 	_blinkTimeElapsed = 0.0f;
@@ -176,11 +176,13 @@ void Isaac::hurt()
 		Audio::instance()->playSound("isaac_hurt_3");
 	}
 
-	
-	HUD* hud = Game::instance()->hud();
-	hud->subHalfHearts();
-	if (!hud->halfHearts())
-		die();
+	if (!_invincible)
+	{
+		HUD* hud = Game::instance()->hud();
+		hud->subHalfHearts();
+		if (!hud->halfHearts())
+			die();
+	}
 
 	schedule("hurt_isaac", 0.2f, [this]() {_hurt = false; });
 }

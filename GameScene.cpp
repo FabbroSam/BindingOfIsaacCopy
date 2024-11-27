@@ -269,9 +269,9 @@ void GameScene::event(SDL_Event& evt)
 				}
 		}
 	}
-	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_G)
+	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_I)
 	{
-		Game::instance()->popSceneLater();
+		_isaac->setInvincible();
 	}
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_O)
 	{
