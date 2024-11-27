@@ -188,15 +188,13 @@ void Isaac::hurt()
 		Audio::instance()->playSound("isaac_hurt_3");
 	}
 
-	unschedule("hurt_isaac");
-	schedule("hurt_isaac", 0.2f, [this]()
-		{
-			HUD* hud = Game::instance()->hud();
-			hud->subHalfHearts();
-			_hurt = false;
-			if (!hud->halfHearts())
-				die();
-		}, 0, false);
+	
+	HUD* hud = Game::instance()->hud();
+	hud->subHalfHearts();
+	if (!hud->halfHearts())
+		die();
+
+	schedule("hurt_isaac", 0.2f, [this]() {_hurt = false; });
 }
 
 void Isaac::shoot(Direction dir) {

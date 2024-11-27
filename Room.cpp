@@ -171,7 +171,6 @@ void Room::Draw()
 
 	if (_roomType == RoomType::INITIAL)
 	{
-		new Fly(_scene, PointF( 3,3 ), 0);
 		new RenderableObject(_scene, RectF(2.25f, 4.4f, 11.5f, 3.2f), spriteLoader->get("controls"));
 	}
 	else if (_roomType == RoomType::TREASURE)
@@ -194,7 +193,7 @@ void Room::Draw()
 			float vec[4][2] = { {1.9f,1.63f},{16 - 2 - 1.3f,1.63f},{1.9f,12 - 2 - 1.4f},{16 - 2 - 1.3f,12 - 2 - 1.4f} };
 			for (int i = 0; i < 4; i++)
 				new Rock(_scene, { _x + vec[i][0], _y + vec[i][1] });
-			int cases = rand() % 2;
+			int cases = rand() % 3;
 			if (cases == 0)
 			{
 				float vec1[8][2] = { {1,0},{1.8f,0.8f},{1.8f,-0.8f},{2.6f,0},{-1,0},{-1.8f,0.8f},{-1.8f,-0.8f},{-2.6f,0} };
@@ -210,7 +209,7 @@ void Room::Draw()
 			float vec[4][2] = { {1.9f,1.63f},{16 - 2 - 1.3f,1.63f},{1.9f,12 - 2 - 1.4f},{16 - 2 - 1.3f,12 - 2 - 1.4f} };
 			for (int i = 0; i < 4; i++)
 				new Poop(_scene, { _x + vec[i][0], _y + vec[i][1] });
-			int cases = rand() % 2;
+			int cases = rand() % 3;
 			if (cases == 0)
 			{
 				float vec1[8][2] = { {1,0},{1.8f,0.8f},{1.8f,-0.8f},{2.6f,0},{-1,0},{-1.8f,0.8f},{-1.8f,-0.8f},{-2.6f,0} };

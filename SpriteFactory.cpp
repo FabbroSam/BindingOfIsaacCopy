@@ -581,12 +581,18 @@ Sprite* SpriteFactory::get(const std::string& id)
 		return new Sprite(_spriteSheets["duke"], RectF(77, 0, 77, 66), "duke");
 
 
-	else if (id == "fly")
+	else if (id == "fly_black")
 	{
 		rects.push_back(moveBy(RectF(0, 0, 31, 31), 0, 0, 31, 31));
 		rects.push_back(moveBy(RectF(0, 0, 31, 31), 1, 0, 31, 31));
-		return new AnimatedSprite(_spriteSheets["fly"], rects, 30, "fly");
+		return new AnimatedSprite(_spriteSheets["fly"], rects, 25, "fly");
 	}
+	else if (id == "fly_red")
+	{
+		rects.push_back(moveBy(RectF(0, 0, 31, 31), 0, 1, 31, 31));
+		rects.push_back(moveBy(RectF(0, 0, 31, 31), 1, 1, 31, 31));
+		return new AnimatedSprite(_spriteSheets["fly"], rects, 25, "fly");
+		}
 
 	else if (id == "dyingFly")
 	{

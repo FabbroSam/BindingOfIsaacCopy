@@ -28,7 +28,7 @@ Poop::Poop(Scene* scene, const PointF& pos, int layer)
     _type = "";
     _index = 0;
 
-    if (rand() % 2== 0)
+    if (rand() % 5== 0)
     {
         _type = "poop_gold";
         _sprite = _sprites[_type];
