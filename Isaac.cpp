@@ -16,6 +16,7 @@
 #include "Scene.h"
 #include "Coin.h"
 #include <iostream>
+#include <cstdlib>
 
 using namespace agp;
 
@@ -46,10 +47,13 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_running = false;
 	_dying = false;
 	_blinking = false;
+	_hurt = false;
 	_dead = false;
 	_invincible = true;
 	_compenetrable = false;
 
+	_blinkTimeElapsed = 0.0f;
+	_blinkCount = 20;
 
 	_x_acc = 50.0f;
 	_x_dec_rel = 5.0f;
@@ -172,6 +176,19 @@ void Isaac::hurt()
 		return;
 	_hurt = true;
 	_blinking = true;
+
+	int soundChoice = rand() % 3 + 1;
+	if (soundChoice == 1) {
+		Audio::instance()->playSound("isaac_hurt");
+	}
+	else if (soundChoice == 2) {
+		Audio::instance()->playSound("isaac_hurt_2");
+	}
+	else {
+		Audio::instance()->playSound("isaac_hurt_3");
+	}
+
+	unschedule("hurt_isaac");
 	schedule("hurt_isaac", 0.2f, [this]()
 		{
 			HUD* hud = Game::instance()->hud();

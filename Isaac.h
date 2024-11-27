@@ -31,8 +31,8 @@ class agp::Isaac : public DynamicObject
 		bool _invincible;
 		bool _hurt;
 		bool _blinking;
-		float _blinkTimeElapsed = 0.0f;
-		int _blinkCount = 20;
+		float _blinkTimeElapsed;
+		int _blinkCount;
 		bool _dying;
 		bool _dead;
 		
