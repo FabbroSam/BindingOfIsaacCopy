@@ -51,8 +51,13 @@ class agp::HUD : public Scene
 		void addCoins() { setCoins(_coins + 1); }
 		void setBombs(int newBombs);
 		void setHalfHearts(int newHalfHearts);
+		void subHalfHearts() { setHalfHearts(_halfHearts - 1); }
 		void setHeartsCapacity(int newCapacity);
 		void setFPS(int fps);
+		int coins() { return _coins; }
+		int bombs() { return _bombs; }
+		int halfHearts() { return _halfHearts; }
+
 
 		// logic minimap
 		void drawMinimap(RectF rect, RoomType roomType);
