@@ -15,6 +15,10 @@ protected:
 
 	std::map<std::string, Sprite*> _sprites;
 
+	//game parameters
+	bool _black; //type
+	float _distFromIsaac;
+
 public:
 
 	Fly(Scene* scene, const PointF& pos, float _spawnDelay);
