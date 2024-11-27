@@ -18,6 +18,7 @@ protected:
 	float _wobbleAccumulator;
 	bool _wobbling;
 	RenderableObject* _blood;
+	RenderableObject* _blackglow;
 	Direction _x_prev_dir;
 	Direction _y_prev_dir;
 
