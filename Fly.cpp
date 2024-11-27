@@ -176,7 +176,6 @@ void Fly::move()
 
 void Fly::hit(float damage, Vec2Df _dir)
 {	
-	std::cout << "_dir" << std::endl;
 
 	_movable = false;
 	_vel = { 0,0 };

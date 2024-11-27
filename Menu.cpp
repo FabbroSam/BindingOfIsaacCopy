@@ -361,7 +361,7 @@ Menu* Menu::startMenu()
 
 	Audio::instance()->playMusic("title screen intro");
 
-	menu->addItem(" ", 1.0f, [](SDL_Scancode code)
+	menu->addItem("debug", 1.0f, [](SDL_Scancode code)
 		{
 			Audio::instance()->playSound("book page turn");
 			Game::instance()->popSceneLater();
