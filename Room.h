@@ -61,6 +61,7 @@ public:
 	void offLightDoor();
 
 	// get/set
+	void setState(RoomState state) { _roomState = state; }
 	RoomState state() { return _roomState; };
 
 	virtual void update(float dt);
@@ -88,6 +89,7 @@ public:
 	};
 
 	Room* room(const std::pair<int, int>& coords) { return _mapRooms[coords]; }
+	std::map<std::pair<int, int>, agp::Room*> map() { return _mapRooms; }
 
 	void generateRooms(Scene* world);
 	

@@ -29,6 +29,10 @@ class agp::Isaac : public DynamicObject
 		bool _running;
 		bool _jumping;
 		bool _invincible;
+		bool _hurt;
+		bool _blinking;
+		float _blinkTimeElapsed;
+		int _blinkCount;
 		bool _dying;
 		bool _dead;
 		
@@ -59,6 +63,7 @@ class agp::Isaac : public DynamicObject
 		// getters/setters
 		bool invincible() { return _invincible; }
 		void setSprite();
+		void goTo(PointF pos) { _rect = RectF(pos.x, pos.y, _rect.size.x, _rect.size.y); }
 
 		// extends game logic (+isaac logic)
 		virtual void update(float dt) override;
@@ -70,6 +75,7 @@ class agp::Isaac : public DynamicObject
 		// scripted actions
 		virtual void die();
 		virtual void hurt();
+		void blink();
 
 		void shoot(Direction dir);
 

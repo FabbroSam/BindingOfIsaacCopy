@@ -532,6 +532,8 @@ Sprite* SpriteFactory::get(const std::string& id)
 		rects.push_back(RectI(1 * 32, 3 * 32, 32, 32));
 		return new AnimatedSprite(_spriteSheets["isaac"], rects, 10, "isaac_walkRight");
 	}
+	else if (id == "isaac_hurt")
+		return new Sprite(_spriteSheets["isaac"], RectI(146, 215, 32, 32), "isaac_hurt");
 	// ITEM SPRITES
 	else if (id == "tear_default")
 		return new Sprite(_spriteSheets["tears"], RectI(192, 0, 32, 32), "tear_default");

@@ -204,6 +204,8 @@ void GameScene::spawnMobs()
 		int amount = rand() % 5;
 		if (amount)
 			_room->changeStateRoom();
+		else
+			_room->setState(RoomState::INACTIVE);
 		for (int i = 0; i < amount; i++)
 		{
 			float x = 4.0f + static_cast<float>(rand()) / RAND_MAX * (11.0f - 4.0f);
