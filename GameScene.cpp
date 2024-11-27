@@ -187,27 +187,14 @@ void GameScene::update(float timeToSimulate)
 	//CHECK NOT ENEMIES IN ROOM
 	_enemiesInRoom.clear();
 	for (auto& obj : objects(_view->rect()))
-		if (auto enemy = obj->to<Enemy*>()) {
+		if (auto enemy = obj->to<Enemy*>())
 			_enemiesInRoom.push_back(enemy);
-		}
-	for (auto& obj : _enemiesInRoom)
-		std::cout << obj->name() << std::endl;
-	
-	if (_enemiesInRoom.size() == 0 && _room->state() == RoomState::COMBAT) {
-		std::cout << "Changing room state to non-COMBAT." << std::endl;
+	if (_enemiesInRoom.size() == 0 && _room->state() == RoomState::COMBAT) 
 		_room->changeStateRoom();
-	}
-	std::cout << "enemies: " << _enemiesInRoom.size() << std::endl;
-	std::cout << "Room state: " << _room->state() << std::endl;
-
-	std::cout << std::endl << std::endl;
 	if (_enemiesInRoom.empty() && _room->state() == RoomState::COMBAT)
-	{
-		std::cout << "ok" << std::endl;
 		_room->changeStateRoom();
-	}
-	Game::instance()->hud()->selectMinimapRoom(_isaac_x, _isaac_y);
 
+	Game::instance()->hud()->selectMinimapRoom(_isaac_x, _isaac_y);
 }
 
 void GameScene::spawnMobs()

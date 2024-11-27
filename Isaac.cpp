@@ -104,6 +104,9 @@ void Isaac::update(float dt) {
 
 	_prev_x_dir = _x_dir;
 	_prev_y_dir = _y_dir;
+
+	// game logics
+
 }
 void Isaac::move_x(Direction dir)
 {
@@ -146,8 +149,13 @@ void Isaac::die()
 
 void Isaac::hurt()
 {
-	// TODO: powerdown (e.g. if Isaac is big, becomes small)
-	//die();
+	schedule("hurt_isaac", 0.2f, [this]()
+		{
+			HUD* hud = Game::instance()->hud();
+			hud->subHalfHearts();
+			if (!hud->halfHearts())
+				die();
+		}, 0, false);
 }
 
 void Isaac::shoot(Direction dir) {
