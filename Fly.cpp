@@ -40,7 +40,7 @@ Fly::Fly(Scene* scene, const PointF& pos, float spawnDelay)
 	_y_dir = Direction::NONE;
 
 	// game parameters
-	_life = 1.5f;
+	_life = 1.6f;
 
 }
 

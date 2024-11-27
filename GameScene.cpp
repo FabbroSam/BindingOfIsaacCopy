@@ -180,26 +180,64 @@ void GameScene::update(float timeToSimulate)
 			setRooms(std::make_pair(0, -1));
 		}
 
-		if (_room->type() == RoomType::NORMAL)
-			new Fly(this, PointF(this->room()->rect().pos.x + 3, this->room()->rect().pos.y + 3), 1.5f);
+		// SPAWN ENEMIES IN NEW ROOM
+		spawnMobs();
+	}
 
-		if (_room->type() == RoomType::BOSS)
-		{
-			if (_vsMonster)
-			{			
-				//Game::instance()->uiMonster()->setActiveUIMonster();
-				_vsMonster = false;
-
-				new Duke(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 2.5f);
-			
-					//_room->offLightDoor();
-				//Game::instance()->popSceneLater();
-			}
+	//CHECK NOT ENEMIES IN ROOM
+	_enemiesInRoom.clear();
+	for (auto& obj : objects(_view->rect()))
+		if (auto enemy = obj->to<Enemy*>()) {
+			_enemiesInRoom.push_back(enemy);
 		}
+	for (auto& obj : _enemiesInRoom)
+		std::cout << obj->name() << std::endl;
+	
+	if (_enemiesInRoom.size() == 0 && _room->state() == RoomState::COMBAT) {
+		std::cout << "Changing room state to non-COMBAT." << std::endl;
+		_room->changeStateRoom();
+	}
+	std::cout << "enemies: " << _enemiesInRoom.size() << std::endl;
+	std::cout << "Room state: " << _room->state() << std::endl;
 
+	std::cout << std::endl << std::endl;
+	if (_enemiesInRoom.empty() && _room->state() == RoomState::COMBAT)
+	{
+		std::cout << "ok" << std::endl;
+		_room->changeStateRoom();
 	}
 	Game::instance()->hud()->selectMinimapRoom(_isaac_x, _isaac_y);
 
+}
+
+void GameScene::spawnMobs()
+{
+	if (_room->type() == RoomType::NORMAL && _room->state() == RoomState::ACTIVE)
+	{
+		int amount = rand() % 5;
+		if (amount)
+			_room->changeStateRoom();
+		for (int i = 0; i < amount; i++)
+		{
+			float x = 4.0f + static_cast<float>(rand()) / RAND_MAX * (11.0f - 4.0f);
+			float y = 4.0f + static_cast<float>(rand()) / RAND_MAX * (7.0f - 4.0f);
+			new Fly(this, PointF(this->room()->rect().pos.x + x, this->room()->rect().pos.y + y), 1.5f);
+		}
+
+	}
+	if (_room->type() == RoomType::BOSS && _room->state() == RoomState::ACTIVE)
+	{
+		if (_vsMonster)
+		{
+			//Game::instance()->uiMonster()->setActiveUIMonster();
+			_vsMonster = false;
+
+			new Duke(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 2.5f);
+
+			//_room->offLightDoor();
+		//Game::instance()->popSceneLater();
+		}
+	}
 }
 
 void GameScene::event(SDL_Event& evt)

@@ -15,7 +15,7 @@ Enemy::Enemy(Scene* scene, const RectF& rect, Sprite* sprite, float spawnDelay, 
 	_dying = false;
 	_spawnDelay = spawnDelay;
 	_visible = false;
-
+	_movable = false;
 	_shadow = new RenderableObject(_scene, _rect, SpriteFactory::instance()->get("shadow"), 4);
 	_shadow->setVisible(false);
 
@@ -29,7 +29,6 @@ Enemy::Enemy(Scene* scene, const RectF& rect, Sprite* sprite, float spawnDelay, 
 				{
 					this->setVisible(true);
 					_shadow->setVisible(true);
-					_movable = true;
 				}
 			);
 		} 
@@ -38,6 +37,7 @@ Enemy::Enemy(Scene* scene, const RectF& rect, Sprite* sprite, float spawnDelay, 
 	schedule("poofDisappearing", 1.1f, [this]() // poof disappearing delay = enemy appearing delay + poof appearing delay
 		{
 			_scene->killObject(_poof);
+			_movable = true;
 		}
 	);
 }

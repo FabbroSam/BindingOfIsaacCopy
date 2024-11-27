@@ -30,7 +30,7 @@ Room::Room(Scene* scene,
 {
 	_scene = scene;
 	_rect = RectF(rect.pos.x * 16, rect.pos.y * 12, 16, 12);
-	_roomState = RoomState::INACTIVE;
+	_roomState = RoomState::ACTIVE;
 	_roomType = roomType;
 	_roomTypeUp = roomTypeUp;
 	_roomTypeDown = roomTypeDown;
@@ -46,6 +46,24 @@ Room::Room(Scene* scene,
 	_doorLeft = nullptr;
 
 	Draw();
+
+}
+
+void Room::changeStateRoom()
+{
+	schedule("changestateRoom", 0.1f, [this]()
+		{
+			if (_roomState == RoomState::ACTIVE)
+			{
+				openCloseDoor();
+				_roomState = RoomState::COMBAT;
+			}
+			else if (_roomState == RoomState::COMBAT)
+			{
+				openCloseDoor();
+				_roomState = RoomState::INACTIVE;
+			}
+		}, 0, false);
 
 }
 
@@ -380,12 +398,3 @@ void Basement::generateRooms(Scene* world)
 
 }
 
-float tCoordX(float x, float w)
-{
-	return x * w + 8 - w / 2;
-}
-
-float tCoordY(float y, float h)
-{
-	return y * h + 6 - h / 2;
-}

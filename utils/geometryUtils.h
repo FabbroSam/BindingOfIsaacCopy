@@ -480,9 +480,9 @@ namespace agp
 
 
 	enum RoomState {
-		INACTIVE,			// stanza non esplorata
+		ACTIVE,			// stanza non ancora esplorata 
 		COMBAT,				// player, nemici, porte chiuse
-		ACTIVE,				// stanza già esplorata 
+		INACTIVE,				// stanza esplorata 
 	};
 
 	enum RoomType {

@@ -60,8 +60,14 @@ public:
 	void openCloseDoor();
 	void offLightDoor();
 
+	// get/set
+	RoomState state() { return _roomState; };
+
 	virtual void update(float dt);
 	virtual std::string name() override;
+
+	// game logic
+	void changeStateRoom();
 };
 
 
@@ -87,6 +93,3 @@ public:
 	
 
 };
-
-float tCoordX(float x, float w);
-float tCoordY(float y, float h);

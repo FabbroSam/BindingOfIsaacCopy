@@ -56,6 +56,8 @@ class agp::GameScene : public Scene
 		Room* _room;
 		Basement* _mapRooms;
 
+		std::list<Object*> _enemiesInRoom;
+
 	public:
 
 		GameScene(const RectF& r, float dt);
@@ -70,6 +72,10 @@ class agp::GameScene : public Scene
 		bool collidersVisible() { return _collidersVisible; }
 		void toggleColliders() { _collidersVisible = !_collidersVisible; }
 
+
+		//action Game
+		void spawnMobs();
+
 		// overrides scene object selection (+octree, NOT implemented)
 		//virtual std::list<Object*> objects(const RectF& cullingRect) override;
 
@@ -78,4 +84,5 @@ class agp::GameScene : public Scene
 
 		// extends event handler (+camera translate/zoom, +brick creation/destroy, +pause menu)
 		virtual void event(SDL_Event& evt) override;
+
 };
