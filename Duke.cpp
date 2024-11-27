@@ -15,11 +15,8 @@ using namespace agp;
 Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 	:Enemy(scene, RectF(pos.x, pos.y, 77 / 16 * 0.8f, 66 / 16 * 0.8f), nullptr, spawnDelay, 5)
 {
-	//_rect = RectF(pos.x, pos.y, 77/16, 66/12);
-	//setCollider(pos.x, pos.y, 77/16, 66/12);
 
-	
-	_collider.adjust(0.6f, 0.3f, -0.6f, -0.6f);
+	_collider.adjust(0.6f, 0.3f, -0.6f, 0.75f);
 	_visible = false;
 	_collidable = true;
 	_compenetrable = false;
@@ -33,17 +30,17 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 	_sprites["bloodExplotion"] = SpriteFactory::instance()->get("bloodExplotion");
 
 	//phisic
-	_x_vel_max = 1.2f;
-	_y_vel_max = 1.2f;
+	_x_vel_max = 1.3f;
+	_y_vel_max = 1.3f;
 	_x_dir = rand() %2 ? Direction::RIGHT : Direction::LEFT;
 	_y_dir = rand() % 2 ? Direction::DOWN : Direction::UP;
-	_x_acc = 100.0f;
-	_y_acc = 100.0f;
+	_x_acc = 25.0f;
+	_y_acc = 25.0f;
 	_x_dec_rel = 0;
 	_y_dec_rel = 0;
 
 	//game parameters
-	_life = 3.0f;
+	_life = 5.0f;
 
 	_accumulator = 0;
 
@@ -123,23 +120,12 @@ void Duke::die()
 	if (!isSchedule("dyingDukeAnimation"))
 		schedule("dyingDukeAnimation", 0.37f, [this]()
 			{
+
 				setVisible(false);
 				new RenderableObject(_scene, _rect, _sprites["blood"], 6);
+				_scene->killObject(this);
 
 			}, 0, false);
-
-	//cancellare shadow
-    //cambia sprite in sangue
-	// visible false
-	//appena finisce esplosione si macchia di sangue 
-
-	schedule("dyingDukeAnimation", 0.400001f, [this]()
-		{
-			_scene->killObject(this);
-		
-		}, 0, false);
-
-	
 
 }
 
