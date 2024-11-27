@@ -17,9 +17,9 @@ Fly::Fly(Scene* scene, const PointF& pos, float spawnDelay)
 	:Enemy(scene, RectF(pos.x, pos.y, 1.1f, 1.1f), nullptr, spawnDelay, 10)
 {
 
-	_sprites["fly"] = SpriteFactory::instance()->get("fly");
+	_sprites["fly_black"] = SpriteFactory::instance()->get("fly_black");
+	_sprites["fly_red"] = SpriteFactory::instance()->get("fly_red");
 	_sprites["dyingFly"] = SpriteFactory::instance()->get("dyingFly");
-	_sprite = _sprites["fly"];
 
 	_collider.adjust(0.35f, 0.25f, -0.32f, 0.3f);
 	_visible = false;
@@ -45,9 +45,16 @@ Fly::Fly(Scene* scene, const PointF& pos, float spawnDelay)
 
 	_black = rand() % 2;
 	if (_black)
+	{
+		_sprite = _sprites["fly_black"];
 		_distFromIsaac = 2;
+	}
+		
 	else
+	{
+		_sprite = _sprites["fly_red"];
 		_distFromIsaac = 16;
+	}
 
 }
 
@@ -96,8 +103,8 @@ void Fly::followIsaac(Vec2Df pos)
 	}
 	else
 	{
-		_x_vel_max = 2.0f;
-		_y_vel_max = 2.0f;
+		_x_vel_max = 2.2f;
+		_y_vel_max = 2.2f;
 	}
 
 	Direction x_dir;
@@ -174,10 +181,10 @@ void Fly::hit(float damage, Vec2Df _dir)
 	_movable = false;
 	_vel = { 0,0 };
 
-	_x_vel_max = 2;
-	_y_vel_max = 2;
-	_x_acc = 3.0f;
-	_y_acc = 3.0f;
+	_x_vel_max = 10;
+	_y_vel_max = 10;
+	_x_acc = 50.0f;
+	_y_acc = 50.0f;
 
 	if (_dir.x < 0)
 		_x_dir = Direction::LEFT;
@@ -189,7 +196,7 @@ void Fly::hit(float damage, Vec2Df _dir)
 	else
 		_y_dir = Direction::DOWN;
 
-	schedule("friction", 0.1f, [this]() { _movable = true; });
+	schedule("friction", 0.05f, [this]() { _movable = true; });
 
 	Enemy::hit(damage);
 }

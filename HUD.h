@@ -51,7 +51,7 @@ class agp::HUD : public Scene
 		void addCoins() { setCoins(_coins + 1); }
 		void setBombs(int newBombs);
 		void setHalfHearts(int newHalfHearts);
-		void subHalfHearts() { setHalfHearts(_halfHearts - 1); }
+		void subHalfHearts() { setHalfHearts(_halfHearts - 1); std::cout << "ok" << std::endl; }
 		void setHeartsCapacity(int newCapacity);
 		void setFPS(int fps);
 		int coins() { return _coins; }
