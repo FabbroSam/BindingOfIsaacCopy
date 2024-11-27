@@ -37,6 +37,8 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 	_y_vel_max = 1.2f;
 	_x_dir = rand() %2 ? Direction::RIGHT : Direction::LEFT;
 	_y_dir = rand() % 2 ? Direction::DOWN : Direction::UP;
+	_x_acc = 10.0f;
+	_y_acc = 10.0f;
 	_x_dec_rel = 0;
 	_y_dec_rel = 0;
 
@@ -112,14 +114,16 @@ void Duke::die()
 {
 	_sprite = _sprites["bloodExplotion"];
 	_dying = true;
-	_shadow->setSprite(_sprites["blood"]);
-	_shadow->setRect(_rect * Vec2Df(0.7f, 0.4f));
+
+	_vel = { 0,0 };
+
+	new RenderableObject(_scene, _rect, _sprites["blood"]);
 
 	if (!isSchedule("dyingDukeAnimation"))
 		schedule("dyingDukeAnimation", 0.45f, [this]()
 			{
-
 				_scene->killObject(this);
+				_scene->killObject(_shadow);
 
 			}, 0, false);
 }

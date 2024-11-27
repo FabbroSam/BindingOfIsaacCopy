@@ -14,14 +14,14 @@
 using namespace agp;
 
 Fly::Fly(Scene* scene, const PointF& pos, float spawnDelay)
-	:Enemy(scene, RectF(pos.x, pos.y, 30/16, 30/16), nullptr, spawnDelay, 5)
+	:Enemy(scene, RectF(pos.x, pos.y, 1.1f, 1.1f), nullptr, spawnDelay, 10)
 {
 
 	_sprites["fly"] = SpriteFactory::instance()->get("fly");
 	_sprites["dyingFly"] = SpriteFactory::instance()->get("dyingFly");
 	_sprite = _sprites["fly"];
 
-	_collider.adjust(0.35f, 0.27f, -0.35f, 0.1f);
+	_collider.adjust(0.35f, 0.25f, -0.32f, 0.3f);
 	_visible = false;
 	_collidable = true;
 	_compenetrable = false;
@@ -43,29 +43,35 @@ Fly::Fly(Scene* scene, const PointF& pos, float spawnDelay)
 	// game parameters
 	_life = 1.6f;
 
+	_black = rand() % 2;
+	if (_black)
+		_distFromIsaac = 2;
+	else
+		_distFromIsaac = 16;
+
 }
 
 void::Fly::update(float dt)
 {
 	Enemy::update(dt);
 
-	_shadow->setRect(_rect * Vec2Df(0.35f, 0.15f) + Vec2Df(0.4f, 0.9f));
+	_shadow->setRect(_rect * Vec2Df(0.35f, 0.15f) + Vec2Df(0.4f, 1.1f));
 
 	Isaac* isaac = static_cast<GameScene*>(_scene)->player();
 	
 	Vec2Df centerIsaac = isaac->rect().center();
 	Vec2Df centerFly = _rect.center();
 
-	float d = centerFly.distance(centerIsaac);
-	if (d < 2)
+	float dist = centerFly.distance(centerIsaac);
+	if (dist < _distFromIsaac )
 	{
-		std::cout << "distance; " << d << std::endl;
 		followIsaac(centerIsaac);
 	}
 	else
 	{
 		move();
 	}
+
 
 
 
@@ -79,25 +85,51 @@ void Fly::followIsaac(Vec2Df pos)
 	{
 		return;
 	}
+
 	_x_acc = 5;
 	_y_acc = 5;
 
-	_x_vel_max = 1.3f;
-	_y_vel_max = 1.3f;
-
-	if (pos.x < _rect.pos.x)
+	if (_black)
 	{
-		_x_dir = Direction::LEFT;
+		_x_vel_max = 1.3f;
+		_y_vel_max = 1.3f;
 	}
 	else
-		_x_dir = Direction::RIGHT;
-
-	if (pos.y -0.7f < _rect.pos.y)
 	{
-		_y_dir = Direction::UP;
+		_x_vel_max = 2.0f;
+		_y_vel_max = 2.0f;
+	}
+
+	Direction x_dir;
+	Direction y_dir;
+	
+	if (pos.x - 0.5f < _rect.pos.x)
+	{
+		x_dir = Direction::LEFT;
 	}
 	else
-		_y_dir = Direction::DOWN;
+		x_dir = Direction::RIGHT;
+
+	if (pos.y - 0.7f < _rect.pos.y)
+	{
+		y_dir = Direction::UP;
+	}
+	else
+		y_dir = Direction::DOWN;
+
+	schedule("dirchange", 0.05f,[this,x_dir,y_dir]() {
+		if (x_dir != _x_dir)
+		{
+			_y_dir == Direction::NONE;
+			_x_dir = x_dir;
+		}
+		else if (y_dir != _y_dir)
+		{
+			_x_dir == Direction::NONE;
+			_y_dir = y_dir;
+		}
+		}, 0, false);
+
 }
 
 bool Fly::collidableWith(CollidableObject* obj)
