@@ -37,8 +37,8 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 	_y_vel_max = 1.2f;
 	_x_dir = rand() %2 ? Direction::RIGHT : Direction::LEFT;
 	_y_dir = rand() % 2 ? Direction::DOWN : Direction::UP;
-	_x_acc = 10.0f;
-	_y_acc = 10.0f;
+	_x_acc = 100.0f;
+	_y_acc = 100.0f;
 	_x_dec_rel = 0;
 	_y_dec_rel = 0;
 
@@ -112,20 +112,35 @@ void Duke::hit(float damage, Vec2Df _dir)
 
 void Duke::die()
 {
-	_sprite = _sprites["bloodExplotion"];
 	_dying = true;
 
 	_vel = { 0,0 };
 
-	new RenderableObject(_scene, _rect, _sprites["blood"]);
+	_scene->killObject(_shadow);
+
+	_sprite = _sprites["bloodExplotion"];
 
 	if (!isSchedule("dyingDukeAnimation"))
-		schedule("dyingDukeAnimation", 0.45f, [this]()
+		schedule("dyingDukeAnimation", 0.37f, [this]()
 			{
-				_scene->killObject(this);
-				_scene->killObject(_shadow);
+				setVisible(false);
+				new RenderableObject(_scene, _rect, _sprites["blood"], 6);
 
 			}, 0, false);
+
+	//cancellare shadow
+    //cambia sprite in sangue
+	// visible false
+	//appena finisce esplosione si macchia di sangue 
+
+	schedule("dyingDukeAnimation", 0.400001f, [this]()
+		{
+			_scene->killObject(this);
+		
+		}, 0, false);
+
+	
+
 }
 
 

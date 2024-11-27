@@ -603,23 +603,22 @@ Sprite* SpriteFactory::get(const std::string& id)
 
 	else if (id == "bloodExplotion")
 	{
-		rects.push_back(moveBy(RectF(0, 0, 145, 100), 0, 0, 144, 103));
-		rects.push_back(moveBy(RectF(0, 0, 145, 100), 1, 0, 144, 103));
-		rects.push_back(moveBy(RectF(0, 0, 145, 100), 2, 0, 144, 103));
-		rects.push_back(moveBy(RectF(0, 0, 145, 100), 0, 1, 144, 103));
-		rects.push_back(moveBy(RectF(0, 0, 145, 100), 1, 1, 144, 103));
-		rects.push_back(moveBy(RectF(0, 0, 145, 100), 2, 1, 144, 103));
-		rects.push_back(moveBy(RectF(0, 0, 145, 120), 0, 2, 144, 103));
-		rects.push_back(moveBy(RectF(0, 0, 145, 120), 1, 2, 144, 103));
-		rects.push_back(moveBy(RectF(0, 0, 145, 120), 2, 2, 144, 103));
-		rects.push_back(moveBy(RectF(0, 0, 145, 120), 0, 3, 144, 103));
-
-		return new AnimatedSprite(_spriteSheets["bloodExplotion"], rects, 19, "bloodExplotion");
+		rects.push_back(moveBy(RectF(0, 0, 145, 109), 0, 0, 144, 103,0,0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 109), 1, 0, 144, 103,0,0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 109), 2, 0, 144, 103,0,0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 109), 0, 1, 144, 103,0,0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 109), 1, 1, 144, 103,0,0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 109), 2, 1, 144, 103,0,0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 109), 0, 2, 144, 103,0,0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 109), 1, 2, 144, 103,0,0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 109), 2, 2, 144, 103,0,0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 109), 0, 3, 144, 103,0,0));
+		return new AnimatedSprite(_spriteSheets["bloodExplotion"], rects, 23, "bloodExplotion");
 		}
 	
 	else if (id == "blood")
 	{
-		return new Sprite(_spriteSheets["bloodExplotion"], RectF(0, 220, 147, 100), "blood");
+		return new Sprite(_spriteSheets["bloodExplotion"], RectF(0, 3*109, 145, 100), "blood");
 	}
 
 
