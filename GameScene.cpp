@@ -23,6 +23,7 @@
 #include "UIMonster.h"
 #include "Duke.h"
 #include "Fly.h"
+#include "Host.h"
 #include <iostream>
 using namespace agp;
 
@@ -203,6 +204,7 @@ void GameScene::spawnMobs()
 {
 	if (_room->type() == RoomType::NORMAL && _room->state() == RoomState::ACTIVE)
 	{
+		new Host(this, PointF(this->room()->rect().pos.x+3, this->room()->rect().pos.y+3), 1.5f);
 		int amount = rand() % 6;			
 		if (amount)
 			_room->changeStateRoom();

@@ -179,7 +179,7 @@ void Duke::update(float dt)
 	{
 		
 		if (_accumulator <= index[0]) {
-			//_wobbling = true;
+			_wobbling = true;
 			_sprite = _sprites["duke_1"];
 		}
 

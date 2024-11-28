@@ -91,6 +91,7 @@ SpriteFactory::SpriteFactory()
 	// MOBS
 	_spriteSheets["duke"] = loadTexture(renderer, "../sprites/duke.png", { 147, 187, 236 });
 	_spriteSheets["fly"] = loadTexture(renderer, "../sprites/fly.png", { 147, 187, 236 });
+	_spriteSheets["host"] = loadTexture(renderer, "../sprites/host.png", { 147, 187, 236 });
 
 	//BLOOD EXPLOTION
 	_spriteSheets["bloodExplotion"] = loadTexture(renderer, "../sprites/bloodExplotion.png", { 147, 187, 236 });
@@ -653,11 +654,22 @@ Sprite* SpriteFactory::get(const std::string& id)
 		rects.push_back(moveBy(RectF(0, 0, 64, 66), 2, 3, 64, 66));
 		return new  AnimatedSprite(_spriteSheets["poof"], rects, 23, "poof");
 	}
+	
 	else if (id == "debug")
 		return nullptr;
 
 	else if(id=="blackglow")
 		return new Sprite(_spriteSheets["blackglow"], RectF(0, 0, 112, 112), "blackglow", SDL_FLIP_NONE, 75);
+
+
+	if (id == "host_0")
+		return new Sprite(_spriteSheets["host"], RectF(0, 0, 32, 44), "host");
+	else if (id == "host_1")
+		return new Sprite(_spriteSheets["host"], RectF(32, 0, 32, 44), "host");
+	else if (id == "host_2")
+		return new Sprite(_spriteSheets["host"], RectF(64, 0, 32, 44), "host");
+
+
 	else
 	{
 		std::cerr << "Cannot find sprite \"" << id << "\"\n";
