@@ -37,14 +37,18 @@ class agp::Isaac : public DynamicObject
 		bool _dead;
 		
 
-		float _shootAnimationTime = 0.1f;
-		float _shootTimer = 0.5f;
-		float _shootCooldown = 0.4f;
-		bool _isShooting = false;
-		bool _isShootingRight = true;
-		bool _canShoot = true;
-		bool _isShootingAnimation = false;
-		const Uint8* _state = SDL_GetKeyboardState(0);
+		float _shootAnimationTime;
+		float _shootTimer;
+		float _shootCooldown;
+		bool _isShooting;
+		bool _isShootingRight;
+		Direction _shootingDirection;
+		bool _canShoot;
+		bool _isShootingAnimation;
+		const Uint8* _state;
+		float _shootAnimationTimer;
+		float _shootAnimationInterval;
+		bool _swapShootAnimation;
 
 		float _x_dec_rel;
 		float _y_dec_rel;

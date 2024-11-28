@@ -171,6 +171,11 @@ namespace agp
 		inline Vec2D<T> tr() const { return Vec2D<T>(right(), top()); }
 		inline Vec2D<T> br() const { return Vec2D<T>(right(), bottom()); }
 		inline Vec2D<T> bl() const { return Vec2D<T>(left(), bottom()); }
+		inline std::vector < Vec2D<T> > verticesVec() const
+		{
+			std::array < Vec2D<T>, 4> vertices_arr = vertices();
+			return std::vector < Vec2D<T> >(vertices_arr.begin(), vertices_arr.end());
+		}
 		inline std::array < Vec2D<T>, 4> vertices() const // counterclockwise starting from pos
 		{
 			if(yUp)

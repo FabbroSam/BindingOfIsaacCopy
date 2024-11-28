@@ -12,6 +12,7 @@
 #include "Duke.h"
 #include "Poop.h"
 #include "Coin.h"
+#include "Rock.h"
 using namespace agp;
 
 
@@ -27,7 +28,6 @@ Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, flo
 
     _destroy = true;
 
-    _compenetrable = true;
     _collider.adjust(0.43f, 0.37f, -0.4f, -0.4f);
 
     //fisica
@@ -75,7 +75,7 @@ void Tear::update(float dt)
     if (isSchedule("explosion") || isSchedule("die"))
         return;
 
-    resolveCollisions(dt);
+    //resolveCollisions(dt);
 
     //control tear level respect shadow
     if (_rect.pos.y > _shadow->rect().pos.y - 0.5f)

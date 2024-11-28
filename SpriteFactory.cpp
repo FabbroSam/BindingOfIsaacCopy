@@ -44,6 +44,7 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["item_coin"] = loadTexture(renderer, "../sprites/item_coin.png", { 147, 187, 236 });
 	_spriteSheets["item_coin_effect"] = loadTexture(renderer, "../sprites/item_coin.png", { 147, 187, 236 });
 	_spriteSheets["item_heart"] = loadTexture(renderer, "../sprites/item_heart.png", { 147, 187, 236 });
+	_spriteSheets["item_poison"] = loadTexture(renderer, "../sprites/item_poison.png");
 
 	// BASEMENT
 	_spriteSheets["basement"] = loadTexture(renderer, "../sprites/basement.png", { 0, 114, 188 });
@@ -570,6 +571,8 @@ Sprite* SpriteFactory::get(const std::string& id)
 		return new Sprite(_spriteSheets["item_heart"], RectF(0, 0, 32, 32), "item_heart");
 	else if (id == "altar")
 		return new Sprite(_spriteSheets["altar"], RectI(0, 0, 32, 32), "altar");
+	else if (id == "item_poison")
+		return new Sprite(_spriteSheets["item_poison"], RectF(0, 0, 32, 32), "item_poison");
 
 		//DUKE OF FLIES (MOB)
 	else if (id == "duke_1")

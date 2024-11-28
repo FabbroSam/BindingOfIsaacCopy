@@ -28,11 +28,8 @@ class agp::StaticObject : public CollidableObject
 		StaticObject(Scene* scene, const RectF& rect, Sprite* sprite, int layer = 0, float angle = 0, SDL_RendererFlip flip = SDL_FLIP_NONE);
 		virtual ~StaticObject() {}
 
-		// extends game logic (-physics, -collisions)
-		virtual void update(float dt) override { RenderableObject::update(dt); }
-
-		// extends logic collision (+scheduler example)
-		virtual bool collision(CollidableObject* with, Direction fromDir) override;
+		// implements CollidableObject's abstract method (do nothing)
+		virtual void resolveCollisions() override { }
 
 		virtual std::string name() override {
 			return strprintf("StaticObject[%d]", _id);

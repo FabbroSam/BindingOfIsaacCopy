@@ -12,5 +12,6 @@ Rock::Rock(Scene* scene, const PointF& pos, int layer)
     _sprite = _sprites["rock"];
 
     _collider.adjust(0.12f, 0.12f, -0.18f, -0.18f);
+
 }
 

@@ -40,7 +40,7 @@ Coin::Coin(Scene* scene, const PointF& pos, int layer)
 void Coin::update(float dt)
 {
     RenderableObject::update(dt);
-    resolveCollisions(dt);
+    //resolveCollisions(dt);
 
     if (_rect.pos.y > _y && _vel.y > 0)
     {

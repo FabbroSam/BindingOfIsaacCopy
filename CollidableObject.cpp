@@ -15,6 +15,8 @@
 #include "collisionUtils.h"
 #include "GameScene.h"
 #include "HUD.h"
+#include "DynamicObject.h"
+#include "StaticObject.h"
 #include <iostream>
 
 using namespace agp;
@@ -34,14 +36,8 @@ void CollidableObject::update(float dt)
 {
 	MovableObject::update(dt);
 
-	// undo move since collision detection is based on CCD
-	_rect.pos -= _vel * dt;
-	
-	// detect and resolve collisions by updating velocities
-	resolveCollisions(dt);
-
-	// move with updated velocity
-	_rect.pos += _vel * dt;
+	detectCollisions();
+	resolveCollisions();
 }
 
 RectF CollidableObject::sceneCollider() const
@@ -49,52 +45,48 @@ RectF CollidableObject::sceneCollider() const
 	return _collider + _rect.pos;
 }
 
-void CollidableObject::resolveCollisions(float dt)
+void CollidableObject::detectCollisions()
 {
 	if (!_collidable)
 		return;
+	
+	_collisionsPrev = _collisions;
+	_collisions.clear();
+	_collisionAxes.clear();
+	_collisionDepths.clear();
 
-	// NARROW collision detection
-	// simulate next iteration pos to get objects within united bounding rect
-	PointF curPos = _rect.pos;
-	RectF curRect = sceneCollider();
-	_rect.pos += _vel * dt;
-	std::list<CollidableObject*> likely_collisions;
-	std::list<Object*> items_in_rect = _scene->objects(sceneCollider().united(curRect));
-	for (auto item : items_in_rect)
+	auto objectsInRect = _scene->objects(sceneCollider());
+	for (auto& obj : objectsInRect)
 	{
-		
-		CollidableObject* obj = item->to<CollidableObject*>();
-		if (obj && obj != this && obj->collidable() && collidableWith(obj))
-			likely_collisions.push_back(obj);
-	}
-	_rect.pos = curPos;	// restore current pos
-
-	// sort collisions in ascending order of contact time
-	Vec2Df cp, cn;
-	float ct = 0, min_t = INFINITY;
-	std::vector<std::pair<CollidableObject*, float>> sortedByContactTime;
-	for (auto& obj : likely_collisions)
-		if (DynamicRectVsRect(sceneCollider(), vel() * dt, obj->sceneCollider(), cp, cn, ct))
-			sortedByContactTime.push_back({ obj, ct });
-	std::sort(sortedByContactTime.begin(), sortedByContactTime.end(),
-		[this](const std::pair<CollidableObject*, float>& a, const std::pair<CollidableObject*, float>& b)
+		CollidableObject* collObj = obj->to<CollidableObject*>();
+		if (collObj && collObj != this && collObj->collidable() && collidableWith(collObj) && collObj->collidableWith(this))
 		{
-			// if contact time is the same, give priority to nearest object
-			return a.second != b.second ? a.second < b.second : distance(a.first) < distance(b.first);
-		});
-
-	// solve the collisions in correct order 
-	for (auto obj : sortedByContactTime)
-		if (DynamicRectVsRect(sceneCollider(), vel() * dt, obj.first->sceneCollider(), cp, cn, ct))
-		{
-			if (!obj.first->compenetrable())
-				velAdd(-cn * cn.dot(_vel * (1 - ct)));
-
-			obj.first->collision(this, normal2dir(cn));
-			collision(obj.first, inverse(normal2dir(cn)));
-
+			Vec2Df axis;
+			float depth;
+			if (checkCollisionSAT(sceneCollider().verticesVec(), collObj->sceneCollider().verticesVec(), axis, depth))
+			{
+				_collisions.push_back(collObj);
+				_collisionAxes.push_back(axis);
+				_collisionDepths.push_back(depth);
+				collision(collObj, normal2dir(axis));
+				collObj->collision(this, normal2dir(axis));
+			}
 		}
+	}
+
+	// remove objects marked 'to be killed' from collision list
+	// since they will not be accessible in the next iteration
+	//_collisions.erase(std::remove_if(_collisions.begin(), _collisions.end(), [](CollidableObject* obj) { return obj->_killed; }), _collisions.end());
+
+	for (auto collObj : _collisionsPrev)
+	{
+		if (std::find(_collisions.begin(), _collisions.end(), collObj) == _collisions.end())
+		{
+			collision(collObj, normal2dir(Vec2Df()));
+			collObj->collision(this, normal2dir(Vec2Df()));
+		}
+	}
+
 }
 
 void CollidableObject::draw(SDL_Renderer* renderer, Transform camera)
