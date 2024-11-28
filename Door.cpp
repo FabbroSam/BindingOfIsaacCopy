@@ -1,5 +1,6 @@
 #include "Door.h"
 #include "SpriteFactory.h"
+#include "StaticObject.h"
 #include "Scene.h"
 #include "Audio.h"
 #include <string>
@@ -9,7 +10,7 @@ using namespace agp;
 
 
 Door::Door(Scene* scene, const RectF& rect, RoomType type, DoorPosition pos, float angle, SDL_RendererFlip flip)
-	: CollidableObject(scene, rect, nullptr)
+	: StaticObject(scene, rect, nullptr)
 {
 
 	_scene = scene;

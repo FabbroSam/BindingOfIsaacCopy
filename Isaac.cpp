@@ -65,7 +65,6 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_x_vel_last_nonzero = 0;
 	_y_vel_last_nonzero = 0;
 
-	_compenetrable = false;
 }
 
 void Isaac::update(float dt) 

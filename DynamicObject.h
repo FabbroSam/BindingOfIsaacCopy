@@ -25,6 +25,9 @@ class agp::DynamicObject : public CollidableObject
 		DynamicObject(Scene* scene, const RectF& rect, Sprite* sprite, int layer = 0);
 		virtual ~DynamicObject() {}
 
+		// implements CollidableObject's abstract method
+		virtual void resolveCollisions() override;
+
 		virtual std::string name() override { 
 			return strprintf("DynamicObject[%d]", _id); 
 		}

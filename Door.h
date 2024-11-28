@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CollidableObject.h"
+#include "StaticObject.h"
 #include "geometryUtils.h"
 
 
@@ -12,7 +12,7 @@ namespace agp
 	enum DoorState;
 }
 
-class agp::Door : public CollidableObject
+class agp::Door : public StaticObject
 {
 	protected:
 
