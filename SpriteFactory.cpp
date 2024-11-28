@@ -43,6 +43,7 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["altar"] = loadTexture(renderer, "../sprites/altar.png");
 	_spriteSheets["item_coin"] = loadTexture(renderer, "../sprites/item_coin.png", { 147, 187, 236 });
 	_spriteSheets["item_coin_effect"] = loadTexture(renderer, "../sprites/item_coin.png", { 147, 187, 236 });
+	_spriteSheets["item_heart"] = loadTexture(renderer, "../sprites/item_heart.png", { 147, 187, 236 });
 
 	_spriteSheets["enemies"] = loadTexture(renderer, "../sprites/enemies.png", { 147, 187, 236 });
 	_spriteSheets["hud"] = loadTexture(renderer, "../sprites/hud.png", { 147, 187, 236 });
@@ -566,7 +567,8 @@ Sprite* SpriteFactory::get(const std::string& id)
 		rects.push_back(moveBy(RectF(64, 0, 64, 64), 1, 1, 64, 64,0,0));
 		return new AnimatedSprite(_spriteSheets["item_coin"], rects, 15, "item_coin_effect", false);
 	}
-
+	else if (id == "item_heart")
+		return new Sprite(_spriteSheets["item_heart"], RectF(0, 0, 32, 32), "item_heart");
 	else if (id == "altar")
 		return new Sprite(_spriteSheets["altar"], RectI(0, 0, 32, 32), "altar");
 

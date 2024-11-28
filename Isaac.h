@@ -65,6 +65,8 @@ class agp::Isaac : public DynamicObject
 		void setSprite();
 		void goTo(PointF pos) { _rect = RectF(pos.x, pos.y, _rect.size.x, _rect.size.y); }
 
+		Vec2Df vel() { return _vel; }
+
 		// extends game logic (+isaac logic)
 		virtual void update(float dt) override;
 

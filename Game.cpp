@@ -36,7 +36,7 @@ Game::Game()
 	_scenesToPop = 0;
 	_running = false;
 	_reset = false;
-	_window = new Window("Binding of Isaac", int(aspectRatio() * 800), 800);
+	_window = new Window("The Binding of Isaac", int(aspectRatio() * 800), 800);
 }
 
 void Game::init()
