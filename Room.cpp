@@ -16,6 +16,7 @@
 #include "Rock.h"
 #include "Poop.h"
 #include "Fly.h"
+#include "Item.h"
 using namespace agp;
 
 Room::Room(Scene* scene,
@@ -184,6 +185,7 @@ void Room::Draw()
 		new StaticObject(_scene, RectF(_x + 9.5f, _y + 7.0f, 1, 1), spriteLoader->get("fireplace_blue"));
 		new RenderableObject(_scene, RectF(_x + 9.5f, _y + 6.5f, 1, 1), spriteLoader->get("bluefire"));
 		new Altar(_scene, RectF(_x + 7.5f, _y + 5.5f, 1, 1), spriteLoader->get("altar"));
+		new Item(_scene, RectF(_x + 7.5f, _y + 4.8f, 1, 1), spriteLoader->get("item_poison"), 10);
 	}
 	else if (_roomType == RoomType::NORMAL)
 	{
