@@ -36,7 +36,7 @@ Game::Game()
 	_scenesToPop = 0;
 	_running = false;
 	_reset = false;
-	_window = new Window("Binding of Isaac", int(aspectRatio() * 800), 800);
+	_window = new Window("The Binding of Isaac", int(aspectRatio() * 800), 800);
 }
 
 void Game::init()
@@ -44,15 +44,15 @@ void Game::init()
 	std::cout << "**************************************************************" << std::endl;
 	std::cout << "********************** BINDING OF ISAAC **********************" << std::endl;
 	std::cout << "**************************************************************" << std::endl;
-	std::cout << "************************** Comandi ***************************" << std::endl;
+	std::cout << "************************** COMANDI ***************************" << std::endl;
 	std::cout << "**************************************************************" << std::endl;
-	std::cout << "KEY i : invincibilità" << std::endl;
-	std::cout << "KEY c : mostra collider" << std::endl;
-	std::cout << "KEY v : mostra bordi di tutti i RenderableObject" << std::endl;
-	std::cout << "KEY o : apertura e chiusura delle porte" << std::endl;
-	std::cout << "KEY l : mostra tutte le stanze nella minimappa" << std::endl;
-	std::cout << "KEY p : attiva/disattiva movimento view" << std::endl;
-	std::cout << "MOUSE WHEEL: quando movimento view attivo -> zoom" << std::endl;
+	std::cout << "KEY I : invincibilita'" << std::endl;
+	std::cout << "KEY C : mostra collider" << std::endl;
+	std::cout << "KEY V : mostra bordi di tutti i RenderableObject" << std::endl;
+	std::cout << "KEY O : apri/chiudi porte" << std::endl;
+	std::cout << "KEY L : mostra tutte le stanze dellaminimappa" << std::endl;
+	std::cout << "KEY L : attiva/disattiva movimento ampio view" << std::endl;
+	std::cout << "MOUSE WHEEL: se KEY P attivo -> zoom" << std::endl;
 	std::cout << "**************************************************************" << std::endl;
 	std::cout << "**************************************************************" << std::endl;
 	std::cout << "**************************************************************" << std::endl;

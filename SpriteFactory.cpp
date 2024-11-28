@@ -43,6 +43,7 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["altar"] = loadTexture(renderer, "../sprites/altar.png");
 	_spriteSheets["item_coin"] = loadTexture(renderer, "../sprites/item_coin.png", { 147, 187, 236 });
 	_spriteSheets["item_coin_effect"] = loadTexture(renderer, "../sprites/item_coin.png", { 147, 187, 236 });
+	_spriteSheets["item_heart"] = loadTexture(renderer, "../sprites/item_heart.png", { 147, 187, 236 });
 
 	// BASEMENT
 	_spriteSheets["basement"] = loadTexture(renderer, "../sprites/basement.png", { 0, 114, 188 });
@@ -99,6 +100,9 @@ SpriteFactory::SpriteFactory()
 
 	// POOF EFFECT
 	_spriteSheets["poof"] = loadTexture(renderer, "../sprites/poof.png", { 147, 187, 236 });
+
+	//DUKE BLACKGLOW 
+	_spriteSheets["blackglow"] = loadTexture(renderer, "../sprites/blackglow.png", { 147, 187, 236 });
 
 	std::vector<RectI> vecRect;
 	SDL_Texture* base = loadTextureSequence(renderer, "../image", vecRect, Point(0, 0), Point(52, 52));
@@ -561,7 +565,8 @@ Sprite* SpriteFactory::get(const std::string& id)
 		rects.push_back(moveBy(RectF(64, 0, 64, 64), 1, 1, 64, 64,0,0));
 		return new AnimatedSprite(_spriteSheets["item_coin"], rects, 15, "item_coin_effect", false);
 	}
-
+	else if (id == "item_heart")
+		return new Sprite(_spriteSheets["item_heart"], RectF(0, 0, 32, 32), "item_heart");
 	else if (id == "altar")
 		return new Sprite(_spriteSheets["altar"], RectI(0, 0, 32, 32), "altar");
 
@@ -650,6 +655,9 @@ Sprite* SpriteFactory::get(const std::string& id)
 	}
 	else if (id == "debug")
 		return nullptr;
+
+	else if(id=="blackglow")
+		return new Sprite(_spriteSheets["blackglow"], RectF(0, 0, 112, 112), "blackglow", SDL_FLIP_NONE, 75);
 	else
 	{
 		std::cerr << "Cannot find sprite \"" << id << "\"\n";
