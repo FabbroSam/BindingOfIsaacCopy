@@ -102,6 +102,6 @@ void PoopGibs::update(float dt)
     }
 
     _rect.pos.x += _vel.x * dt;
-    _rect.pos.y += (50 * pow(dt, 2)) / 2 + _vel.y * dt;
+    _rect.pos.y += static_cast<float>((50 * pow(dt, 2)) / 2 + _vel.y * dt);
     _vel.y += 100 * dt;
 }
