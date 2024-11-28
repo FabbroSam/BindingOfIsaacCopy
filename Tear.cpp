@@ -92,12 +92,12 @@ void Tear::update(float dt)
     //move tear
     float x = _rect.pos.x + _vel.x * dt;
     float y = _rect.pos.y + _vel.y * dt;
-    float norm = sqrt(pow(pos0.x - x, 2) + pow(pos0.y - y, 2));
+    float norm = static_cast<float>(sqrt(pow(pos0.x - x, 2) + pow(pos0.y - y, 2)));
     _rect.pos.x += _vel.x * dt;
     if (norm < _distance)
-        _rect.pos.y += (10 * pow(dt,2)) / 2 + _vel.y * dt;
+        _rect.pos.y += static_cast<float>((10 * pow(dt,2)) / 2 + _vel.y * dt);
     else
-        _rect.pos.y += (500 * pow(dt, 2)) / 2 + _vel.y * dt;
+        _rect.pos.y += static_cast<float>((500 * pow(dt, 2)) / 2 + _vel.y * dt);
  
 }
 

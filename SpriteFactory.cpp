@@ -45,10 +45,6 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["item_coin_effect"] = loadTexture(renderer, "../sprites/item_coin.png", { 147, 187, 236 });
 	_spriteSheets["item_heart"] = loadTexture(renderer, "../sprites/item_heart.png", { 147, 187, 236 });
 
-	_spriteSheets["enemies"] = loadTexture(renderer, "../sprites/enemies.png", { 147, 187, 236 });
-	_spriteSheets["hud"] = loadTexture(renderer, "../sprites/hud.png", { 147, 187, 236 });
-	_spriteSheets["tiles"] = loadTexture(renderer, "../sprites/stage_tiles.png", { 147, 187, 236 });
-
 	// BASEMENT
 	_spriteSheets["basement"] = loadTexture(renderer, "../sprites/basement.png", { 0, 114, 188 });
 	_spriteSheets["door"] = loadTexture(renderer, "../sprites/basement_door.png", { 0, 255, 255 });
@@ -104,6 +100,9 @@ SpriteFactory::SpriteFactory()
 
 	// POOF EFFECT
 	_spriteSheets["poof"] = loadTexture(renderer, "../sprites/poof.png", { 147, 187, 236 });
+
+	//DUKE BLACKGLOW 
+	_spriteSheets["blackglow"] = loadTexture(renderer, "../sprites/blackglow.png", { 147, 187, 236 });
 
 	std::vector<RectI> vecRect;
 	SDL_Texture* base = loadTextureSequence(renderer, "../image", vecRect, Point(0, 0), Point(52, 52));
@@ -233,8 +232,6 @@ Sprite* SpriteFactory::get(const std::string& id)
 		else if (cases == 4)
 			return new Sprite(_spriteSheets["poop_gibs"], RectF(1 * 16, 1 * 16, 16, 16), "poop_gibs");
 	}
-
-
 	else if (id == "basement_UpL" || id == "basement_UpR" || id == "basement_DownL" || id == "basement_DownR")
 	{
 		float size = 52;
@@ -367,6 +364,7 @@ Sprite* SpriteFactory::get(const std::string& id)
 				}
 			}
 		}
+		return nullptr;
 	}
 	else if (id == "basement_overlay")
 	{
@@ -378,11 +376,11 @@ Sprite* SpriteFactory::get(const std::string& id)
 			{
 				if ((i * 6 + j) == overlay[index])
 				{
-					std::cout << index << std::endl;
 					return new Sprite(_spriteSheets["overlay"], RectI(j * 331, i * 215, 331, 215), "basement_overlay", SDL_FLIP_NONE, 200);
 				}
 			}
 		}
+		return nullptr;
 	}
 	// UI_MONSTER
 	else if (id == "ui_boss")
@@ -582,7 +580,6 @@ Sprite* SpriteFactory::get(const std::string& id)
 	else if (id == "duke_4")
 		return new Sprite(_spriteSheets["duke"], RectF(77, 0, 77, 66), "duke");
 
-
 	else if (id == "fly_black")
 	{
 		rects.push_back(moveBy(RectF(0, 0, 31, 31), 0, 0, 31, 31));
@@ -594,7 +591,7 @@ Sprite* SpriteFactory::get(const std::string& id)
 		rects.push_back(moveBy(RectF(0, 0, 31, 31), 0, 1, 31, 31));
 		rects.push_back(moveBy(RectF(0, 0, 31, 31), 1, 1, 31, 31));
 		return new AnimatedSprite(_spriteSheets["fly"], rects, 25, "fly");
-		}
+	}
 
 	else if (id == "dyingFly")
 	{
@@ -656,11 +653,17 @@ Sprite* SpriteFactory::get(const std::string& id)
 		rects.push_back(moveBy(RectF(0, 0, 64, 66), 2, 3, 64, 66));
 		return new  AnimatedSprite(_spriteSheets["poof"], rects, 23, "poof");
 	}
+	else if (id == "debug")
+		return nullptr;
+
+	else if(id=="blackglow")
+		return new Sprite(_spriteSheets["blackglow"], RectF(0, 0, 112, 112), "blackglow", SDL_FLIP_NONE, 75);
 	else
 	{
 		std::cerr << "Cannot find sprite \"" << id << "\"\n";
 		return nullptr;
 	}
+	return nullptr;
 }
 
 Sprite* SpriteFactory::getNumber(int n, int fill)

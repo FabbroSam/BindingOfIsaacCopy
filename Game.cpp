@@ -41,6 +41,25 @@ Game::Game()
 
 void Game::init()
 {
+	std::cout << "**************************************************************" << std::endl;
+	std::cout << "********************** BINDING OF ISAAC **********************" << std::endl;
+	std::cout << "**************************************************************" << std::endl;
+	std::cout << "************************** COMANDI ***************************" << std::endl;
+	std::cout << "**************************************************************" << std::endl;
+	std::cout << "KEY I : invincibilita'" << std::endl;
+	std::cout << "KEY C : mostra collider" << std::endl;
+	std::cout << "KEY V : mostra bordi di tutti i RenderableObject" << std::endl;
+	std::cout << "KEY O : apri/chiudi porte" << std::endl;
+	std::cout << "KEY L : mostra tutte le stanze dellaminimappa" << std::endl;
+	std::cout << "KEY L : attiva/disattiva movimento ampio view" << std::endl;
+	std::cout << "MOUSE WHEEL: se KEY P attivo -> zoom" << std::endl;
+	std::cout << "**************************************************************" << std::endl;
+	std::cout << "**************************************************************" << std::endl;
+	std::cout << "**************************************************************" << std::endl;
+	std::cout << "**************************************************************" << std::endl;
+	std::cout << "**************************************************************" << std::endl;
+	
+
 	_hud = new HUD();
 	_uiMonster = new UIMonster();
 	pushScene(LevelLoader::instance()->load("basement"));

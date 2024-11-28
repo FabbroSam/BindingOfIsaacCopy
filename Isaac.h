@@ -46,8 +46,8 @@ class agp::Isaac : public DynamicObject
 		bool _isShootingAnimation = false;
 		const Uint8* _state = SDL_GetKeyboardState(0);
 
-		float _x_dec_rel = 20;
-		float _y_dec_rel = 20;
+		float _x_dec_rel;
+		float _y_dec_rel;
 		Direction _prev_x_dir = Direction::NONE;
 		Direction _prev_y_dir = Direction::NONE;
 
@@ -62,6 +62,7 @@ class agp::Isaac : public DynamicObject
 
 		// getters/setters
 		bool invincible() { return _invincible; }
+		void setInvincible() { _invincible = !_invincible; }
 		void setSprite();
 		void goTo(PointF pos) { _rect = RectF(pos.x, pos.y, _rect.size.x, _rect.size.y); }
 

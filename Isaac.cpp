@@ -33,9 +33,6 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_sprites["bodyFront"] = SpriteFactory::instance()->get("isaac_bodyFront");
 	_sprites["walkDown"] = SpriteFactory::instance()->get("isaac_walkDown");
 	_sprites["walkRight"] = SpriteFactory::instance()->get("isaac_walkRight");
-	_sprites["skid"] = SpriteFactory::instance()->get("isaac_skid");
-	_sprites["jump"] = SpriteFactory::instance()->get("isaac_jump");
-	_sprites["die"] = SpriteFactory::instance()->get("isaac_die");
 	_sprites["shadow"] = SpriteFactory::instance()->get("shadow");
 	_sprites["hurt"] = SpriteFactory::instance()->get("isaac_hurt");
 	_sprite = _sprites["headFront"];
@@ -49,19 +46,19 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_blinking = false;
 	_hurt = false;
 	_dead = false;
-	_invincible = true;
+	_invincible = false;
 	_compenetrable = false;
 
 	_blinkTimeElapsed = 0.0f;
 	_blinkCount = 20;
 
 	_x_acc = 50.0f;
-	_x_dec_rel = 5.0f;
+	_x_dec_rel = 0;
 	_x_vel_max = 5.5f;
 	_x_vel_min = 0.2f;
 
 	_y_acc = 50.0f;
-	_y_dec_rel = 5.0f; 
+	_y_dec_rel = 0; 
 	_y_vel_max = 5.5f;
 	_y_vel_min = 0.2f;
 
@@ -71,7 +68,8 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_compenetrable = false;
 }
 
-void Isaac::update(float dt) {
+void Isaac::update(float dt) 
+{
 	// physics and overrides
 	DynamicObject::update(dt);
 
@@ -112,9 +110,9 @@ void Isaac::update(float dt) {
 
 	// animations
 	if (_dying)
-		_sprite = _sprites["die"];
+		;
 	else if (skidding())
-		_sprite = _sprites["skid"];
+		;
 	else if (_isShooting) {
 		_shootTimer -= dt;
 		if (_shootTimer <= 0.0f) {
@@ -156,18 +154,8 @@ void Isaac::die()
 	_vel = { 0,0 };
 	_x_dir = Direction::NONE;
 	_y_dir = _x_dir = Direction::NONE;
-	Audio::instance()->haltMusic();
-	Audio::instance()->playSound("death");
-	Game::instance()->freeze(true);
 
-	schedule("dying", 0.5f, [this]()
-		{
-			schedule("die", 3, [this]()
-				{
-					_dead = true;
-					Game::instance()->gameover();
-				});
-		});
+	Game::instance()->freeze(true);
 }
 
 void Isaac::hurt()
@@ -188,11 +176,13 @@ void Isaac::hurt()
 		Audio::instance()->playSound("isaac_hurt_3");
 	}
 
-	
-	HUD* hud = Game::instance()->hud();
-	hud->subHalfHearts();
-	if (!hud->halfHearts())
-		die();
+	if (!_invincible)
+	{
+		HUD* hud = Game::instance()->hud();
+		hud->subHalfHearts();
+		if (!hud->halfHearts())
+			die();
+	}
 
 	schedule("hurt_isaac", 0.2f, [this]() {_hurt = false; });
 }

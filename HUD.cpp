@@ -42,7 +42,7 @@ HUD::HUD()
 	_bombs = -1;
 	_coins = -1;
 	_halfHearts = -1;
-	_heartsCapacity = 5;
+	_heartsCapacity = 3;
 
 	// _FPS
 	_fpsText = new RenderableObject(this, RectF(13.0f, 0.5f, 2.0f, 0.5f), SpriteFactory::instance()->getNumber(0, 4));
@@ -66,7 +66,7 @@ HUD::HUD()
 
 	setCoins(0);
 	setBombs(0);
-	setHalfHearts(10);
+	setHalfHearts(6);
 
 }
 

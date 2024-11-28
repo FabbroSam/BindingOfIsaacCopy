@@ -58,6 +58,7 @@ GameScene::GameScene(const RectF& r, float dt)
 	_view->setFixedAspectRatio(Game::instance()->aspectRatio());
 	_view->setRect(RectF(0, 0, 16, 12));
 
+	_schedule = new Scheduler();
 
 	_name = "gamescene";
 }
@@ -66,7 +67,7 @@ void GameScene::update(float timeToSimulate)
 {
 
 	Scene::update(timeToSimulate);
-
+	_schedule->update(timeToSimulate);
 
 	if (!_active)
 		return;
@@ -221,16 +222,15 @@ void GameScene::spawnMobs()
 	{
 		if (_vsMonster)
 		{
-			//Game::instance()->uiMonster()->setActiveUIMonster();
+			Game::instance()->uiMonster()->setActiveUIMonster();	
 			_vsMonster = false;
 
-			new Duke(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 6.5f);
-			new Fly(this, PointF(this->room()->rect().center().x + 1, this->room()->rect().center().y - 1), 4.5f);
-			new Fly(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y - 1), 4.5f);
-			new Fly(this, PointF(this->room()->rect().center().x - 1, this->room()->rect().center().y), 4.5f);
-			new Fly(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y + 1), 4.5f);
-
-			_room->offLightDoor();
+			_schedule = new Scheduler(1.8f, [this]() 
+				{
+					new Duke(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y - 1), 6.5f);				
+					_room->changeStateRoom();
+					//_room->offLightDoor(); non funge
+				});	
 		}
 	}
 }
@@ -271,9 +271,9 @@ void GameScene::event(SDL_Event& evt)
 				}
 		}
 	}
-	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_G)
+	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_I)
 	{
-		Game::instance()->popSceneLater();
+		_isaac->setInvincible();
 	}
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_O)
 	{
