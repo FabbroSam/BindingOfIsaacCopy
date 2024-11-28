@@ -272,20 +272,4 @@ void Isaac::setSprite()
 		_flip = SDL_FLIP_NONE;
 		_body->setFlip(SDL_FLIP_NONE);
 	}
-
-
-	if (_state[SDL_SCANCODE_UP])
-		_sprite = _sprites["headBack"];
-	else if (_state[SDL_SCANCODE_RIGHT])
-		_sprite = _sprites["headRight"];
-	else if (_state[SDL_SCANCODE_LEFT])
-		_sprite = _sprites["headRight"];
-	else
-		_sprite = _sprites["headFront"];
-
-	// x-mirroring
-	if (_state[SDL_SCANCODE_LEFT])
-		_flip = SDL_FLIP_HORIZONTAL;
-	else
-		_flip = SDL_FLIP_NONE;
 }

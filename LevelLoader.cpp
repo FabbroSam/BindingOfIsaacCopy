@@ -53,7 +53,7 @@ GameScene* LevelLoader::load(const std::string& name)
 
 
 		// isaac
-		Isaac* isaac = new Isaac(world, PointF(7.5f, 5.2f));
+		Isaac* isaac = new Isaac(world, PointF(7.3f, 4.5f));
 		world->setPlayer(isaac);
 
 		return world;
