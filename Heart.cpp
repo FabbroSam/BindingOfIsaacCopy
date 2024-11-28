@@ -24,11 +24,16 @@ Heart::Heart(Scene* scene, const PointF& pos, int layer)
     _collidable = true;
     _compenetrable = false;
     _colliding = false;
-    _x_vel_max = 3.0f;
-    _y_vel_max = 3.0f;
-    _x_dec_rel = 1.2f;
-    _y_dec_rel = 1.2f;
+    _x_vel_max = 4.0f;
+    _y_vel_max = 4.0f;
+    _x_dec_rel = 6.0f;
+    _y_dec_rel = 6.0f;
+    _x_acc = 6.0f;
+    _y_acc = 6.0f;
     _vel = { 0.0f, 0.0f };
+
+    //_coinsText = new RenderableObject(_scene, RectF(_rect + Vec2Df(0.4f,1.3f)), nullptr, 5);
+   // _coinsText->setSprite(SpriteFactory::instance()->getNumber(1, 1));
 }
 
 void Heart::update(float dt)
@@ -40,9 +45,7 @@ void Heart::update(float dt)
         _y_dir = Direction::NONE;
         _colliding = false;
     }
-    
-    resolveCollisions(dt);
-    std::cout << "XPOS: " << _rect.pos.x << " -- YPOS: " << _rect.pos.y << std::endl;
+
 }
 
 bool Heart::collision(CollidableObject* with, Direction fromDir)
@@ -50,8 +53,9 @@ bool Heart::collision(CollidableObject* with, Direction fromDir)
     HUD* hud = Game::instance()->hud();
     Isaac* isaac = dynamic_cast<Isaac*>(with);
 
-    if (isaac && _collidable && hud->halfHearts() < 10)
+    if (isaac && _collidable && hud->halfHearts() < 6)
     {
+        hud->setHalfHearts(hud->halfHearts() + 2);
         destroy(isaac);
         return true;
     }
@@ -94,6 +98,7 @@ void Heart::destroy(CollidableObject* isaac)
 {
     _rect = RectF(isaac->rect().pos.x, isaac->rect().pos.y, 2, 2);
     _collidable = false;
+    //_coinsText->setVisible(false);
     _sprite = _sprites["item_coin_effect"];
     schedule("heart_kill" + _id, 0.4f, [this]() {
         setVisible(false);

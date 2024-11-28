@@ -5,6 +5,7 @@
 #include "Coin.h"
 #include <stdio.h>
 #include <math.h>
+#include "Heart.h"
 using namespace agp;
 
 
@@ -59,6 +60,8 @@ void Poop::destroy()
     {
         _collidable = false;
         _explosion = new RenderableObject(_scene, RectF(_rect.pos.x - 0.8f, _rect.pos.y - 0.7f, 3.2f,3.2f), _sprites["poop_explosion"],2);
+        if(rand()%10 == 0)
+            new Heart(_scene, PointF(_rect.pos), 1);
     }
 }
 

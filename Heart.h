@@ -16,6 +16,8 @@ private:
     std::map<std::string, Sprite*> _sprites;
     bool _colliding;
 
+    RenderableObject* _coinsText;
+
 public:
     Heart(Scene* scene, const PointF& pos, int layer = 0);
     virtual ~Heart() {};

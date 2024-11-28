@@ -116,7 +116,10 @@ void HUD::setHalfHearts(int newHalfHearts)
 	if (newHalfHearts == _halfHearts)
 		return;
 
-	_halfHearts = newHalfHearts;
+	if (newHalfHearts > _heartsCapacity * 2)
+		_halfHearts = _heartsCapacity * 2;
+	else
+		_halfHearts = newHalfHearts;
 	refreshHearts();
 }
 

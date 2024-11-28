@@ -215,7 +215,6 @@ void GameScene::spawnMobs()
 			float y = 4.0f + static_cast<float>(rand()) / RAND_MAX * (7.0f - 4.0f);
 			new Fly(this, PointF(this->room()->rect().pos.x + x, this->room()->rect().pos.y + y), 1.5f);
 		}
-		new Heart(this, PointF(this->room()->rect().pos.x + 7.35f, this->room()->rect().pos.y + 5.3f), 1.0f);
 
 	}
 	if (_room->type() == RoomType::BOSS && _room->state() == RoomState::ACTIVE)
@@ -233,6 +232,11 @@ void GameScene::spawnMobs()
 				});	
 		}
 	}
+	if (_room->type() == RoomType::SHOP)
+	{
+		new Heart(this, PointF(this->room()->rect().pos.x + 8 - 1.4f / 2, this->room()->rect().pos.y + 6.0f), 1);
+	}
+
 }
 
 void GameScene::event(SDL_Event& evt)
