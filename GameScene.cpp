@@ -207,36 +207,40 @@ void GameScene::spawnMobs()
 
 	if (_room->type() == RoomType::NORMAL && _room->state() == RoomState::ACTIVE)
 	{
-		int amount = rand() % 6;			
-		if (amount)
-			_room->changeStateRoom();
+		if (rand() % 2)
+		{
+			int amount = rand() % 6;
+			if (amount)
+				_room->changeStateRoom();
+			else
+				_room->setState(RoomState::INACTIVE);
+
+			for (int i = 0; i < amount; i++)
+			{
+				float x = 4.0f + static_cast<float>(rand()) / RAND_MAX * (11.0f - 4.0f);
+				float y = 4.0f + static_cast<float>(rand()) / RAND_MAX * (7.0f - 4.0f);
+				new Fly(this, PointF(this->room()->rect().pos.x + x, this->room()->rect().pos.y + y), 1.5f);
+			}
+		}
 		else
-			_room->setState(RoomState::INACTIVE);
-
-		for (int i = 0; i < amount; i++)
 		{
-			float x = 4.0f + static_cast<float>(rand()) / RAND_MAX * (11.0f - 4.0f);
-			float y = 4.0f + static_cast<float>(rand()) / RAND_MAX * (7.0f - 4.0f);
-			new Fly(this, PointF(this->room()->rect().pos.x + x, this->room()->rect().pos.y + y), 1.5f);
+			int amount = rand() % 3;
+			if (amount)
+			{
+				//for (int i = 0; i < amount; i++)
+				new Host(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 1.5f);
+			}
 		}
-
 	}
-
-	int amount_2 = rand() % 3;
-	
-	if (_room->state() == RoomState::ACTIVE && _occ < 2)
+	else if (_room->type() == RoomType::TREASURE && _room->state() == RoomState::ACTIVE)
 	{
-		if (amount_2)
-		{
-			_occ++;
-			new Host(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 1.5f);
 
-		}
 	}
-
-		
-
-	if (_room->type() == RoomType::BOSS && _room->state() == RoomState::ACTIVE)
+	else if (_room->type() == RoomType::SHOP)
+	{
+		new Heart(this, PointF(this->room()->rect().pos.x + 8 - 1.4f / 2, this->room()->rect().pos.y + 6.0f), 1);
+	}
+	else if (_room->type() == RoomType::BOSS && _room->state() == RoomState::ACTIVE)
 	{
 		if (_vsMonster)
 		{
@@ -251,10 +255,7 @@ void GameScene::spawnMobs()
 				});	
 		}
 	}
-	if (_room->type() == RoomType::SHOP)
-	{
-		new Heart(this, PointF(this->room()->rect().pos.x + 8 - 1.4f / 2, this->room()->rect().pos.y + 6.0f), 1);
-	}
+
 
 }
 

@@ -24,7 +24,7 @@ Host::Host(Scene* scene, const PointF& pos, float spawnDelay)
 
 	_shadow->setRect(_rect * Vec2Df(0.3f, 0.1f) + Vec2Df(0,-1));
 
-	setRect(_rect * Vec2Df(1.0f, 1.1f));
+	//setRect(_rect * Vec2Df(1.0f, 1.1f));
 	_collider.adjust(0.4f, 1.05f, -0.4f, 0.2f);
 	_visible = false;
 	_collidable = true;

@@ -52,7 +52,6 @@ class agp::GameScene : public Scene
 		bool _moveIsaac;
 
 		bool _vsMonster;
-		int _occ;
 
 		Room* _room;
 		Basement* _mapRooms;
