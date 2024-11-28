@@ -34,6 +34,9 @@ void Item::update(float dt)
         _rect.adjust(0, 0, -0.003f * scaleFactorX, 0.003f * scaleFactorY);
     }
 
+    // non capisco perché il moto netto sia verso le y negative invece che puramente oscillatorio
     _rect.pos.x = center.x - _rect.size.x / 2;
-    _rect.pos.y = baseY + 0.08f * sinf(0.7 * _animTimer) - _rect.size.y / 2;
+    float normalizedTime = fmod(_animTimer, 2 * M_PI);
+    _rect.pos.y = baseY + 0.08f * sinf(normalizedTime) - _rect.size.y / 2;
+    //std::cout << _rect.pos.y << std::endl;
 }
