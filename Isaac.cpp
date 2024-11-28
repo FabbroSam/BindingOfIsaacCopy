@@ -23,7 +23,6 @@ using namespace agp;
 Isaac::Isaac(Scene* scene, const PointF& pos)
 	: DynamicObject(scene, RectF(pos.x + 1 / 16.0f, pos.y, 1.2f, 1.4f), nullptr, 9)
 {
-
 	_sprites["headFront"] = SpriteFactory::instance()->get("isaac_headFront");
 	_sprites["headFrontShoot"] = SpriteFactory::instance()->get("isaac_headFrontShoot");
 	_sprites["headBack"] = SpriteFactory::instance()->get("isaac_headBack");
@@ -66,6 +65,20 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_y_vel_last_nonzero = 0;
 
 	_compenetrable = false;
+
+	_shootAnimationTime = 0.5f;
+	_shootTimer = 0.5f;
+	_shootCooldown = 0.4f;
+	_isShooting = false;
+	_isShootingRight = true;
+	_shootingDirection = Direction::NONE;
+	_canShoot = true;
+	_isShootingAnimation = false;
+	_state = SDL_GetKeyboardState(0);
+
+	_shootAnimationTimer = 0.0f;
+	_shootAnimationInterval = 0.4f;
+	_swapShootAnimation = false;
 }
 
 void Isaac::update(float dt) 
@@ -114,10 +127,18 @@ void Isaac::update(float dt)
 	else if (skidding())
 		;
 	else if (_isShooting) {
-		_shootTimer -= dt;
-		if (_shootTimer <= 0.0f) {
-			//_sprite = _sprites["headFront"];
-			_isShooting = false;
+		_shootAnimationTimer += dt;
+		if (_shootAnimationTimer >= _shootAnimationInterval)
+		{
+			_shootAnimationTimer = 0.0f;
+			_swapShootAnimation = true;
+		}
+		if (!_state[SDL_SCANCODE_RIGHT] && !_state[SDL_SCANCODE_LEFT] && !_state[SDL_SCANCODE_UP] && !_state[SDL_SCANCODE_DOWN])
+		{
+			_shootTimer -= dt;
+			if (_shootTimer <= 0.0f) {
+				_isShooting = false;
+			}
 		}
 	}
 
@@ -206,31 +227,25 @@ void Isaac::shoot(Direction dir) {
 	case Direction::LEFT:
 		spawnPoint.y += (_isShootingRight ? -0.5f : -0.2f);
 		spawnPoint.x += (_isShootingRight ? -0.5f : 0.0f);
-		_sprite = _sprites["headRightShoot"];
 		break;
 	case Direction::RIGHT:
 		spawnPoint.y += (_isShootingRight ? -0.2f : -0.5f);
 		spawnPoint.x += (_isShootingRight ? 0.0f : 0.5f);
-		_sprite = _sprites["headRightShoot"];
 		break;
 	case Direction::UP:
 		spawnPoint.x += (_isShootingRight ? 0.2f : -0.05f);
 		spawnPoint.y -= 1.0f;
-		_sprite = _sprites["headBackShoot"];
 		break;
 	case Direction::DOWN:
 		spawnPoint.x += (_isShootingRight ? -0.05f : 0.2f);
-		_sprite = _sprites["headFrontShoot"];
 		break;
 	default:
 		break;
 	}
 
 	Tear* newTear = new Tear(_scene, spawnPoint, dir, _vel.x, _vel.y);
-	if (_isShootingRight)
-		_isShootingRight = false;
-	else
-		_isShootingRight = true;
+	// alternate between left and right eye
+	_isShootingRight = !_isShootingRight;
 }
 
 void Isaac::setSprite()
@@ -241,35 +256,85 @@ void Isaac::setSprite()
 		_body->setSprite(nullptr);
 		return;
 	}
-	else if (_walking)
+
+	// shooting animation prio ie. if isaac is walking right but shooting
+	// left, let this direction have priority when choosing which way
+	// isaac has to face
+	if (_isShooting) {
+		if (_state[SDL_SCANCODE_UP]) {
+			if (_swapShootAnimation) {
+				_sprite = _sprites["headBack"];
+				_swapShootAnimation = false;
+			}
+			else {
+				_sprite = _sprites["headBackShoot"];
+			}
+			_flip = SDL_FLIP_NONE;
+		}
+		else if (_state[SDL_SCANCODE_DOWN]) {
+			if (_swapShootAnimation) {
+				_sprite = _sprites["headFront"];
+				_swapShootAnimation = false;
+			}
+			else {
+				_sprite = _sprites["headFrontShoot"];
+			}
+			_flip = SDL_FLIP_NONE;
+		}
+		else if (_state[SDL_SCANCODE_RIGHT]) {
+			if (_swapShootAnimation) {
+				_sprite = _sprites["headRight"];
+				_swapShootAnimation = false;
+			}
+			else {
+				_sprite = _sprites["headRightShoot"];
+			}
+			_flip = SDL_FLIP_NONE;
+		}
+		else if (_state[SDL_SCANCODE_LEFT]) {
+			if (_swapShootAnimation) {
+				_sprite = _sprites["headRight"];
+				_swapShootAnimation = false;
+			}
+			else {
+				_sprite = _sprites["headRightShoot"];
+			}
+			_flip = SDL_FLIP_HORIZONTAL;
+		}
+	}
+	else 
 	{
-		if (_vel.y > 0) {
+		_isShooting = false;
+		if (_walking)
+		{
+			if (_vel.y > 0) {
+				_sprite = _sprites["headFront"];
+				_body->setSprite(_sprites["walkDown"]);
+			}
+			else if (_vel.y < 0) {
+				_sprite = _sprites["headBack"];
+				_body->setSprite(_sprites["walkDown"]);
+			}
+			else if (_vel.x != 0) {
+				_sprite = _sprites["headRight"];
+				_body->setSprite(_sprites["walkRight"]);
+			}
+		}
+		else
+		{
 			_sprite = _sprites["headFront"];
-			_body->setSprite(_sprites["walkDown"]);
+			_body->setSprite(_sprites["bodyFront"]);
 		}
-		else if (_vel.y < 0) {
-			_sprite = _sprites["headBack"];
-			_body->setSprite(_sprites["walkDown"]);
+		// x-mirroring (move)
+		if ((_vel.x < 0) || _x_vel_last_nonzero < 0)
+		{
+			_flip = SDL_FLIP_HORIZONTAL;
+			_body->setFlip(SDL_FLIP_HORIZONTAL);
 		}
-		else if (_vel.x != 0) {
-			_sprite = _sprites["headRight"];
-			_body->setSprite(_sprites["walkRight"]);
+		else
+		{
+			_flip = SDL_FLIP_NONE;
+			_body->setFlip(SDL_FLIP_NONE);
 		}
-	}
-	else
-	{
-		_sprite = _sprites["headFront"];
-		_body->setSprite(_sprites["bodyFront"]);
-	}
-	// x-mirroring (move)
-	if ((_vel.x < 0) || _x_vel_last_nonzero < 0)
-	{
-		_flip = SDL_FLIP_HORIZONTAL;
-		_body->setFlip(SDL_FLIP_HORIZONTAL);
-	}
-	else
-	{
-		_flip = SDL_FLIP_NONE;
-		_body->setFlip(SDL_FLIP_NONE);
 	}
 }
