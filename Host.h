@@ -33,7 +33,7 @@ public:
 
 	virtual void update(float dt) override;
 
-	/*virtual bool collidableWith(CollidableObject* obj) override;
-	virtual bool collision(CollidableObject* with, Direction fromDir) override;*/
+	virtual bool collidableWith(CollidableObject* obj) override;
+	//virtual bool collision(CollidableObject* with, Direction fromDir) override;
 	virtual std::string name() override { return strprintf("Duke[%d]", _id); }
 };

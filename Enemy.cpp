@@ -61,7 +61,10 @@ bool Enemy::collision(CollidableObject* with, Direction fromDir)
 
 void Enemy::hit(float damage, Vec2Df _dir)
 {
-	_life -= damage;
-	if (_life <= 0)
-		die();
+	if (_hitable)
+	{
+		_life -= damage;
+		if (_life <= 0)
+			die();
+	}
 }

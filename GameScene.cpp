@@ -53,6 +53,8 @@ GameScene::GameScene(const RectF& r, float dt)
 
 	_room = nullptr;
 	_mapRooms = nullptr;
+	//logic
+	int _occ = 0;
 
 	// setup view (specific for super isaac bros)
 	_view = new View(this, _rect);
@@ -202,9 +204,9 @@ void GameScene::update(float timeToSimulate)
 
 void GameScene::spawnMobs()
 {
+
 	if (_room->type() == RoomType::NORMAL && _room->state() == RoomState::ACTIVE)
 	{
-		new Host(this, PointF(this->room()->rect().pos.x+3, this->room()->rect().pos.y+3), 1.5f);
 		int amount = rand() % 6;			
 		if (amount)
 			_room->changeStateRoom();
@@ -219,6 +221,21 @@ void GameScene::spawnMobs()
 		}
 
 	}
+
+	int amount_2 = rand() % 3;
+	
+	if (_room->state() == RoomState::ACTIVE && _occ < 2)
+	{
+		if (amount_2)
+		{
+			_occ++;
+			new Host(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 1.5f);
+
+		}
+	}
+
+		
+
 	if (_room->type() == RoomType::BOSS && _room->state() == RoomState::ACTIVE)
 	{
 		if (_vsMonster)
