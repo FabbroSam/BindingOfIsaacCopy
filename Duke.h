@@ -34,8 +34,9 @@ public:
 
 
 	//setter of scheduling parameters such as sawn delay, collidable flag ecc...
-	void wobble(float dt);
+	void wobble();
 	void spawnFly();
+	virtual void trigger() override;
 
 	virtual void update(float dt) override;
 	virtual bool collidableWith(CollidableObject* obj) override;

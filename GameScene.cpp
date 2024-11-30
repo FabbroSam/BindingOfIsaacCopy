@@ -204,6 +204,8 @@ void GameScene::update(float timeToSimulate)
 
 void GameScene::spawnMobs()
 {
+	int _spawnIndex = 0;
+	_spawnIndex++;
 
 	if (_room->type() == RoomType::NORMAL && _room->state() == RoomState::ACTIVE)
 	{
@@ -225,9 +227,8 @@ void GameScene::spawnMobs()
 		else
 		{
 			int amount = rand() % 3;
-			if (amount)
+			if (amount && _spawnIndex<2)
 			{
-				//for (int i = 0; i < amount; i++)
 				new Host(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 1.5f);
 			}
 		}

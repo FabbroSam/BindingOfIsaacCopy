@@ -77,49 +77,69 @@ void Duke::spawnFly()
 		});
 }
 
-void Duke::wobble(float dt)
+void Duke::wobble()
 {
-	float wMax = 77 / 16 * 0.8f;
-	float hMax = 66 / 16 * 0.8f;
-
-	if (!_wobbling)
-		return;
-
-	_wobbleAccumulator += dt;
-	float conv = _wobbleAccumulator;
-
-
-	float frequency = 14.0f;   // Oscillazioni al secondo
-	float initialAmplitude = 16.0f; // Intensità iniziale del wobble
-	float convDuration = 1.0f; // Durata dello smorzamento 
-
-	
-	float dampeningFactor = 1.0f - (conv / convDuration);
-	if (dampeningFactor < 0.0f)
-		dampeningFactor = 0.0f;
-
-	float amplitude = initialAmplitude * dampeningFactor;
-
-	float wobbleFactor = amplitude * sin(_wobbleAccumulator * frequency);
-
-	// Applica la trasformazione solo se c'è un effetto visibile
-	if (dampeningFactor > 0.0f)
-		_rect.adjust(0, 0, wobbleFactor * dt, -wobbleFactor * dt);
-	
-	if (dampeningFactor <= 0.0f)
+	if (_trigger)
 	{
-		if (wobbleFactor * dt < wMax && wobbleFactor * dt < hMax)
+		if (_wobbling)
 		{
-			_rect.size = { wMax, hMax };
+			_rect.size.x += 0.05f * _bounceDirection;
+			_rect.size.y += 0.2f * _bounceDirection;
+
+			if (_rect.size.y >= _fixSize.y + 1.2f && _rect.size.x >= _fixSize.x + 0.1f)
+				_bounceDirection *= -1;
+
+			if (_rect.size.x <= _fixSize.x || _rect.size.y <= _fixSize.y)
+			{
+				_rect.size = _fixSize;
+				_bounceDirection = 0;
+			}
 		}
 	}
 
-	if (_wobbleAccumulator >= convDuration)
-	{
-		_wobbleAccumulator = 0; 
-	}
-}
 
+
+	//float wMax = 77 / 16 * 0.8f;
+	//float hMax = 66 / 16 * 0.8f;
+
+	//if (!_wobbling)
+	//	return;
+
+	//_wobbleAccumulator += dt;
+	//float conv = _wobbleAccumulator;
+
+
+	//float frequency = 14.0f;   // Oscillazioni al secondo
+	//float initialAmplitude = 16.0f; // Intensità iniziale del wobble
+	//float convDuration = 1.0f; // Durata dello smorzamento 
+
+	//
+	//float dampeningFactor = 1.0f - (conv / convDuration);
+	//if (dampeningFactor < 0.0f)
+	//	dampeningFactor = 0.0f;
+
+	//float amplitude = initialAmplitude * dampeningFactor;
+
+	//float wobbleFactor = amplitude * sin(_wobbleAccumulator * frequency);
+
+	//// Applica la trasformazione solo se c'è un effetto visibile
+	//if (dampeningFactor > 0.0f)
+	//	_rect.adjust(0, 0, wobbleFactor * dt, -wobbleFactor * dt);
+	//
+	//if (dampeningFactor <= 0.0f)
+	//{
+	//	if (wobbleFactor * dt < wMax && wobbleFactor * dt < hMax)
+	//	{
+	//		_rect.size = { wMax, hMax };
+	//	}
+	//}
+
+	//if (_wobbleAccumulator >= convDuration)
+	//{
+	//	_wobbleAccumulator = 0; 
+	//}
+
+}
 
 void Duke::hit(float damage, Vec2Df _dir)
 {
@@ -157,6 +177,12 @@ void Duke::die()
 
 }
 
+void Duke::trigger()
+{
+		_wobbling = true;
+		_trigger = true;
+}
+
 
 void Duke::update(float dt)
 {
@@ -173,49 +199,43 @@ void Duke::update(float dt)
 	index[3] = 3.0f;
 
 	_shadow->setRect(_rect * Vec2Df(0.5f, 0.3f) + Vec2Df(0.85f, 2.7f));
-	_blackglow->setRect(_rect * Vec2Df(100,100));
+	_blackglow->setRect(_rect * Vec2Df(100, 100));
 
 	if (!_dying)
 	{
-		
-		if (_accumulator <= index[0]) {
-			_wobbling = true;
+
+		if (_accumulator <= index[0])
+		{
 			_sprite = _sprites["duke_1"];
 		}
 
 		else if (_accumulator <= (index[0] + index[1]))
 		{
-			_wobbling = true; 
-			//wobble(dt);
+			trigger();
+			wobble();
 			_sprite = _sprites["duke_2"];
 		}
 		else if (_accumulator <= (index[0] + index[1] + index[2]))
 		{
-			_wobbling = true;
-			//wobble(dt);
+			trigger();
+			wobble();
 			_sprite = _sprites["duke_3"];
 		}
 		else if (_accumulator <= (index[0] + 4 * index[1] + index[2]))
 		{
-			_wobbling = true;
-			//wobble(dt);
+			trigger();
 			_sprite = _sprites["duke_2"];
-			
 		}
 		else if (_accumulator <= (index[0] + index[1] + index[2] + index[3]))
 		{
-			_wobbling = true;
-			//wobble(dt);
+			trigger();
 			_sprite = _sprites["duke_4"];
-			
 		}
 		else
 		{
 			_accumulator = 0;
-			_wobbling = false;
 		}
 	}
-
 }
 
 bool Duke::collision(CollidableObject* with, Direction fromDir)

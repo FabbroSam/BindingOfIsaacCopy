@@ -19,6 +19,12 @@ Enemy::Enemy(Scene* scene, const RectF& rect, Sprite* sprite, float spawnDelay, 
 	_shadow = new RenderableObject(_scene, _rect, SpriteFactory::instance()->get("shadow"), 3);
 	_shadow->setVisible(false);
 
+	//animation logic
+	_fixSize = rect.size;
+	_trigger = false;
+	_bounceDirection = 1;
+	_bounceCycle = 0;
+
 
 	schedule("poofAppearing", 0.6f, [this]()
 		{
@@ -40,6 +46,11 @@ Enemy::Enemy(Scene* scene, const RectF& rect, Sprite* sprite, float spawnDelay, 
 			_movable = true;
 		}
 	);
+}
+
+void Enemy::trigger()
+{
+	_trigger = true;
 }
 
 bool Enemy::collision(CollidableObject* with, Direction fromDir)

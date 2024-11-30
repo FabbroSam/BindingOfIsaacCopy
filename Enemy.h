@@ -30,6 +30,12 @@ protected:
 	RenderableObject* _shadow;
 	RenderableObject* _poof;
 
+	// animation parameters (if needed)
+	Vec2Df _fixSize;
+	bool _trigger;
+	int _bounceDirection;
+	int _bounceCycle;
+
 
 public:
 
@@ -44,6 +50,9 @@ public:
 
 	// extends logic collision (+smashed, +hurt Isaac)
 	virtual bool collision(CollidableObject* with, Direction fromDir) override;
+
+	// animation flag
+	virtual void trigger();
 
 	virtual std::string name() override { return strprintf("Enemy[%d]", _id); }
 };
