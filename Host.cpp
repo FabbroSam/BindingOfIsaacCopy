@@ -15,17 +15,18 @@
 using namespace agp;
 
 Host::Host(Scene* scene, const PointF& pos, float spawnDelay)
-	:Enemy(scene, RectF(pos.x, pos.y, 2.0f, 2.0f), nullptr, spawnDelay, 5)
+	:Enemy(scene, RectF(pos.x, pos.y, 2.0f, 2.5f), nullptr, spawnDelay, 5)
 {
 
 	_sprites["host_0"] = SpriteFactory::instance()->get("host_0");
 	_sprites["host_1"] = SpriteFactory::instance()->get("host_1");
 	_sprites["host_2"] = SpriteFactory::instance()->get("host_2");
+	_sprites["bloodExplotion"] = SpriteFactory::instance()->get("bloodExplotion");
 
-	_shadow->setRect(_rect * Vec2Df(0.3f, 0.1f) + Vec2Df(0,-1));
+	_shadow->setRect(_rect * Vec2Df(0.8f, 0.3f) + Vec2Df(0.18f, 1.6f));
 
 	//setRect(_rect * Vec2Df(1.0f, 1.1f));
-	_collider.adjust(0.4f, 1.05f, -0.4f, 0.2f);
+	_collider.adjust(0.4f, 1.3f, -0.4f, 0.0f);
 	_visible = false;
 	_collidable = true;
 	_compenetrable = false;
@@ -33,17 +34,20 @@ Host::Host(Scene* scene, const PointF& pos, float spawnDelay)
 
 	//logic
 	_accumulator = 0;
-
+	_canShoot = true;
+	_shooting = false;
+	_hitable = false;
 	//physics
 
 
 	// game parameters
-	_life = 5.0f;
+	_life = 15.0f;
 }
 
 void Host::update(float dt)
 {
 	Enemy::update(dt);
+	Isaac* isaac = static_cast<GameScene*>(_scene)->player();
 
 	_accumulator += dt;
 
@@ -58,17 +62,28 @@ void Host::update(float dt)
 		{
 			_sprite = _sprites["host_2"];
 		}
-		else if (_accumulator <= 12.1f)
-		{	
+		else if (_accumulator <= 8.1f)
+		{
+			_canShoot = true;
 			_hitable = true;
 			_sprite = _sprites["host_1"];
+			
+			if (!_shooting)
+			{
+				//shoot(normal2dir((isaac->rect().pos)/(isaac->rect().pos.mag())));
+				rand() % 2 == 1 ? shoot(Direction::RIGHT) : shoot(Direction::LEFT);
+				_shooting = true;
+				_canShoot = false;
+			}
 		}
-		else if (_accumulator <= 12.15f)
+
+		else if (_accumulator <= 8.15f)
 		{
 			_hitable = false;
+			_shooting = false;
 			_sprite = _sprites["host_0"];
 		}
-		else if (_accumulator <= 12.25f)
+		else if (_accumulator <= 8.25f)
 		{
 			_sprite = _sprites["host_2"];
 		}
@@ -84,3 +99,60 @@ bool Host::collidableWith(CollidableObject* obj)
 	return true;
 }
 
+void Host::shoot(Direction dir)
+{
+	PointF spawnPoint;
+	spawnPoint.x = _rect.pos.x + 0.5f;
+	spawnPoint.y = _rect.pos.y - 0.2f;
+
+	if (_canShoot)
+	{
+		switch (dir) 
+		{
+			case Direction::LEFT:
+				new Tear(_scene, spawnPoint, dir, 0.1, 0.1, true);
+				new Tear(_scene, spawnPoint + PointF(0, 0.5f), dir, 0.1, 0.1, true);
+				new Tear(_scene, spawnPoint + PointF(0, -0.5f), dir, 0.1, 0.1, true);
+				break;
+			case Direction::RIGHT:
+				new Tear(_scene, spawnPoint, dir, 0.1, 0.1, true);
+				new Tear(_scene, spawnPoint + PointF(0, 0.5f), dir, 0.1, 0.1, true);
+				new Tear(_scene, spawnPoint + PointF(0, -0.5f), dir, 0.1, 0.1, true);
+				break;
+			case Direction::UP:
+				new Tear(_scene, spawnPoint, dir, 0.1, 0.1, true);
+				new Tear(_scene, spawnPoint + PointF(0.5f, 0), dir, 0.1, 0.1, true);
+				new Tear(_scene, spawnPoint + PointF(-0.5f, 0), dir, 0.1, 0.1, true);
+				break;
+			case Direction::DOWN:
+				new Tear(_scene, spawnPoint, dir, 0.1, 0.1, true);
+				new Tear(_scene, spawnPoint + PointF(0.5f, 0), dir, 0.1, 0.1, true);
+				new Tear(_scene, spawnPoint + PointF(-0.5f, 0), dir, 0.1, 0.1, true);
+				break;
+			default:
+				break;
+		}
+	}
+}
+
+void Host::hit(float damage, Vec2Df _dir)
+{
+	//Enemy::hit(damage);
+}
+
+void Host::die()
+{
+	_collidable = false;
+
+	_shadow->setVisible(false);
+	_sprite = _sprites["bloodExplotion"];
+
+	if (!isSchedule("dyingHostAnimation"))
+		schedule("dyingHostAnimation", 0.37f, [this]()
+			{
+				setVisible(false);
+				new RenderableObject(_scene, _rect, _sprites["blood"], 6);
+				_scene->killObject(this);
+
+			}, 0, false);
+}

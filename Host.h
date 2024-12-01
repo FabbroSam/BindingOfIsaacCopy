@@ -20,6 +20,8 @@ protected:
 	Direction _x_prev_dir;
 	Direction _y_prev_dir;
 	float _accumulator;
+	bool _canShoot;
+	bool _shooting;
 
 public:
 
@@ -28,10 +30,12 @@ public:
 	//basic enemy actions
 	virtual void spawn() {};
 	virtual void move() {};
-	virtual void hit(float damage, Vec2Df _dir) {};
-	virtual void die() {};
+	virtual void hit(float damage, Vec2Df _dir);
+	virtual void die();
 
 	virtual void update(float dt) override;
+
+	void shoot(Direction dir);
 
 	virtual bool collidableWith(CollidableObject* obj) override;
 	//virtual bool collision(CollidableObject* with, Direction fromDir) override;

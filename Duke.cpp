@@ -45,13 +45,13 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 	_y_dec_rel = 0;
 
 	//game parameters
-	_life = 5.0f;
+	_life = 20.0f;
 
 	_accumulator = 0;
 
 
 	spawnFly();
-	schedule("spawn_fly", 12.0f, [this]() {spawnFly();}, -1);
+	schedule("spawn_fly", 10.0f, [this]() {spawnFly();}, -1);
 }
 
 void Duke::spawnFly()
@@ -69,7 +69,7 @@ void Duke::spawnFly()
 	new Fly(_scene, PointF(_rect.pos.x + _rect.size.x - 1, _rect.pos.y + _rect.size.y - 1), 4.5f);
 	_blackglow->setVisible(true);
 
-	schedule("change_dir", 0.8f, [this]() 
+	schedule("change_dir", 0.7f, [this]() 
 		{ 	
 			_blackglow->setVisible(false);
 			_x_dir = _x_prev_dir;
@@ -96,49 +96,6 @@ void Duke::wobble()
 			}
 		}
 	}
-
-
-
-	//float wMax = 77 / 16 * 0.8f;
-	//float hMax = 66 / 16 * 0.8f;
-
-	//if (!_wobbling)
-	//	return;
-
-	//_wobbleAccumulator += dt;
-	//float conv = _wobbleAccumulator;
-
-
-	//float frequency = 14.0f;   // Oscillazioni al secondo
-	//float initialAmplitude = 16.0f; // Intensità iniziale del wobble
-	//float convDuration = 1.0f; // Durata dello smorzamento 
-
-	//
-	//float dampeningFactor = 1.0f - (conv / convDuration);
-	//if (dampeningFactor < 0.0f)
-	//	dampeningFactor = 0.0f;
-
-	//float amplitude = initialAmplitude * dampeningFactor;
-
-	//float wobbleFactor = amplitude * sin(_wobbleAccumulator * frequency);
-
-	//// Applica la trasformazione solo se c'è un effetto visibile
-	//if (dampeningFactor > 0.0f)
-	//	_rect.adjust(0, 0, wobbleFactor * dt, -wobbleFactor * dt);
-	//
-	//if (dampeningFactor <= 0.0f)
-	//{
-	//	if (wobbleFactor * dt < wMax && wobbleFactor * dt < hMax)
-	//	{
-	//		_rect.size = { wMax, hMax };
-	//	}
-	//}
-
-	//if (_wobbleAccumulator >= convDuration)
-	//{
-	//	_wobbleAccumulator = 0; 
-	//}
-
 }
 
 void Duke::hit(float damage, Vec2Df _dir)
@@ -247,7 +204,7 @@ bool Duke::collision(CollidableObject* with, Direction fromDir)
 		if (fromDir == Direction::UP || fromDir == Direction::DOWN)
 			_y_dir = inverse(_y_dir);
 
-		else if (fromDir == Direction::LEFT || fromDir == Direction::RIGHT)
+		/*if (fromDir == Direction::LEFT || fromDir == Direction::RIGHT)*/
 			_x_dir = inverse(_x_dir);
 	}
 	return true;

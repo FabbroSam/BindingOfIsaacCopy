@@ -243,7 +243,7 @@ void Isaac::shoot(Direction dir) {
 		break;
 	}
 
-	Tear* newTear = new Tear(_scene, spawnPoint, dir, _vel.x, _vel.y);
+	Tear* newTear = new Tear(_scene, spawnPoint, dir, _vel.x, _vel.y, false);
 	// alternate between left and right eye
 	_isShootingRight = !_isShootingRight;
 }

@@ -40,6 +40,7 @@ SpriteFactory::SpriteFactory()
 	// ITEM
 	_spriteSheets["tears"] = loadTexture(renderer, "../sprites/tears.png");
 	_spriteSheets["explosion"] = loadTexture(renderer, "../sprites/tear_animation.png");
+	_spriteSheets["explosion_red"] = loadTexture(renderer, "../sprites/tear_red_animation.png");
 	_spriteSheets["altar"] = loadTexture(renderer, "../sprites/altar.png");
 	_spriteSheets["item_coin"] = loadTexture(renderer, "../sprites/item_coin.png", { 147, 187, 236 });
 	_spriteSheets["item_coin_effect"] = loadTexture(renderer, "../sprites/item_coin.png", { 147, 187, 236 });
@@ -538,14 +539,6 @@ Sprite* SpriteFactory::get(const std::string& id)
 	// ITEM SPRITES
 	else if (id == "tear_default")
 		return new Sprite(_spriteSheets["tears"], RectI(192, 0, 32, 32), "tear_default");
-	else if (id == "tear_explosion") {
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				rects.push_back(RectI(j * 64, i * 64, 64, 64));
-			}
-		}
-		return new AnimatedSprite(_spriteSheets["explosion"], rects, 20, "tear_explosion");
-	}
 	else if (id == "tear_wet")
 		return new Sprite(_spriteSheets["shadow"], RectF(0, 0, 120, 49), "tear_wet", SDL_FLIP_NONE, rand()%5 + 5);
 	else if (id == "item_coin")
@@ -664,6 +657,24 @@ Sprite* SpriteFactory::get(const std::string& id)
 	else if(id=="blackglow")
 		return new Sprite(_spriteSheets["blackglow"], RectF(0, 0, 112, 112), "blackglow", SDL_FLIP_NONE, 75);
 
+	if (id == "tear_red")
+		return new Sprite(_spriteSheets["tears"], RectI(192, 64, 32, 32), "tear_red");
+	else if (id == "tear_explosion") {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				rects.push_back(RectI(j * 64, i * 64, 64, 64));
+			}
+		}
+		return new AnimatedSprite(_spriteSheets["explosion"], rects, 20, "tear_explosion");
+		}
+	else if (id == "tear_red_explosion") {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				rects.push_back(RectI(j * 64, i * 64, 64, 64));
+			}
+		}
+		return new AnimatedSprite(_spriteSheets["explosion_red"], rects, 20, "tear_red_explosion");
+		}
 
 	if (id == "host_0")
 		return new Sprite(_spriteSheets["host"], RectF(0, 0, 32, 44), "host");

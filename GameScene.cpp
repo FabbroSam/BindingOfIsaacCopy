@@ -228,9 +228,8 @@ void GameScene::spawnMobs()
 		{
 			int amount = rand() % 3;
 			if (amount && _spawnIndex<2)
-			{
-				new Host(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 1.5f);
-			}
+				Host* newHost = new Host(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 1.5f);
+			_room->changeStateRoom();
 		}
 	}
 	else if (_room->type() == RoomType::TREASURE && _room->state() == RoomState::ACTIVE)
@@ -299,6 +298,7 @@ void GameScene::event(SDL_Event& evt)
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_I)
 	{
 		_isaac->setInvincible();
+		std::cout << "invincible\n";
 	}
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_O)
 	{

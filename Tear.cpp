@@ -13,20 +13,28 @@
 #include "Poop.h"
 #include "Coin.h"
 #include "Rock.h"
+#include "Host.h"
 using namespace agp;
 
 
-Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, float y_velIsaac, int layer)
+Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, float y_velIsaac, bool _red, int layer)
     : DynamicObject(scene, RectF(pos.x, pos.y, 1.2f, 1.2f), nullptr, 6)
 {
 
     _sprites["tear"] = SpriteFactory::instance()->get("tear_default");
     _sprites["tear_explosion"] = SpriteFactory::instance()->get("tear_explosion");
+    _sprites["tear_red"] = SpriteFactory::instance()->get("tear_red");
+    _sprites["tear_red_explosion"] = SpriteFactory::instance()->get("tear_red_explosion");
     _sprites["tear_wet"] = SpriteFactory::instance()->get("tear_wet");
     _sprites["shadow"] = SpriteFactory::instance()->get("shadow");
-    _sprite = _sprites["tear"];
+    
+    if(!_red)
+        _sprite = _sprites["tear"];
+    else
+        _sprite = _sprites["tear_red"];
 
     _destroy = true;
+    _red = false;
 
     _collider.adjust(0.43f, 0.37f, -0.4f, -0.4f);
 
@@ -94,6 +102,7 @@ void Tear::update(float dt)
     float y = _rect.pos.y + _vel.y * dt;
     float norm = static_cast<float>(sqrt(pow(pos0.x - x, 2) + pow(pos0.y - y, 2)));
     _rect.pos.x += _vel.x * dt;
+    
     if (norm < _distance)
         _rect.pos.y += static_cast<float>((10 * pow(dt,2)) / 2 + _vel.y * dt);
     else
@@ -113,15 +122,22 @@ void Tear::destroy(CollidableObject* obj)
     new RenderableObject(_scene, RectF(newX, newY, (rand() % 20 + 10) / 100.0f, (rand() % 20 + 10) / 100.0f), _sprites["tear_wet"], 2);
     new RenderableObject(_scene, RectF(newX, newY, (rand() % 20 + 10) / 100.0f, (rand() % 20 + 10) / 100.0f), _sprites["tear_wet"], 2);
 
+    
+    
     schedule("explosion", 0.01f, [this]() {
-        _sprite = _sprites["tear_explosion"];
-        _rect.size = {1.8f, 1.8f};
+        if (_red)
+            _sprite = _sprites["tear_red_explosion"];
+        else
+            _sprite = _sprites["tear_red_explosion"];
+        _rect.size = { 1.8f, 1.8f };
         _rect.pos += {-0.4f, -0.4f};
         _vel = { 0.0f,0.0f };
         _collidable = false;
         _shadow->setVisible(false);
         Audio::instance()->playSound("tear block");
         }, 0, false);
+
+
     schedule("die", 0.4f, [this]() {
         kill();
         _scene->killObject(_shadow);
@@ -130,24 +146,39 @@ void Tear::destroy(CollidableObject* obj)
 
 bool Tear::collision(CollidableObject* with, Direction fromDir)
 {
-    destroy(with);
-    Enemy* enemy = dynamic_cast<Enemy*>(with);
-    if (enemy) // se incontra un nemico colpiscilo
+    if (_red)
     {
-        enemy->hit(0.5f, _vel);
+        Isaac* isaac = dynamic_cast<Isaac*>(with);
+        if (isaac)
+            isaac->hurt();
     }
 
-    Poop* poop = dynamic_cast<Poop*>(with);
-    if (poop)
+    else 
     {
-        poop->destroy();
+        Enemy* enemy = dynamic_cast<Enemy*>(with);
+        if (enemy)
+            enemy->hit(0.5f, _vel);
+
+        Poop* poop = dynamic_cast<Poop*>(with);
+        if (poop)
+        {
+            poop->destroy();
+        }
     }
+ 
+    destroy(with);
     return true;
 }
 
 bool Tear::collidableWith(CollidableObject* obj)
 {
-    if (obj->to<Isaac*>() || obj->to<Coin*>())
-        return false;
+    if (!_red)
+        if (obj->to<Isaac*>() || obj->to<Coin*>())
+            return false;
+ 
+    else
+        if (obj->to<Host*>() || obj->to<Poop*>() || obj->to<Rock*>())
+            return false;
+
     return true;
 }
