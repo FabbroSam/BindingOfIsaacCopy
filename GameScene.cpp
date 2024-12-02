@@ -249,7 +249,7 @@ void GameScene::spawnMobs()
 
 			_schedule = new Scheduler(1.8f, [this]() 
 				{
-					new Duke(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y - 1), 6.5f);				
+					new Duke(this, PointF(this->room()->rect().center().x-1, this->room()->rect().center().y - 1), 6.5f);				
 					_room->changeStateRoom();
 					//_room->offLightDoor(); non funge
 				});	

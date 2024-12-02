@@ -22,6 +22,7 @@ protected:
 	float _accumulator;
 	bool _canShoot;
 	bool _shooting;
+	bool _wobbling;
 
 public:
 
@@ -36,6 +37,8 @@ public:
 	virtual void update(float dt) override;
 
 	void shoot(Direction dir);
+	void wobble() {};
+	virtual void trigger() override {};
 
 	virtual bool collidableWith(CollidableObject* obj) override;
 	//virtual bool collision(CollidableObject* with, Direction fromDir) override;

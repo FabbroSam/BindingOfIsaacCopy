@@ -78,14 +78,14 @@ void CollidableObject::detectCollisions()
 	// since they will not be accessible in the next iteration
 	//_collisions.erase(std::remove_if(_collisions.begin(), _collisions.end(), [](CollidableObject* obj) { return obj->_killed; }), _collisions.end());
 
-	for (auto collObj : _collisionsPrev)
-	{
-		if (std::find(_collisions.begin(), _collisions.end(), collObj) == _collisions.end())
-		{
-			collision(collObj, normal2dir(Vec2Df()));
-			collObj->collision(this, normal2dir(Vec2Df()));
-		}
-	}
+	//for (auto collObj : _collisionsPrev)
+	//{
+	//	if (std::find(_collisions.begin(), _collisions.end(), collObj) == _collisions.end())
+	//	{
+	//		collision(collObj, normal2dir(Vec2Df()));
+	//		collObj->collision(this, normal2dir(Vec2Df()));
+	//	}
+	//}
 
 }
 

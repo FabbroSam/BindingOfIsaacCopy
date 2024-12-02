@@ -31,9 +31,6 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 	_sprites["bloodExplotion"] = SpriteFactory::instance()->get("bloodExplotion");
 	_sprites["blackglow"] = SpriteFactory::instance()->get("blackglow");
 
-	_blackglow = new RenderableObject(_scene, _rect, SpriteFactory::instance()->get("blackglow"), 7);
-	_blackglow->setVisible(true);
-
 	//phisic
 	_x_vel_max = 1.3f;
 	_y_vel_max = 1.3f;
@@ -67,11 +64,10 @@ void Duke::spawnFly()
 	new Fly(_scene, PointF(_rect.pos.x + _rect.size.x - 1, _rect.pos.y), 4.5f);
 	new Fly(_scene, PointF(_rect.pos.x, _rect.pos.y + _rect.size.y - 1), 4.5f);
 	new Fly(_scene, PointF(_rect.pos.x + _rect.size.x - 1, _rect.pos.y + _rect.size.y - 1), 4.5f);
-	_blackglow->setVisible(true);
+	
 
 	schedule("change_dir", 0.7f, [this]() 
 		{ 	
-			_blackglow->setVisible(false);
 			_x_dir = _x_prev_dir;
 			_y_dir = _y_prev_dir;
 		});
@@ -87,7 +83,9 @@ void Duke::wobble()
 			_rect.size.y += 0.2f * _bounceDirection;
 
 			if (_rect.size.y >= _fixSize.y + 1.2f && _rect.size.x >= _fixSize.x + 0.1f)
+			{
 				_bounceDirection *= -1;
+			}
 
 			if (_rect.size.x <= _fixSize.x || _rect.size.y <= _fixSize.y)
 			{
@@ -156,7 +154,6 @@ void Duke::update(float dt)
 	index[3] = 3.0f;
 
 	_shadow->setRect(_rect * Vec2Df(0.5f, 0.3f) + Vec2Df(0.85f, 2.7f));
-	_blackglow->setRect(_rect * Vec2Df(100, 100));
 
 	if (!_dying)
 	{

@@ -17,7 +17,7 @@
 using namespace agp;
 
 
-Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, float y_velIsaac, bool _red, int layer)
+Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, float y_velIsaac, bool red, int layer)
     : DynamicObject(scene, RectF(pos.x, pos.y, 1.2f, 1.2f), nullptr, 6)
 {
 
@@ -27,14 +27,9 @@ Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, flo
     _sprites["tear_red_explosion"] = SpriteFactory::instance()->get("tear_red_explosion");
     _sprites["tear_wet"] = SpriteFactory::instance()->get("tear_wet");
     _sprites["shadow"] = SpriteFactory::instance()->get("shadow");
-    
-    if(!_red)
-        _sprite = _sprites["tear"];
-    else
-        _sprite = _sprites["tear_red"];
 
     _destroy = true;
-    _red = false;
+    _red = red;
 
     _collider.adjust(0.43f, 0.37f, -0.4f, -0.4f);
 
@@ -74,6 +69,11 @@ Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, flo
 
     //_shadow = new ShadowTear(scene, pos + PointF({ 0.34f,1 }), _vel, 5);
     _shadow = new RenderableObject(scene, RectF(pos.x + 0.34f, pos.y + 1.3f, 0.37f, 0.23f), _sprites["shadow"], 5);
+
+    if (_red)
+        _sprite = _sprites["tear_red"];
+    else
+        _sprite = _sprites["tear"];
 }
 
 void Tear::update(float dt)
@@ -128,7 +128,7 @@ void Tear::destroy(CollidableObject* obj)
         if (_red)
             _sprite = _sprites["tear_red_explosion"];
         else
-            _sprite = _sprites["tear_red_explosion"];
+            _sprite = _sprites["tear_explosion"];
         _rect.size = { 1.8f, 1.8f };
         _rect.pos += {-0.4f, -0.4f};
         _vel = { 0.0f,0.0f };
@@ -146,6 +146,7 @@ void Tear::destroy(CollidableObject* obj)
 
 bool Tear::collision(CollidableObject* with, Direction fromDir)
 {
+    destroy(with);
     if (_red)
     {
         Isaac* isaac = dynamic_cast<Isaac*>(with);
@@ -166,19 +167,25 @@ bool Tear::collision(CollidableObject* with, Direction fromDir)
         }
     }
  
-    destroy(with);
     return true;
 }
 
 bool Tear::collidableWith(CollidableObject* obj)
 {
-    if (!_red)
-        if (obj->to<Isaac*>() || obj->to<Coin*>())
+
+    if (_red)
+    {
+        if (obj->to<Host*>() || obj->to<Poop*>())
             return false;
+    }
+
+    else if(!_red)
+    {
+        if (obj->to<Isaac*>() || obj->to<Coin*>() || obj->to<Rock*>())
+            return false;
+    }
  
-    else
-        if (obj->to<Host*>() || obj->to<Poop*>() || obj->to<Rock*>())
-            return false;
+
 
     return true;
 }

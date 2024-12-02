@@ -23,7 +23,7 @@ private:
     std::map<std::string, Sprite*> _sprites;
 
 public:
-    Tear(Scene* scene, const PointF& pos, Direction dir, float x_inertia, float y_inertia, bool _red, int layer = 0);
+    Tear(Scene* scene, const PointF& pos, Direction dir, float x_inertia, float y_inertia, bool red, int layer = 0);
     virtual ~Tear() {};
 
     void destroy(CollidableObject* obj);
