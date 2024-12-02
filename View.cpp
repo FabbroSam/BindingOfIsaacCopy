@@ -100,7 +100,7 @@ void View::render()
 
 void View::update(float dt)
 {
-	float step = 0.9f; // velocità con cui si sposta la view
+	float step = 0.68f; // velocità con cui si sposta la view
 
 	if (_move_to)
 	{

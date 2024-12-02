@@ -18,7 +18,7 @@ using namespace agp;
 
 
 Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, float y_velIsaac, bool red, int layer)
-    : DynamicObject(scene, RectF(pos.x, pos.y, 1.2f, 1.2f), nullptr, 6)
+    : DynamicObject(scene, RectF(pos.x, pos.y, 1.2f, 1.2f), nullptr, layer)
 {
 
     _sprites["tear"] = SpriteFactory::instance()->get("tear_default");
@@ -178,10 +178,9 @@ bool Tear::collidableWith(CollidableObject* obj)
         if (obj->to<Host*>() || obj->to<Poop*>())
             return false;
     }
-
     else if(!_red)
     {
-        if (obj->to<Isaac*>() || obj->to<Coin*>() || obj->to<Rock*>())
+        if (obj->to<Isaac*>() || obj->to<Coin*>())
             return false;
     }
  

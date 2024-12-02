@@ -24,6 +24,7 @@ class agp::Door : public StaticObject
 		Vec2Df _fixPos;
 		Vec2Df _fixSize;
 		bool _trigger;
+		bool _openable;
 
 		DoorBorder* _doorUp;
 		DoorBorder* _doorDown;

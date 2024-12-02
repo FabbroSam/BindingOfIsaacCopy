@@ -25,6 +25,7 @@ Door::Door(Scene* scene, const RectF& rect, RoomType type, DoorPosition pos, flo
 	_fixPos = rect.pos;
 	_fixSize = rect.size;
 	_trigger = false;
+	_openable = true;
 
 	_doorUp = nullptr;
 	_doorDown = nullptr;
@@ -120,6 +121,11 @@ void Door::Draw()
 void Door::openClose()
 {
 
+	if (!_openable)
+		return;
+	_openable = false;
+	schedule("OpenableDoor", 1.2f, [this]() {_openable = true; }, 0, false);
+
 	if (_doorUp)
 		_doorUp->Trigger();
 	else if (_doorDown)
@@ -129,7 +135,7 @@ void Door::openClose()
 	else if (_doorLeft)
 		_doorLeft->Trigger();
 
-	schedule("TriggerPanel", 0.4f, [this]()
+	schedule("TriggerDoor", 0.4f, [this]()
 		{
 			if (_state == DoorState::OPEN)
 				Audio::instance()->playSound("door_open");
@@ -152,7 +158,18 @@ void Door::openClose()
 				_doorLeftLeft->Trigger();
 				_doorLeftRight->Trigger();
 			}
-		}, 0);
+
+			if (_state == DoorState::OPEN)
+			{
+				_compenetrable = false;
+				_state = DoorState::ClOSE;
+			}
+			else if (_state == DoorState::ClOSE)
+			{
+				schedule("CompenetrableDoor", 0.65f, [this]() {_compenetrable = true;; }, 0, false);			
+				_state = DoorState::OPEN;
+			}
+		}, 0, false);
 
 	schedule("ToggleLightDoor", 0.6f, [this]()
 		{
@@ -162,16 +179,7 @@ void Door::openClose()
 				_doorLight->setVisible(true);
 		}, 0);
 
-	if (_state == DoorState::OPEN)
-	{
-		_compenetrable = false;
-		_state = DoorState::ClOSE;
-	}
-	else if (_state == DoorState::ClOSE)
-	{
-		_compenetrable = true;
-		_state = DoorState::OPEN;
-	}
+
 }
 
 void Door::offLight()
@@ -417,18 +425,20 @@ DoorPanel::DoorPanel(Scene* scene, const RectF& rect, RoomType type, DoorPositio
 
 void DoorPanel::Trigger()
 {
-
-	if (_state == DoorState::OPEN)
-	{		
-		_close = true;
-		_visible = true;
-		_state = DoorState::ClOSE;
-	}
-	else if (_state == DoorState::ClOSE)
-	{
-		_open = true;
-		_state = DoorState::OPEN;
-	}
+	schedule("TriggerPanel", 0.2f, [this]()
+		{
+			if (_state == DoorState::OPEN)
+			{
+				_close = true;
+				_visible = true;
+				_state = DoorState::ClOSE;
+			}
+			else if (_state == DoorState::ClOSE)
+			{
+				_open = true;
+				_state = DoorState::OPEN;
+			}
+		}, 0, false);
 }
 
 void DoorPanel::update(float dt)

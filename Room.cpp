@@ -122,19 +122,19 @@ void Room::Draw()
 	//left
 	new StaticObject(_scene, RectF(_x, _y, 2, 5 + 0.4f), spriteLoader->get("wall"));
 	new StaticObject(_scene, RectF(_x, _y + 7 - 0.75f, 2, 5 + 0.75f), spriteLoader->get("wall"));
-	new DynamicObject(_scene, RectF(_x, _y, 1, 12), spriteLoader->get("upWall"));
+	//new DynamicObject(_scene, RectF(_x, _y, 1, 12), spriteLoader->get("upWall"));
 	//up						   _
 	new StaticObject(_scene, RectF(_x + 2, _y, 5 + 0.6f, 2), spriteLoader->get("wall"));
 	new StaticObject(_scene, RectF(_x + 2 + 7 - 0.6f, _y, 5 + 0.6f, 2), spriteLoader->get("wall"));
-	new DynamicObject(_scene, RectF(_x, _y, 16, 1), spriteLoader->get("upWall"));
+	//new DynamicObject(_scene, RectF(_x, _y, 16, 1), spriteLoader->get("upWall"));
 	//down						   _
 	new StaticObject(_scene, RectF(_x + 2, _y + 10, 5 + 0.6f, 2), spriteLoader->get("wall"));
 	new StaticObject(_scene, RectF(_x + 2 + 7 - 0.6f, _y + 10, 5 + 0.6f, 2), spriteLoader->get("wall"));
-	new DynamicObject(_scene, RectF(_x, _y + 10.2f, 16, 1.8f), spriteLoader->get("upWall"));
+	//new DynamicObject(_scene, RectF(_x, _y + 10.2f, 16, 1.8f), spriteLoader->get("upWall"));
 	//right						   _
 	new StaticObject(_scene, RectF(_x + 14, _y, 2, 5 + 0.4f), spriteLoader->get("wall"));
 	new StaticObject(_scene, RectF(_x + 14, _y + 7 - 0.75f, 2, 5 + 0.75f), spriteLoader->get("wall"));
-	new DynamicObject(_scene, RectF(_x + 15, _y, 1, 12), spriteLoader->get("upWall"));
+	//new DynamicObject(_scene, RectF(_x + 15, _y, 1, 12), spriteLoader->get("upWall"));
 
 	// DOOR (viene inserita la porta senza collider oppure il collider sopra il muro)
 
