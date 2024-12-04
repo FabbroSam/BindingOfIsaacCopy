@@ -327,6 +327,7 @@ void Isaac::setSprite()
 			}
 		}
 		else if (_state[SDL_SCANCODE_RIGHT]) {
+			setFlip(SDL_FLIP_NONE);
 			if (_swapShootAnimation) {
 				_sprite = _sprites["headRight"];
 				_swapShootAnimation = false;
