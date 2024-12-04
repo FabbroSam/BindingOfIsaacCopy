@@ -1,6 +1,6 @@
 //#pragma once
 //
-//#include "CollidableObject.h"
+//#include "DynamicObject.h"
 //#include "Scene.h"
 //
 //namespace agp
