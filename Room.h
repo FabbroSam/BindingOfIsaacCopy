@@ -37,6 +37,7 @@ protected:
 	int _w = 16;
 	int _h = 12;
 
+	bool _isEmpty;
 
 public:
 
@@ -63,6 +64,12 @@ public:
 	// get/set
 	void setState(RoomState state) { _roomState = state; }
 	RoomState state() { return _roomState; };
+	bool isEmpty() { return _isEmpty; }
+
+	bool doorUp() { _doorUp ? true : false; }
+	bool doorDown() { _doorDown ? true : false; }
+	bool doorRight() { _doorRight ? true : false; }
+	bool doorLeft() { _doorLeft ? true : false; }
 
 	virtual void update(float dt);
 	virtual std::string name() override;

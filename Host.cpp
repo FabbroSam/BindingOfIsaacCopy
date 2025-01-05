@@ -11,24 +11,29 @@
 #include "Poop.h"
 #include "Isaac.h"
 #include "Fly.h"
-
+#include <math.h>
+#include <iostream>
 using namespace agp;
 
 Host::Host(Scene* scene, const PointF& pos, float spawnDelay)
-	:Enemy(scene, RectF(pos.x, pos.y, 1.5f, 1.9f), nullptr, spawnDelay, 5)
+	:Enemy(scene, RectF(pos.x, pos.y, 1.3f, 1.7f), nullptr, spawnDelay, 5)
 {
+	
 
 	_sprites["host_0"] = SpriteFactory::instance()->get("host_0");
 	_sprites["host_1"] = SpriteFactory::instance()->get("host_1");
 	_sprites["host_2"] = SpriteFactory::instance()->get("host_2");
 	_sprites["bloodExplotion"] = SpriteFactory::instance()->get("bloodExplotion");
 
-	//setRect(_rect * Vec2Df(1.0f, 1.1f));
-	_collider.adjust(0.4f, 1.3f, -0.4f, 0.0f);
+	_rect = _rect - Vec2Df({ 0.65f, 1.1f });
+	setCollider(RectF(0.2f, 0.95f, 0.9f, 0.6f)); // collider abbassato
+	// setCollider(RectF(0.4f, 0.95f, 0.5f, 0.6f)); // collider alzato
+	std::cout << _collider << std::endl;
 	_visible = false;
 	_collidable = true;
 	_compenetrable = false;
 	_movable = false;
+	_shadow->setVisible(false);
 
 	//logic
 	_accumulator = 0;
@@ -47,9 +52,8 @@ Host::Host(Scene* scene, const PointF& pos, float spawnDelay)
 void Host::update(float dt)
 {
 	Enemy::update(dt);
-	Isaac* isaac = static_cast<GameScene*>(_scene)->player();
 
-	_shadow->setRect(_rect * Vec2Df(0.8f, 0.3f) + Vec2Df(0.18f, 1.6f));
+	_shadow->setRect(_rect * Vec2Df(0.8f, 0.3f) + Vec2Df(0.13f, 1.2f));
 
 	_accumulator += dt;
 
@@ -66,6 +70,7 @@ void Host::update(float dt)
 		}
 		else if (_accumulator <= 4.8f)
 		{
+			setCollider(RectF(0.4f, 0.95f, 0.5f, 0.6f)); // collider alzato
 			_canShoot = true;
 			_hitable = true;
 			_sprite = _sprites["host_1"];
@@ -74,7 +79,7 @@ void Host::update(float dt)
 			{
 				schedule("shoot", 0.1f, [this]() 
 				{
-					rand() % 2 ? shoot(Direction::RIGHT) : shoot(Direction::LEFT);
+					shoot();
 				});
 				_shooting = true;
 				_canShoot = false;
@@ -83,6 +88,7 @@ void Host::update(float dt)
 
 		else if (_accumulator <= 4.85f)
 		{
+			setCollider(RectF(0.2f, 0.95f, 0.9f, 0.6f)); // collider abbassato
 			_hitable = false;
 			_shooting = false;
 			_sprite = _sprites["host_0"];
@@ -103,39 +109,25 @@ bool Host::collidableWith(CollidableObject* obj)
 	return true;
 }
 
-void Host::shoot(Direction dir)
+void Host::shoot()
 {
 	PointF spawnPoint;
-	spawnPoint.x = _rect.pos.x + 0.5f;
-	spawnPoint.y = _rect.pos.y - 0.2f;
+	spawnPoint.x = _rect.pos.x + 0.3f;
+	spawnPoint.y = _rect.pos.y + 0.5f;
 
 	if (_canShoot)
 	{
-		switch (dir) 
-		{
-			case Direction::LEFT:
-				new Tear(_scene, spawnPoint, dir, 0.1, 0.1, true);
-				new Tear(_scene, spawnPoint + PointF(0, 0.5f), dir, 0.1, 0.1, true);
-				new Tear(_scene, spawnPoint + PointF(0, -0.5f), dir, 0.1, 0.1, true);
-				break;
-			case Direction::RIGHT:
-				new Tear(_scene, spawnPoint, dir, 0.1, 0.1, true);
-				new Tear(_scene, spawnPoint + PointF(0, 0.5f), dir, 0.1, 0.1, true);
-				new Tear(_scene, spawnPoint + PointF(0, -0.5f), dir, 0.1, 0.1, true);
-				break;
-			case Direction::UP:
-				new Tear(_scene, spawnPoint, dir, 0.1, 0.1, true);
-				new Tear(_scene, spawnPoint + PointF(0.5f, 0), dir, 0.1, 0.1, true);
-				new Tear(_scene, spawnPoint + PointF(-0.5f, 0), dir, 0.1, 0.1, true);
-				break;
-			case Direction::DOWN:
-				new Tear(_scene, spawnPoint, dir, 0.1, 0.1, true);
-				new Tear(_scene, spawnPoint + PointF(0.5f, 0), dir, 0.1, 0.1, true);
-				new Tear(_scene, spawnPoint + PointF(-0.5f, 0), dir, 0.1, 0.1, true);
-				break;
-			default:
-				break;
-		}
+		Isaac* isaac = static_cast<GameScene*>(_scene)->player();
+		Vec2Df dir = (isaac->rect().center() - spawnPoint).norm();
+		float angle = atan2(dir.y, dir.x);
+		// Tear Center
+		new Tear(_scene, spawnPoint, dir, 0.1f, 0.1f, true, 5);
+		// Tear Up
+		dir = Vec2Df(cos(angle + 0.3f), sin(angle + 0.3f));
+		new Tear(_scene, spawnPoint, dir, 0.1, 0.1, true, 5);
+		// Tear Down
+		dir = Vec2Df(cos(angle - 0.3f), sin(angle - 0.3f));
+		new Tear(_scene, spawnPoint, dir, 0.1, 0.1, true, 5);
 	}
 }
 

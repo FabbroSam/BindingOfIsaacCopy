@@ -36,7 +36,7 @@ public:
 
 	virtual void update(float dt) override;
 
-	void shoot(Direction dir);
+	void shoot();
 	void wobble() {};
 	virtual void trigger() override {};
 

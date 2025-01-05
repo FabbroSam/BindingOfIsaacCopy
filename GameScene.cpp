@@ -209,7 +209,7 @@ void GameScene::spawnMobs()
 
 	if (_room->type() == RoomType::NORMAL && _room->state() == RoomState::ACTIVE)
 	{
-		if (rand() % 2)
+		if (false)//!_room->isEmpty() )
 		{
 			int amount = rand() % 6;
 			if (amount)
@@ -226,9 +226,8 @@ void GameScene::spawnMobs()
 		}
 		else
 		{
-			int amount = rand() % 3;
-			if (amount && _spawnIndex<2)
-				Host* newHost = new Host(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 1.5f);
+			Host* newHost = new Host(this, PointF(this->room()->rect().center().x,this->room()->rect().center().y), 1.5f);
+
 			_room->changeStateRoom();
 		}
 	}
