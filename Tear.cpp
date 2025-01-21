@@ -14,6 +14,7 @@
 #include "Coin.h"
 #include "Rock.h"
 #include "Host.h"
+#include "Door.h"
 using namespace agp;
 
 
@@ -66,6 +67,43 @@ Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, flo
         _vel = { 0.0f, 0.0f };
         break;
     }
+
+    //_shadow = new ShadowTear(scene, pos + PointF({ 0.34f,1 }), _vel, 5);
+    _shadow = new RenderableObject(scene, RectF(pos.x + 0.34f, pos.y + 1.3f, 0.37f, 0.23f), _sprites["shadow"], 5);
+
+    if (_red)
+        _sprite = _sprites["tear_red"];
+    else
+        _sprite = _sprites["tear"];
+}
+
+Tear::Tear(Scene* scene, const PointF& pos, Vec2Df dir, float x_velIsaac, float y_velIsaac, bool red, int layer)
+    : DynamicObject(scene, RectF(pos.x, pos.y, 1.2f, 1.2f), nullptr, layer)
+{
+    _sprites["tear"] = SpriteFactory::instance()->get("tear_default");
+    _sprites["tear_explosion"] = SpriteFactory::instance()->get("tear_explosion");
+    _sprites["tear_red"] = SpriteFactory::instance()->get("tear_red");
+    _sprites["tear_red_explosion"] = SpriteFactory::instance()->get("tear_red_explosion");
+    _sprites["tear_wet"] = SpriteFactory::instance()->get("tear_wet");
+    _sprites["shadow"] = SpriteFactory::instance()->get("shadow");
+
+    _destroy = true;
+    _red = red;
+
+    _collider.adjust(0.43f, 0.37f, -0.4f, -0.4f);
+
+    //fisica
+    pos0 = _rect.pos;
+    _absVel = 6.0f;
+    _vel = { 0.0f, 0.0f };
+    _x_dec_rel = 0;
+    _y_dec_rel = 0;
+    _x_velIsaac = 0;
+    _y_velIsaac = 0;
+
+    float distanceMax = 8.5f;
+    _distance = distanceMax;
+    _vel = _absVel * dir;
 
     //_shadow = new ShadowTear(scene, pos + PointF({ 0.34f,1 }), _vel, 5);
     _shadow = new RenderableObject(scene, RectF(pos.x + 0.34f, pos.y + 1.3f, 0.37f, 0.23f), _sprites["shadow"], 5);
@@ -183,8 +221,25 @@ bool Tear::collidableWith(CollidableObject* obj)
         if (obj->to<Isaac*>() || obj->to<Coin*>())
             return false;
     }
- 
+    
+    StaticObject* sobj = obj->to<StaticObject*>();
+    if (sobj)
+    {
+        
+        if (sobj->name().find("up") == 0)
+        {
+            return false;
+        }
+    }
 
+    Door* dobj = obj->to<Door*>();
+    if (dobj)
+    {
+        if (dobj->doorPosition() == DoorPosition::TOP)
+        {
+            return false;
+        }
+    }
 
     return true;
 }

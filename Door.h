@@ -46,9 +46,11 @@ class agp::Door : public StaticObject
 		Door(Scene* scene, const RectF& rect, RoomType type, DoorPosition pos, float angle = 0, SDL_RendererFlip flip = SDL_FLIP_NONE);
 		virtual ~Door() {};
 
+		//get/set
+		DoorPosition doorPosition() { return _pos; }
 
+		//utility
 		void Draw();
-
 		void openClose();
 		void offLight();
 

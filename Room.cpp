@@ -46,6 +46,7 @@ Room::Room(Scene* scene,
 	_doorDown = nullptr;
 	_doorRight = nullptr;
 	_doorLeft = nullptr;
+	_isEmpty = false;
 
 	Draw();
 
@@ -124,9 +125,9 @@ void Room::Draw()
 	new StaticObject(_scene, RectF(_x, _y + 7 - 0.75f, 2, 5 + 0.75f), spriteLoader->get("wall"));
 	//new DynamicObject(_scene, RectF(_x, _y, 1, 12), spriteLoader->get("upWall"));
 	//up						   _
-	new StaticObject(_scene, RectF(_x + 2, _y, 5 + 0.6f, 2), spriteLoader->get("wall"));
-	new StaticObject(_scene, RectF(_x + 2 + 7 - 0.6f, _y, 5 + 0.6f, 2), spriteLoader->get("wall"));
-	//new DynamicObject(_scene, RectF(_x, _y, 16, 1), spriteLoader->get("upWall"));
+	new StaticObject(_scene, RectF(_x + 2, _y, 5 + 0.6f, 2), spriteLoader->get("upWall"));
+	new StaticObject(_scene, RectF(_x + 2 + 7 - 0.6f, _y, 5 + 0.6f, 2), spriteLoader->get("upWall"));
+	new StaticObject(_scene, RectF(_x, _y, 16, 1), spriteLoader->get("wall"));
 	//down						   _
 	new StaticObject(_scene, RectF(_x + 2, _y + 10, 5 + 0.6f, 2), spriteLoader->get("wall"));
 	new StaticObject(_scene, RectF(_x + 2 + 7 - 0.6f, _y + 10, 5 + 0.6f, 2), spriteLoader->get("wall"));
@@ -202,9 +203,11 @@ void Room::Draw()
 				for (int i = 0; i < 8; i++)
 					new Rock(_scene, { vec1[i][0] * 1.4f + _x + 8 - 1.4f / 2, vec1[i][1] * 1.4f + _y + 6 + 0 - 1.4f / 2 });
 			}
-			if (cases == 1)
+			else if (cases == 1)
 				for (int i = 0; i < 8; i++)
 					new Rock(_scene, { (rand() % 5 - 2) * 1.4f + _x + 8 - 1.4f / 2, (rand() % 5 - 2) * 1.4f + _y + 6 + 0 - 1.4f / 2 });
+			else
+				_isEmpty = true;
 		}
 		else
 		{
@@ -218,9 +221,11 @@ void Room::Draw()
 				for (int i = 0; i < 8; i++)
 					new Poop(_scene, { vec1[i][0] * 1.4f + _x + 8 - 1.4f / 2, vec1[i][1] * 1.4f + _y + 6 + 0 - 1.4f / 2 });
 			}
-			if (cases == 1)
+			else if (cases == 1)
 				for (int i = 0; i < 8; i++)
 					new Poop(_scene, { (rand() % 5 - 2) * 1.4f + _x + 8 - 1.4f / 2, (rand() % 5 - 2) * 1.4f + _y + 6 + 0 - 1.4f / 2 });
+			else
+				_isEmpty = true;
 		}
 	}
 	if (_roomType == RoomType::INITIAL || _roomType == RoomType::NORMAL)
