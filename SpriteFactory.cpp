@@ -187,9 +187,9 @@ Sprite* SpriteFactory::get(const std::string& id)
 	else if (id == "poop")
 		return new Sprite(_spriteSheets["poop"], RectF(0, 0, 32, 32), "poop");
 	else if (id == "poop_1")
-		return new Sprite(_spriteSheets["poop"], RectF(1*32, 0, 32, 32), "poop");
+		return new Sprite(_spriteSheets["poop"], RectF(1 * 32, 0, 32, 32), "poop");
 	else if (id == "poop_2")
-		return new Sprite(_spriteSheets["poop"], RectF(2*32, 0, 32, 32), "poop");
+		return new Sprite(_spriteSheets["poop"], RectF(2 * 32, 0, 32, 32), "poop");
 	else if (id == "poop_3")
 		return new Sprite(_spriteSheets["poop"], RectF(3 * 32, 0, 32, 32), "poop");
 	else if (id == "poop_4")
@@ -197,7 +197,7 @@ Sprite* SpriteFactory::get(const std::string& id)
 	else if (id == "poop_gold")
 		return new Sprite(_spriteSheets["poop"], RectF(0, 3 * 32, 32, 32), "poop");
 	else if (id == "poop_gold_1")
-		return new Sprite(_spriteSheets["poop"], RectF(1 * 32, 3*32, 32, 32), "poop");
+		return new Sprite(_spriteSheets["poop"], RectF(1 * 32, 3 * 32, 32, 32), "poop");
 	else if (id == "poop_gold_2")
 		return new Sprite(_spriteSheets["poop"], RectF(2 * 32, 3 * 32, 32, 32), "poop");
 	else if (id == "poop_gold_3")
@@ -206,11 +206,11 @@ Sprite* SpriteFactory::get(const std::string& id)
 		return new Sprite(_spriteSheets["poop"], RectF(4 * 32, 3 * 32, 32, 32), "poop");
 	else if (id == "poop_explosion")
 	{
-		rects.push_back(moveBy(RectI(0, 0, 64, 64), 0, 0, 64, 64,0,0));
-		rects.push_back(moveBy(RectI(0, 0, 64, 64), 1, 0, 64, 64,0,0));
-		rects.push_back(moveBy(RectI(0, 0, 64, 64), 2, 0, 64, 64,0,0));
-		rects.push_back(moveBy(RectI(0, 0, 64, 64), 3, 0, 64, 64,0,0));
-		rects.push_back(moveBy(RectI(0, 0, 64, 64), 0, 1, 64, 64,0,0));
+		rects.push_back(moveBy(RectI(0, 0, 64, 64), 0, 0, 64, 64, 0, 0));
+		rects.push_back(moveBy(RectI(0, 0, 64, 64), 1, 0, 64, 64, 0, 0));
+		rects.push_back(moveBy(RectI(0, 0, 64, 64), 2, 0, 64, 64, 0, 0));
+		rects.push_back(moveBy(RectI(0, 0, 64, 64), 3, 0, 64, 64, 0, 0));
+		rects.push_back(moveBy(RectI(0, 0, 64, 64), 0, 1, 64, 64, 0, 0));
 		//rects.push_back(moveBy(RectI(0, 0, 64, 64), 1, 1, 64, 64,0,0));
 		//rects.push_back(moveBy(RectI(0, 0, 64, 64), 2, 1, 64, 64, 0, 0));
 		//rects.push_back(moveBy(RectI(0, 0, 64, 64), 3, 1, 64, 64, 0, 0));
@@ -221,7 +221,7 @@ Sprite* SpriteFactory::get(const std::string& id)
 	else if (id == "poop_gibs")
 	{
 		int cases = rand() % 5;
-		if(cases == 0)
+		if (cases == 0)
 			return new Sprite(_spriteSheets["poop_gibs"], RectF(0 * 16, 0 * 16, 16, 16), "poop_gibs");
 		else if (cases == 1)
 			return new Sprite(_spriteSheets["poop_gibs"], RectF(1 * 16, 0 * 16, 16, 16), "poop_gibs");
@@ -537,24 +537,24 @@ Sprite* SpriteFactory::get(const std::string& id)
 	else if (id == "tear_default")
 		return new Sprite(_spriteSheets["tears"], RectI(192, 0, 32, 32), "tear_default");
 	else if (id == "tear_wet")
-		return new Sprite(_spriteSheets["shadow"], RectF(0, 0, 120, 49), "tear_wet", SDL_FLIP_NONE, rand()%5 + 5);
+		return new Sprite(_spriteSheets["shadow"], RectF(0, 0, 120, 49), "tear_wet", SDL_FLIP_NONE, rand() % 5 + 5);
 	else if (id == "item_coin")
 	{
-		rects.push_back(moveBy(RectF(0, 1, 32, 16), 0, 0, 32, 16,0,0));
-		rects.push_back(moveBy(RectF(0, 1, 32, 16), 1, 0, 32, 16,0,0));
-		rects.push_back(moveBy(RectF(0, 1, 32, 16), 0, 1, 32, 16,0,0));
-		rects.push_back(moveBy(RectF(0, 1, 32, 16), 1, 1, 32, 16,0,0));
-		rects.push_back(moveBy(RectF(0, 1, 32, 16), 0, 2, 32, 16,0,0));
-		rects.push_back(moveBy(RectF(0, 1, 32, 16), 1, 2, 32, 16,0,0));
+		rects.push_back(moveBy(RectF(0, 1, 32, 16), 0, 0, 32, 16, 0, 0));
+		rects.push_back(moveBy(RectF(0, 1, 32, 16), 1, 0, 32, 16, 0, 0));
+		rects.push_back(moveBy(RectF(0, 1, 32, 16), 0, 1, 32, 16, 0, 0));
+		rects.push_back(moveBy(RectF(0, 1, 32, 16), 1, 1, 32, 16, 0, 0));
+		rects.push_back(moveBy(RectF(0, 1, 32, 16), 0, 2, 32, 16, 0, 0));
+		rects.push_back(moveBy(RectF(0, 1, 32, 16), 1, 2, 32, 16, 0, 0));
 		return new AnimatedSprite(_spriteSheets["item_coin"], rects, 10, "coin");
 	}
 	else if (id == "item_coin_effect")
 	{
-		rects.push_back(moveBy(RectF(64, 0, 64, 64), 0, 0, 64, 64,0,0));
-		rects.push_back(moveBy(RectF(64, 0, 64, 64), 1, 0, 64, 64,0,0));
-		rects.push_back(moveBy(RectF(64, 0, 64, 64), 2, 0, 64, 64,0,0));
-		rects.push_back(moveBy(RectF(64, 0, 64, 64), 0, 1, 64, 64,0,0));
-		rects.push_back(moveBy(RectF(64, 0, 64, 64), 1, 1, 64, 64,0,0));
+		rects.push_back(moveBy(RectF(64, 0, 64, 64), 0, 0, 64, 64, 0, 0));
+		rects.push_back(moveBy(RectF(64, 0, 64, 64), 1, 0, 64, 64, 0, 0));
+		rects.push_back(moveBy(RectF(64, 0, 64, 64), 2, 0, 64, 64, 0, 0));
+		rects.push_back(moveBy(RectF(64, 0, 64, 64), 0, 1, 64, 64, 0, 0));
+		rects.push_back(moveBy(RectF(64, 0, 64, 64), 1, 1, 64, 64, 0, 0));
 		return new AnimatedSprite(_spriteSheets["item_coin"], rects, 15, "item_coin_effect", false);
 	}
 	else if (id == "item_heart")
@@ -564,11 +564,11 @@ Sprite* SpriteFactory::get(const std::string& id)
 	else if (id == "item_poison")
 		return new Sprite(_spriteSheets["item_poison"], RectF(0, 0, 32, 32), "item_poison");
 
-		//DUKE OF FLIES (MOB)
+	//DUKE OF FLIES (MOB)
 	else if (id == "duke_1")
-		return new Sprite(_spriteSheets["duke"], RectF(154, 0, 77, 66), "duke");		
+		return new Sprite(_spriteSheets["duke"], RectF(154, 0, 77, 66), "duke");
 	else if (id == "duke_2")
-		return new Sprite(_spriteSheets["duke"], RectF(0, 0, 77, 66), "duke");	
+		return new Sprite(_spriteSheets["duke"], RectF(0, 0, 77, 66), "duke");
 	else if (id == "duke_3")
 		return new Sprite(_spriteSheets["duke"], RectF(231, 0, 77, 66), "duke");
 	else if (id == "duke_4")
@@ -593,10 +593,10 @@ Sprite* SpriteFactory::get(const std::string& id)
 		rects.push_back(moveBy(RectF(0, 68, 58, 55), 1, 0, 58, 55));
 		rects.push_back(moveBy(RectF(0, 68, 58, 55), 2, 0, 58, 55));
 		rects.push_back(moveBy(RectF(0, 68, 58, 55), 3, 0, 58, 55));
-		rects.push_back(moveBy(RectF(0, 128, 62,61), 0, 0 ,62, 61));
-		rects.push_back(moveBy(RectF(0, 128, 62,61), 1, 0, 62, 61));
-		rects.push_back(moveBy(RectF(0, 128, 62,61), 2, 0, 62, 61));
-		rects.push_back(moveBy(RectF(0, 128, 62,61), 3, 0, 62, 61));
+		rects.push_back(moveBy(RectF(0, 128, 62, 61), 0, 0, 62, 61));
+		rects.push_back(moveBy(RectF(0, 128, 62, 61), 1, 0, 62, 61));
+		rects.push_back(moveBy(RectF(0, 128, 62, 61), 2, 0, 62, 61));
+		rects.push_back(moveBy(RectF(0, 128, 62, 61), 3, 0, 62, 61));
 		rects.push_back(moveBy(RectF(0, 193, 62, 61), 0, 0, 62, 61));
 		rects.push_back(moveBy(RectF(0, 193, 62, 61), 1, 0, 62, 61));
 		return new AnimatedSprite(_spriteSheets["fly"], rects, 28, "fly");
@@ -604,22 +604,22 @@ Sprite* SpriteFactory::get(const std::string& id)
 
 	else if (id == "bloodExplotion")
 	{
-		rects.push_back(moveBy(RectF(0, 0, 145, 110), 0, 0, 144, 103,0,0));
-		rects.push_back(moveBy(RectF(0, 0, 145, 110), 1, 0, 144, 103,0,0));
-		rects.push_back(moveBy(RectF(0, 0, 145, 110), 2, 0, 144, 103,0,0));
-		rects.push_back(moveBy(RectF(0, 0, 145, 110), 0, 1, 144, 103,0,0));
-		rects.push_back(moveBy(RectF(0, 0, 145, 110), 1, 1, 144, 103,0,0));
-		rects.push_back(moveBy(RectF(0, 0, 145, 110), 2, 1, 144, 103,0,0));
-		rects.push_back(moveBy(RectF(0, 0, 145, 110), 0, 2, 144, 103,0,0));
-		rects.push_back(moveBy(RectF(0, 0, 145, 110), 1, 2, 144, 103,0,0));
-		rects.push_back(moveBy(RectF(0, 0, 145, 110), 2, 2, 144, 103,0,0));
-		rects.push_back(moveBy(RectF(0, 0, 145, 110), 0, 3, 144, 103,0,0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 110), 0, 0, 144, 103, 0, 0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 110), 1, 0, 144, 103, 0, 0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 110), 2, 0, 144, 103, 0, 0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 110), 0, 1, 144, 103, 0, 0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 110), 1, 1, 144, 103, 0, 0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 110), 2, 1, 144, 103, 0, 0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 110), 0, 2, 144, 103, 0, 0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 110), 1, 2, 144, 103, 0, 0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 110), 2, 2, 144, 103, 0, 0));
+		rects.push_back(moveBy(RectF(0, 0, 145, 110), 0, 3, 144, 103, 0, 0));
 		return new AnimatedSprite(_spriteSheets["bloodExplotion"], rects, 23, "bloodExplotion");
-		}
-	
+	}
+
 	else if (id == "blood")
 	{
-		return new Sprite(_spriteSheets["bloodExplotion"], RectF(0, 3*110, 145, 100), "blood");
+		return new Sprite(_spriteSheets["bloodExplotion"], RectF(0, 3 * 110, 145, 100), "blood");
 	}
 
 
@@ -647,11 +647,11 @@ Sprite* SpriteFactory::get(const std::string& id)
 		rects.push_back(moveBy(RectF(0, 0, 64, 66), 2, 3, 64, 66));
 		return new  AnimatedSprite(_spriteSheets["poof"], rects, 23, "poof");
 	}
-	
+
 	else if (id == "debug")
 		return nullptr;
 
-	else if(id=="blackglow")
+	else if (id == "blackglow")
 		return new Sprite(_spriteSheets["blackglow"], RectF(0, 0, 112, 112), "blackglow", SDL_FLIP_NONE, 75);
 
 	if (id == "tear_red")
@@ -663,16 +663,17 @@ Sprite* SpriteFactory::get(const std::string& id)
 			}
 		}
 		return new AnimatedSprite(_spriteSheets["explosion"], rects, 20, "tear_explosion");
-		}
-	else if (id == "tear_red_explosion") {
+	}
+	else if (id == "tear_red_explosion") 
+	{
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				rects.push_back(RectI(j * 64, i * 64, 64, 64));
 			}
 		}
 		return new AnimatedSprite(_spriteSheets["explosion_red"], rects, 20, "tear_red_explosion");
-		}
-
+	}
+	
 	if (id == "host_0")
 		return new Sprite(_spriteSheets["host"], RectF(0, 0, 32, 44), "host");
 	else if (id == "host_1")
@@ -680,7 +681,7 @@ Sprite* SpriteFactory::get(const std::string& id)
 	else if (id == "host_2")
 		return new Sprite(_spriteSheets["host"], RectF(64, 0, 32, 44), "host");
 
-
+	
 	else
 	{
 		std::cerr << "Cannot find sprite \"" << id << "\"\n";
