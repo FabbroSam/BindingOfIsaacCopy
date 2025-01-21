@@ -17,6 +17,8 @@ protected:
 	float _accumulator;
 	float _wobbleAccumulator;
 	bool _wobbling;
+	int n_fly;
+	static const int _max_flies = 12;
 	RenderableObject* _blood;
 	RenderableObject* _blackglow;
 	Direction _x_prev_dir;

@@ -245,18 +245,19 @@ void GameScene::spawnMobs()
 		{
 			Game::instance()->uiMonster()->setActiveUIMonster();	
 			_vsMonster = false;
-
-			_schedule = new Scheduler(1.8f, [this]() 
+	
+			_schedule = new Scheduler(1.8f, [this]()
 				{
-					new Duke(this, PointF(this->room()->rect().center().x-1, this->room()->rect().center().y - 1), 6.5f);				
 					_room->changeStateRoom();
 					//_room->offLightDoor(); non funge
-				});	
+					new Duke(this, PointF(this->room()->rect().center().x - 1, this->room()->rect().center().y - 1), 6.5f);
+				});
 		}
 	}
-
-
 }
+
+
+
 
 void GameScene::event(SDL_Event& evt)
 {

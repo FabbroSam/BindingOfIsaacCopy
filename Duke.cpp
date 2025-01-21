@@ -41,11 +41,21 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 
 	//game parameters
 	_life = 20.0f;
+	n_fly = 0;
 
 	//_accumulator = 0;
 
+
 	spawnFly();
-	schedule("spawn_fly", 9.2f, [this]() {spawnFly();}, -1);
+	schedule("spawn_fly", 9.2f, [this]() 
+	{
+		n_fly += 4;
+			
+		if (n_fly < _max_flies && n_fly > -4)
+			spawnFly();
+		else
+			n_fly = -4;
+	}, -1);
 }
 
 void Duke::spawnFly()
@@ -57,11 +67,11 @@ void Duke::spawnFly()
 	_x_dir = Direction::NONE;
 	_y_dir = Direction::NONE;
 
-	//messi fuori così spawna, si ferma e riparte dopo l'animazione dello spawn
-	new Fly(_scene, PointF(_rect.pos.x, _rect.pos.y), 2.5f);
+	new Fly(_scene, PointF(_rect.pos.x, _rect.pos.y), 0);
 	new Fly(_scene, PointF(_rect.pos.x + _rect.size.x - 1, _rect.pos.y), 2.5f);
 	new Fly(_scene, PointF(_rect.pos.x, _rect.pos.y + _rect.size.y - 1), 2.5f);
 	new Fly(_scene, PointF(_rect.pos.x + _rect.size.x - 1, _rect.pos.y + _rect.size.y - 1), 2.5f);
+
 
 	schedule("change_dir", 0.8f, [this]() 
 		{ 	

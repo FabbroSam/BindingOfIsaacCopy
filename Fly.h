@@ -3,7 +3,6 @@
 #include <map>
 #include <string>
 
-
 namespace agp
 {
 	class Fly;
