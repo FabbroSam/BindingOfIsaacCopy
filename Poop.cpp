@@ -10,7 +10,7 @@ using namespace agp;
 
 
 Poop::Poop(Scene* scene, const PointF& pos, int layer)
-    : StaticObject(scene, RectF(pos.x, pos.y, 1.4f, 1.4f), nullptr, 3)
+    : StaticObject(scene, RectF(pos.x, pos.y, 1.4f, 1.4f), nullptr, 2)
 {
     _sprites["poop"] = SpriteFactory::instance()->get("poop");
     _sprites["poop1"] = SpriteFactory::instance()->get("poop_1");

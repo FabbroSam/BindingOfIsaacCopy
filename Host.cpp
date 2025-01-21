@@ -22,6 +22,7 @@ Host::Host(Scene* scene, const PointF& pos, float spawnDelay)
 	_sprites["host_1"] = SpriteFactory::instance()->get("host_1");
 	_sprites["host_2"] = SpriteFactory::instance()->get("host_2");
 	_sprites["bloodExplotion"] = SpriteFactory::instance()->get("bloodExplotion");
+	_sprites["blood"] = SpriteFactory::instance()->get("blood");
 
 	//setRect(_rect * Vec2Df(1.0f, 1.1f));
 	_collider.adjust(0.4f, 1.3f, -0.4f, 0.0f);
@@ -146,6 +147,7 @@ void Host::hit(float damage, Vec2Df _dir)
 
 void Host::die()
 {
+	_dying = true;
 	_collidable = false;
 
 	_shadow->setVisible(false);

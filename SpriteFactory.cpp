@@ -104,9 +104,6 @@ SpriteFactory::SpriteFactory()
 	// POOF EFFECT
 	_spriteSheets["poof"] = loadTexture(renderer, "../sprites/poof.png", { 147, 187, 236 });
 
-	//DUKE BLACKGLOW 
-	_spriteSheets["blackglow"] = loadTexture(renderer, "../sprites/blackglow.png", { 147, 187, 236 });
-
 	std::vector<RectI> vecRect;
 	SDL_Texture* base = loadTextureSequence(renderer, "../image", vecRect, Point(0, 0), Point(52, 52));
 	RectI src(0, 0, 180, 180);

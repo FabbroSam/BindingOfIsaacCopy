@@ -22,6 +22,7 @@ Enemy::Enemy(Scene* scene, const RectF& rect, Sprite* sprite, float spawnDelay, 
 	//animation logic
 	_fixSize = rect.size;
 	_trigger = false;
+	//schedule("setBounce", 3.0f, [this]() {	_bounceDirection = 1; });
 	_bounceDirection = 1;
 	_bounceCycle = 0;
 

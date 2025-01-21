@@ -204,7 +204,7 @@ void GameScene::update(float timeToSimulate)
 
 void GameScene::spawnMobs()
 {
-	int _spawnIndex = 0;
+	int _spawnIndex = 1;
 	_spawnIndex++;
 
 	if (_room->type() == RoomType::NORMAL && _room->state() == RoomState::ACTIVE)

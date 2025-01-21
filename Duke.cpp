@@ -29,9 +29,7 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 
 	_sprites["blood"] = SpriteFactory::instance()->get("blood");
 	_sprites["bloodExplotion"] = SpriteFactory::instance()->get("bloodExplotion");
-	_sprites["blackglow"] = SpriteFactory::instance()->get("blackglow");
 
-	//phisic
 	_x_vel_max = 1.3f;
 	_y_vel_max = 1.3f;
 	_x_dir = rand() %2 ? Direction::RIGHT : Direction::LEFT;
@@ -48,7 +46,7 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 
 
 	spawnFly();
-	schedule("spawn_fly", 10.0f, [this]() {spawnFly();}, -1);
+	schedule("spawn_fly", 9.2f, [this]() {spawnFly();}, -1);
 }
 
 void Duke::spawnFly()
@@ -71,29 +69,6 @@ void Duke::spawnFly()
 			_x_dir = _x_prev_dir;
 			_y_dir = _y_prev_dir;
 		});
-}
-
-void Duke::wobble()
-{
-	if (_trigger)
-	{
-		if (_wobbling)
-		{
-			_rect.size.x += 0.05f * _bounceDirection;
-			_rect.size.y += 0.2f * _bounceDirection;
-
-			if (_rect.size.y >= _fixSize.y + 1.2f && _rect.size.x >= _fixSize.x + 0.1f)
-			{
-				_bounceDirection *= -1;
-			}
-
-			if (_rect.size.x <= _fixSize.x || _rect.size.y <= _fixSize.y)
-			{
-				_rect.size = _fixSize;
-				_bounceDirection = 0;
-			}
-		}
-	}
 }
 
 void Duke::hit(float damage, Vec2Df _dir)
@@ -134,10 +109,34 @@ void Duke::die()
 
 void Duke::trigger()
 {
-		_wobbling = true;
-		_trigger = true;
+	_wobbling = true;
+	_trigger = true;
 }
 
+void Duke::wobble()
+{
+	if (_wobbling)
+	{
+		_rect.size.x += 0.05f * _bounceDirection;
+		_rect.size.y += 0.2f * _bounceDirection;
+		std::cout << _bounceDirection << std::endl;
+
+		if (_rect.size.y >= _fixSize.y + 1.2f && _rect.size.x >= _fixSize.x + 0.1f)
+		{
+			_bounceDirection *= -1;
+			std::cout << _bounceDirection << std::endl;
+		}
+
+		if (_rect.size.x <= _fixSize.x || _rect.size.y <= _fixSize.y)
+		{
+			_rect.size = _fixSize;
+			_bounceDirection = 0;
+			std::cout << _bounceDirection << std::endl;
+			_wobbling = false;
+			_trigger = false;
+		}
+	}
+}
 
 void Duke::update(float dt)
 {
@@ -178,11 +177,13 @@ void Duke::update(float dt)
 		else if (_accumulator <= (index[0] + 4 * index[1] + index[2]))
 		{
 			trigger();
+			wobble();
 			_sprite = _sprites["duke_2"];
 		}
 		else if (_accumulator <= (index[0] + index[1] + index[2] + index[3]))
 		{
 			trigger();
+			wobble();
 			_sprite = _sprites["duke_4"];
 		}
 		else
