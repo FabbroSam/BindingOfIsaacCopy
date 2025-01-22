@@ -30,8 +30,8 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 	_sprites["blood"] = SpriteFactory::instance()->get("blood");
 	_sprites["bloodExplotion"] = SpriteFactory::instance()->get("bloodExplotion");
 
-	_x_vel_max = 1.3f;
-	_y_vel_max = 1.3f;
+	_x_vel_max = 1.4f;
+	_y_vel_max = 1.4f;
 	_x_dir = rand() %2 ? Direction::RIGHT : Direction::LEFT;
 	_y_dir = rand() % 2 ? Direction::DOWN : Direction::UP;
 	_x_acc = 25.0f;
@@ -40,25 +40,31 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 	_y_dec_rel = 0;
 
 	//game parameters
-	_life = 20.0f;
-	n_fly = 0;
+	_life = 14.0f;
+	_n_fly = 0;
+	_max_flies = 12;
 
-	//_accumulator = 0;
-
-
-	spawnFly();
-	schedule("spawn_fly", 9.2f, [this]() 
+	spawnFly(4);
+	schedule("spawn_fly", 11.5f, [this]() 
 	{
-		n_fly += 4;
-			
-		if (n_fly < _max_flies && n_fly > -4)
-			spawnFly();
+		int _n_fly = 0;
+		auto& objects = _scene->objects();
+		for (auto& obj : objects) 
+			if (obj->to<Fly*>()) 
+				_n_fly++;
+
+		int _toSpawn = _max_flies - _n_fly;
+		if (_toSpawn > 4)
+			spawnFly(4);
 		else
-			n_fly = -4;
+			spawnFly(_toSpawn);
+
+		std::cout << "n fly " << _n_fly << std::endl << "to spawn " << _toSpawn << std::endl;
+
 	}, -1);
 }
 
-void Duke::spawnFly()
+void Duke::spawnFly(int k)
 {
 	_x_prev_dir = _x_dir;
 	_y_prev_dir = _y_dir;
@@ -67,10 +73,16 @@ void Duke::spawnFly()
 	_x_dir = Direction::NONE;
 	_y_dir = Direction::NONE;
 
-	new Fly(_scene, PointF(_rect.pos.x, _rect.pos.y), 0);
-	new Fly(_scene, PointF(_rect.pos.x + _rect.size.x - 1, _rect.pos.y), 2.5f);
+	for (int i = 0; i < k - 2; i++)
+	{
+		new Fly(_scene, PointF(_rect.pos.x + (rand() % 3) - 1, _rect.pos.y + (rand() % 3) - 1), 0);
+		new Fly(_scene, PointF(_rect.pos.x - (rand() % 3) - 1, _rect.pos.y - (rand() % 3) - 1), 0);
+	}
+		
+	
+	/*new Fly(_scene, PointF(_rect.pos.x + _rect.size.x - 1, _rect.pos.y), 2.5f);
 	new Fly(_scene, PointF(_rect.pos.x, _rect.pos.y + _rect.size.y - 1), 2.5f);
-	new Fly(_scene, PointF(_rect.pos.x + _rect.size.x - 1, _rect.pos.y + _rect.size.y - 1), 2.5f);
+	new Fly(_scene, PointF(_rect.pos.x + _rect.size.x - 1, _rect.pos.y + _rect.size.y - 1), 2.5f);*/
 
 
 	schedule("change_dir", 0.8f, [this]() 

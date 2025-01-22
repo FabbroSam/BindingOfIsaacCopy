@@ -17,8 +17,8 @@ protected:
 	float _accumulator;
 	float _wobbleAccumulator;
 	bool _wobbling;
-	int n_fly;
-	static const int _max_flies = 12;
+	int _n_fly;
+	int _max_flies;
 	RenderableObject* _blood;
 	RenderableObject* _blackglow;
 	Direction _x_prev_dir;
@@ -37,7 +37,7 @@ public:
 
 	//setter of scheduling parameters such as sawn delay, collidable flag ecc...
 	void wobble();
-	void spawnFly();
+	void spawnFly(int k);
 	virtual void trigger() override;
 
 	virtual void update(float dt) override;

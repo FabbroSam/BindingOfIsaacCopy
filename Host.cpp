@@ -47,7 +47,7 @@ Host::Host(Scene* scene, const PointF& pos, float spawnDelay)
 
 
 	// game parameters
-	_life = 1.0f;
+	_life = 1.5f;
 }
 
 void Host::update(float dt)
