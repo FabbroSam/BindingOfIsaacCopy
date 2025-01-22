@@ -43,6 +43,9 @@ Fly::Fly(Scene* scene, const PointF& pos, float spawnDelay)
 	// game parameters
 	_life = 1.2f;
 
+	//se la mosca è duke salta il colore casuale
+	//da fare un (if mosca duke) non mira isaac
+
 	_black = rand() % 2;
 	if (_black)
 	{

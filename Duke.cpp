@@ -1,3 +1,4 @@
+#include <cmath>
 #include "Duke.h"
 #include "SpriteFactory.h"
 #include "GameScene.h"
@@ -42,29 +43,35 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 	//game parameters
 	_life = 14.0f;
 	_n_fly = 0;
-	_max_flies = 12;
+	_max_flies = 6;
+	_accumulator = 0;
+	_bounceCycle = 1;
+	_acc = 0;
+	_wobbling = false;
+	_fix_pos_x = _rect.pos.x;
 
-	spawnFly(4);
-	schedule("spawn_fly", 11.5f, [this]() 
-	{
-		int _n_fly = 0;
-		auto& objects = _scene->objects();
-		for (auto& obj : objects) 
-			if (obj->to<Fly*>()) 
-				_n_fly++;
 
-		int _toSpawn = _max_flies - _n_fly;
-		if (_toSpawn > 4)
-			spawnFly(4);
-		else
-			spawnFly(_toSpawn);
 
-		std::cout << "n fly " << _n_fly << std::endl << "to spawn " << _toSpawn << std::endl;
+	//schedule("spawn_fly", 11.5f, [this]() 
+	//{
+	//	int _n_fly = 0;
+	//	auto& objects = _scene->objects();
+	//	for (auto& obj : objects) 
+	//		if (obj->to<Fly*>()) 
+	//			_n_fly++;
 
-	}, -1);
+	//	int _toSpawn = _max_flies - _n_fly;
+	//	if (_toSpawn > 4)
+	//		spawnFly(4);
+	//	else
+	//		spawnFly(_toSpawn);
+
+	//	std::cout << "n fly " << _n_fly << std::endl << "to spawn " << _toSpawn << std::endl;
+
+	//}, -1);
 }
 
-void Duke::spawnFly(int k)
+void Duke::spawnFly()
 {
 	_x_prev_dir = _x_dir;
 	_y_prev_dir = _y_dir;
@@ -73,10 +80,20 @@ void Duke::spawnFly(int k)
 	_x_dir = Direction::NONE;
 	_y_dir = Direction::NONE;
 
-	for (int i = 0; i < k - 2; i++)
+	int _n_fly = 0;
+	auto& objects = _scene->objects();
+	for (auto& obj : objects)
+		if (obj->to<Fly*>())
+			_n_fly++;
+
+	int _toSpawn = _max_flies - _n_fly;
+
+	std::cout << "n fly " << _n_fly << std::endl << "to spawn " << _toSpawn << std::endl;
+
+
+	for (int i = 0; i < _toSpawn; i++)
 	{
 		new Fly(_scene, PointF(_rect.pos.x + (rand() % 3) - 1, _rect.pos.y + (rand() % 3) - 1), 0);
-		new Fly(_scene, PointF(_rect.pos.x - (rand() % 3) - 1, _rect.pos.y - (rand() % 3) - 1), 0);
 	}
 		
 	
@@ -134,29 +151,66 @@ void Duke::trigger()
 	_trigger = true;
 }
 
-void Duke::wobble()
+void Duke::wobble(float dt)
 {
 	if (_wobbling)
 	{
-		// Incrementa o decrementa la dimensione in base alla direzione del rimbalzo
-		_rect.size.x += 0.05f * _bounceDirection;
-		_rect.size.y += 0.2f * _bounceDirection;
-
-		// Inverti direzione se la dimensione supera i limiti
-		if (_rect.size.y >= _fixSize.y + 1.2f || _rect.size.y <= _fixSize.y)
+		if (isSchedule("wobble"))
 		{
-			_bounceDirection *= -1;
+			_fix_pos_x = _rect.pos.x;
+			_x_prev_dir = _x_dir;
+			_y_prev_dir = _y_dir;
+			_prev_vel = _vel;
+			_acc += dt;
+
 		}
 
-		// Se il rimbalzo è completato, ferma il wobble
-		if (_rect.size.x <= _fixSize.x && _rect.size.y <= _fixSize.y)
-		{
-			_rect.size = _fixSize; // Reset dimensione originale
-			_bounceDirection = 1; // Ripristina direzione iniziale
-			_wobbling = false;    // Ferma l'oscillazione
-			_trigger = false;     // Disabilita il trigger
-		}
+		schedule("wobble", 0.2f, [this]() 
+			{
+				if (_acc <= 0.3f)
+				{
+					_vel = { 0,0 };
+					_x_dir = Direction::NONE;
+					_y_dir = Direction::NONE;
+
+					_rect.size.x = 0.6f * std::sin(30.0f * _acc) * std::exp(-9.0f * _acc) + _fixSize.x;
+					_rect.pos.x = -0.3f * std::sin(30.0f * _acc) * std::exp(-9.0f * _acc) + _fix_pos_x;
+					//_rect.size.y = -1.3f * std::sin(30.0f * _acc) * std::exp(-9.0f * _acc) + _fixSize.y;
+				}
+				else
+				{
+					_x_dir = _x_prev_dir;
+					_y_dir = _y_prev_dir;
+					_vel = _prev_vel;
+					_rect.size.x = _fixSize.x;
+					_rect.pos.x = _fix_pos_x;
+					_rect.size.y = _fixSize.y;
+					_acc = 0;
+					_wobbling = false;
+				}
+			},0,false);
+		
 	}
+	//{
+	//	// Incrementa o decrementa la dimensione in base alla direzione del rimbalzo
+	//	_rect.size.x += 0.05f * _bounceDirection;
+	//	_rect.size.y += 0.2f * _bounceDirection;
+
+	//	// Inverti direzione se la dimensione supera i limiti
+	//	if (_rect.size.y >= _fixSize.y + 1.4f || _rect.size.y <= _fixSize.y - 1.4f)
+	//	{
+	//		_bounceDirection *= -1;
+	//	}
+
+	//	// Se il rimbalzo è completato, ferma il wobble
+	//	if (_rect.size.x <= _fixSize.x && _rect.size.y <= _fixSize.y)
+	//	{
+	//		_rect.size = _fixSize; // Reset dimensione originale
+	//		_bounceDirection = 1; // Ripristina direzione iniziale
+	//		_wobbling = false;    // Ferma l'oscillazione
+	//		_trigger = false;     // Disabilita il trigger
+	//	}
+	//}
 }
 
 
@@ -165,13 +219,13 @@ void Duke::update(float dt)
 	Enemy::update(dt);
 
 	_accumulator += dt;
-	float index[4];
 
 	// Inserimento secondi per ogni animazione nell'array
 	index[0] = 5.0f;
-	index[1] = 0.2f;
+	index[1] = 0.4f;
 	index[2] = 4.0f;
-	index[3] = 3.0f;
+	index[3] = 2.0f;
+	index[4] = 2.0f;
 
 	_shadow->setRect(_rect * Vec2Df(0.5f, 0.3f) + Vec2Df(0.85f, 2.7f));
 
@@ -181,51 +235,58 @@ void Duke::update(float dt)
 		{
 			if (_sprite != _sprites["duke_1"]) 
 			{
-				_sprite = _sprites["duke_1"];
+				std::cout << "duke1\n";
 				trigger();
+				_sprite = _sprites["duke_1"];
 			}
 		}
 		else if (_accumulator <= (index[0] + index[1]))
 		{
 			if (_sprite != _sprites["duke_2"])
 			{
-				_sprite = _sprites["duke_2"];
+				std::cout << "duke2\n";
 				trigger();
+				_sprite = _sprites["duke_2"];
 			}
 		}
 		else if (_accumulator <= (index[0] + index[1] + index[2]))
 		{
 			if (_sprite != _sprites["duke_3"])
 			{
+				std::cout << "duke3\n";
+				trigger();
 				_sprite = _sprites["duke_3"];
-				trigger();
-			}
-		}
-		else if (_accumulator <= (index[0] + 4 * index[1] + index[2]))
-		{
-			if (_sprite != _sprites["duke_2"])
-			{
-				_sprite = _sprites["duke_2"];
-				trigger();
 			}
 		}
 		else if (_accumulator <= (index[0] + index[1] + index[2] + index[3]))
 		{
+			if (_sprite != _sprites["duke_2"] && !isSchedule("delay_sprite"))
+			{
+				spawnFly();
+				std::cout << "duke2.2\n";
+				schedule("delay_sprite", 0.5f, [this]() 
+					{
+					trigger();
+					_sprite = _sprites["duke_2"];
+					},0,false);
+				
+			}
+		}
+		else if (_accumulator <= (index[0] + 4 * index[1] + index[2] + index[3] + index[4]))
+		{
 			if (_sprite != _sprites["duke_4"])
 			{
-				_sprite = _sprites["duke_4"];
+				std::cout << "duke4\n";
 				trigger();
+				_sprite = _sprites["duke_4"];
 			}
 		}
 		else
 		{
 			_accumulator = 0;
 		}
-
-		if (_wobbling)
-		{
-			wobble();
-		}
+		
+		wobble(dt);
 	}
 }
 
@@ -236,11 +297,11 @@ bool Duke::collision(CollidableObject* with, Direction fromDir)
 
 	if (with->to<StaticObject*>())
 	{
-		if (fromDir == Direction::UP || fromDir == Direction::DOWN)
-			_y_dir = inverse(fromDir);
-
 		if (fromDir == Direction::LEFT || fromDir == Direction::RIGHT)
 			_x_dir = inverse(fromDir);
+
+		if (fromDir == Direction::UP || fromDir == Direction::DOWN)
+			_y_dir = inverse(fromDir);
 	}
 	return true;
 }

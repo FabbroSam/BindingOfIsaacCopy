@@ -19,6 +19,9 @@ protected:
 	bool _wobbling;
 	int _n_fly;
 	int _max_flies;
+	float index[5]{ 0 };
+	float _acc;
+	float _fix_pos_x;
 	RenderableObject* _blood;
 	RenderableObject* _blackglow;
 	Direction _x_prev_dir;
@@ -36,8 +39,8 @@ public:
 
 
 	//setter of scheduling parameters such as sawn delay, collidable flag ecc...
-	void wobble();
-	void spawnFly(int k);
+	void wobble(float dt);
+	void spawnFly();
 	virtual void trigger() override;
 
 	virtual void update(float dt) override;
