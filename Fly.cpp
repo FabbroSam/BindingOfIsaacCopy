@@ -1,4 +1,5 @@
-#include "Fly.h"
+ï»¿#include "Fly.h"
+#include "Duke.h"
 #include "SpriteFactory.h"
 #include "StaticObject.h"
 #include "GameScene.h"
@@ -13,8 +14,8 @@
 
 using namespace agp;
 
-Fly::Fly(Scene* scene, const PointF& pos, float spawnDelay)
-	:Enemy(scene, RectF(pos.x, pos.y, 1.1f, 1.1f), nullptr, spawnDelay, 10)
+Fly::Fly(Scene* scene, const PointF& pos, float spawnDelay, bool duke_fly)
+	:Enemy(scene, RectF(pos.x, pos.y, 1.1f, 1.1f), nullptr, spawnDelay, 5)
 {
 
 	_sprites["fly_black"] = SpriteFactory::instance()->get("fly_black");
@@ -27,36 +28,40 @@ Fly::Fly(Scene* scene, const PointF& pos, float spawnDelay)
 	_compenetrable = false;
 
 	//physics
-	_x_acc = 1.0f;
-	_y_acc = 1.0f;
+	_x_acc = 0;
+	_y_acc = 0;
 	_x_dec_rel = 0;
 	_y_dec_rel = 0;
-
-	_vel.y = 1;
-	_vel.x = 1;
-	_x_vel_max = 0.5f;
-	_y_vel_max = 0.5f;
+	_x_vel_max = 6.0f;
+	_y_vel_max = 6.0f;
 
 	_x_dir = Direction::NONE;
 	_y_dir = Direction::NONE;
 
 	// game parameters
 	_life = 1.2f;
+	_duke_fly = duke_fly;
+	_accumulator = 0;
 
-	//se la mosca è duke salta il colore casuale
-	//da fare un (if mosca duke) non mira isaac
-
-	_black = rand() % 2;
-	if (_black)
+	if (duke_fly)
 	{
 		_sprite = _sprites["fly_black"];
-		_distFromIsaac = 2;
+		_distFromIsaac = 0;
 	}
-		
 	else
 	{
-		_sprite = _sprites["fly_red"];
-		_distFromIsaac = 16;
+		_black = rand() % 2;
+		if (_black)
+		{
+			_sprite = _sprites["fly_black"];
+			_distFromIsaac = 2;
+		}
+
+		else
+		{
+			_sprite = _sprites["fly_red"];
+			_distFromIsaac = 16;
+		}
 	}
 
 }
@@ -67,22 +72,87 @@ void::Fly::update(float dt)
 
 	_shadow->setRect(_rect * Vec2Df(0.35f, 0.15f) + Vec2Df(0.4f, 1.1f));
 
-	Isaac* isaac = static_cast<GameScene*>(_scene)->player();
-	
-	Vec2Df centerIsaac = isaac->rect().center();
+	Duke* duke = static_cast<GameScene*>(_scene)->duke();
+	Vec2Df centerDuke = duke->rect().center();
 	Vec2Df centerFly = _rect.center();
-
-	float dist = centerFly.distance(centerIsaac);
-	if (dist < _distFromIsaac )
+	
+	if (_duke_fly)
 	{
-		followIsaac(centerIsaac);
+		moveAroundDuke(centerDuke, centerFly, dt);
 	}
 	else
 	{
-		move();
-	}
+		Isaac* isaac = static_cast<GameScene*>(_scene)->player();
 
+		Vec2Df centerIsaac = isaac->rect().center();
+
+
+		float dist = centerFly.distance(centerIsaac);
+		if (dist < _distFromIsaac)
+			followIsaac(centerIsaac);
+		else
+			move();
+	}
 }
+
+
+void Fly::moveAroundDuke(Vec2Df pos, Vec2Df fly, float dt)
+{
+	_x_acc = 45.0f;
+	_y_acc = 45.0f;
+
+	static float currentAngle = 0.0f;
+	const float rotationRadius = 80.0f; 
+	const float minDistance = 1.7f; 
+	const float angleIncrement = 0.3f * M_PI;
+	Vec2Df _next;
+
+	float _distanceFromDuke = pos.distance(fly);
+
+	if (_distanceFromDuke > minDistance) {
+		if (pos.x > fly.x) {
+			_x_dir = Direction::RIGHT;
+		}
+		else {
+			_x_dir = Direction::LEFT;
+		}
+		if (pos.y > fly.y) {
+			_y_dir = Direction::DOWN;
+		}
+		else {
+			_y_dir = Direction::UP;
+		}
+	}
+	else {
+
+		_x_acc = 40.0f;
+		_y_acc = 40.0f;
+
+		currentAngle += angleIncrement * dt;
+		
+		if (currentAngle >= 2 * M_PI) {
+			currentAngle -= 2 * M_PI;
+		}
+
+		_next.x = pos.x + rotationRadius * std::cos(currentAngle);
+		_next.y = pos.y + rotationRadius * std::sin(currentAngle);
+
+		// Direzione verso il nuovo target
+		if (_next.x > fly.x) {
+			_x_dir = Direction::RIGHT;
+		}
+		else {
+			_x_dir = Direction::LEFT;
+		}
+		if (_next.y > fly.y) {
+			_y_dir = Direction::DOWN;
+		}
+		else {
+			_y_dir = Direction::UP;
+		}
+	}
+}
+
 
 void Fly::followIsaac(Vec2Df pos)
 {
@@ -158,17 +228,11 @@ void Fly::move()
 	_x_acc = 3;
 	_y_acc = 3;
 
-	schedule("movement", 0.07f, [this]() 
+	schedule("movement", 0.07f, [this]()
 		{
 			_x_dir = rand() % 100 > 20 ? Direction::NONE : (rand() % 100 > 50 ? Direction::LEFT : Direction::RIGHT);
 			_y_dir = rand() % 100 > 20 ? Direction::NONE : (rand() % 100 > 50 ? Direction::UP : Direction::DOWN);
-		},0,false);
-	//schedule("impulse", 0.1f, [this]()
-	//	{
-	//		_x_dir = _x_dir != Direction::NONE ? (rand() % 100 > 50 ? Direction::LEFT : Direction::RIGHT) : Direction::NONE;
-	//		_y_dir = _y_dir != Direction::NONE ? (rand() % 100 > 50 ? Direction::LEFT : Direction::RIGHT) : Direction::NONE;
-	//	}, 0, false);
-
+		});
 }
 
 

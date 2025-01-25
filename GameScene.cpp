@@ -33,6 +33,7 @@ GameScene::GameScene(const RectF& r, float dt)
 	_dt = dt;
 	_timeToSimulate = 0;
 	_isaac = nullptr;
+	_duke = nullptr;
 	_cameraZoomVel = 0.1f;
 	_a_pressed = false;
 	_d_pressed = false;
@@ -221,40 +222,41 @@ void GameScene::spawnMobs()
 			{
 				float x = 4.0f + static_cast<float>(rand()) / RAND_MAX * (11.0f - 4.0f);
 				float y = 4.0f + static_cast<float>(rand()) / RAND_MAX * (7.0f - 4.0f);
-				new Fly(this, PointF(this->room()->rect().pos.x + x, this->room()->rect().pos.y + y), 1.5f);
+				new Fly(this, PointF(this->room()->rect().pos.x + x, this->room()->rect().pos.y + y), 1.5f, false);
 			}
 		}
 		else
 		{
-			Host* newHost = new Host(this, PointF(this->room()->rect().center().x,this->room()->rect().center().y), 1.5f);
+			Host* newHost = new Host(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 1.5f);
 
 			_room->changeStateRoom();
 		}
-	}
-	else if (_room->type() == RoomType::TREASURE && _room->state() == RoomState::ACTIVE)
-	{
-
-	}
-	else if (_room->type() == RoomType::SHOP)
-	{
-		new Heart(this, PointF(this->room()->rect().pos.x + 8 - 1.4f / 2, this->room()->rect().pos.y + 6.0f), 1);
-	}
-	else if (_room->type() == RoomType::BOSS && _room->state() == RoomState::ACTIVE)
-	{
-		if (_vsMonster)
-		{
-			Game::instance()->uiMonster()->setActiveUIMonster();	
-			_vsMonster = false;
-	
-			_schedule = new Scheduler(1.8f, [this]()
-				{
-					_room->changeStateRoom();
-					//_room->offLightDoor(); non funge
-					new Duke(this, PointF(this->room()->rect().center().x - 1, this->room()->rect().center().y - 1), 6.5f);
-				});
 		}
-	}
+		else if (_room->type() == RoomType::TREASURE && _room->state() == RoomState::ACTIVE)
+		{
+
+		}
+		else if (_room->type() == RoomType::SHOP)
+		{
+			new Heart(this, PointF(this->room()->rect().pos.x + 8 - 1.4f / 2, this->room()->rect().pos.y + 6.0f), 1);
+		}
+		else if (_room->type() == RoomType::BOSS && _room->state() == RoomState::ACTIVE)
+		{
+			if (_vsMonster)
+			{
+				Game::instance()->uiMonster()->setActiveUIMonster();
+				_vsMonster = false;
+
+				_schedule = new Scheduler(1.8f, [this]()
+					{
+						_room->changeStateRoom();
+						//_room->offLightDoor(); non funge
+						_duke = new Duke(this, PointF(this->room()->rect().center().x - 1, this->room()->rect().center().y - 1), 6.5f);
+					});
+			}
+		}
 }
+
 
 
 

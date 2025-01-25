@@ -17,14 +17,17 @@ protected:
 	//game parameters
 	bool _black; //type
 	float _distFromIsaac;
+	bool _duke_fly;
+	float _accumulator;
 
 public:
 
-	Fly(Scene* scene, const PointF& pos, float _spawnDelay);
+	Fly(Scene* scene, const PointF& pos, float _spawnDelay, bool duke_fly);
 	
 	//basic enemy actions
 	virtual void spawn() {};
 	virtual void move();
+	void moveAroundDuke(Vec2Df _target, Vec2Df fly, float dt);
 	virtual void hit(float damage, Vec2Df _dir = { 0,0 });
 	virtual void die();
 

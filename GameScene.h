@@ -16,6 +16,7 @@ namespace agp
 {
 	class GameScene;
 	class Isaac;
+	class Duke;
 	class Door;
 	class Basement;
 }
@@ -33,6 +34,7 @@ class agp::GameScene : public Scene
 		float _timeToSimulate;		// time integration extent
 
 		Isaac* _isaac;
+		Duke* _duke;
 		bool _d_pressed;
 		bool _a_pressed;
 		bool _w_pressed;
@@ -66,6 +68,7 @@ class agp::GameScene : public Scene
 		virtual ~GameScene() {};
 
 		Isaac* player() { return _isaac; }
+		Duke* duke() { return _duke; }
 		void setPlayer(Isaac* isaac) { _isaac = isaac; }
 		void setMapRooms(Basement* mapRooms) { _mapRooms = mapRooms; }
 		void setRooms(Room* room) { _room = room; }

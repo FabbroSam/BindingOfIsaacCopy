@@ -22,6 +22,8 @@ protected:
 	float index[5]{ 0 };
 	float _acc;
 	float _fix_pos_x;
+	float _fix_pos_y;
+	bool _wobbleTakeVar;
 	RenderableObject* _blood;
 	RenderableObject* _blackglow;
 	Direction _x_prev_dir;
