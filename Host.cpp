@@ -11,6 +11,7 @@
 #include "Poop.h"
 #include "Isaac.h"
 #include "Fly.h"
+#include "Audio.h"
 #include <math.h>
 #include <iostream>
 using namespace agp;
@@ -18,8 +19,10 @@ using namespace agp;
 Host::Host(Scene* scene, const PointF& pos, float spawnDelay)
 	:Enemy(scene, RectF(pos.x, pos.y, 1.3f, 1.7f), nullptr, spawnDelay, 5)
 {
-	
-
+	schedule("sound", 0.8f, [this]() 
+		{
+		Audio::instance()->playSound("boss lite roar 3");
+		});
 	_sprites["host_0"] = SpriteFactory::instance()->get("host_0");
 	_sprites["host_1"] = SpriteFactory::instance()->get("host_1");
 	_sprites["host_2"] = SpriteFactory::instance()->get("host_2");
@@ -60,56 +63,59 @@ void Host::update(float dt)
 {
 	Enemy::update(dt);
 
-	_shadow->setRect(_rect * Vec2Df(0.8f, 0.3f) + Vec2Df(0.13f, 1.2f));
-
-	_accumulator += dt;
-
-	if (!_dying)
+	if (!_freezed)
 	{
+		_shadow->setRect(_rect * Vec2Df(0.8f, 0.3f) + Vec2Df(0.13f, 1.2f));
 
-		if (_accumulator <= 3.0f)
+		_accumulator += dt;
+
+		if (!_dying)
 		{
-			_sprite = _sprites["host_0"];
-		}
-		else if (_accumulator <= 3.2f)
-		{
-			trigger();
-			_sprite = _sprites["host_2"];
-		}
-		else if (_accumulator <= 4.8f)
-		{
-			setCollider(RectF(0.4f, 0.95f, 0.5f, 0.6f)); // collider alzato
-			_canShoot = true;
-			_hitable = true;
-			_sprite = _sprites["host_1"];
-			
-			if (!_shooting)
+
+			if (_accumulator <= 3.0f)
 			{
-				schedule("shoot", 0.1f, [this]() 
-				{
-					shoot();
-				});
-				_shooting = true;
-				_canShoot = false;
+				_sprite = _sprites["host_0"];
 			}
-		}
+			else if (_accumulator <= 3.2f)
+			{
+				trigger();
+				_sprite = _sprites["host_2"];
+			}
+			else if (_accumulator <= 4.8f)
+			{
+				setCollider(RectF(0.4f, 0.95f, 0.5f, 0.6f)); // collider alzato
+				_canShoot = true;
+				_hitable = true;
+				_sprite = _sprites["host_1"];
 
-		else if (_accumulator <= 4.85f)
-		{
-			setCollider(RectF(0.2f, 0.95f, 0.9f, 0.6f)); // collider abbassato
-			_hitable = false;
-			_shooting = false;
-			_sprite = _sprites["host_0"];
-		}
-		else if (_accumulator <= 4.95f)
-		{
-			_sprite = _sprites["host_2"];
-		}
-		else
-			_accumulator = 0;
+				if (!_shooting)
+				{
+					schedule("shoot", 0.1f, [this]()
+						{
+							shoot();
+						});
+					_shooting = true;
+					_canShoot = false;
+				}
+			}
 
-		if (_wobbling)
-			wobble(dt);
+			else if (_accumulator <= 4.85f)
+			{
+				setCollider(RectF(0.2f, 0.95f, 0.9f, 0.6f)); // collider abbassato
+				_hitable = false;
+				_shooting = false;
+				_sprite = _sprites["host_0"];
+			}
+			else if (_accumulator <= 4.95f)
+			{
+				_sprite = _sprites["host_2"];
+			}
+			else
+				_accumulator = 0;
+
+			if (_wobbling)
+				wobble(dt);
+		}
 	}
 }
 
@@ -122,6 +128,8 @@ bool Host::collidableWith(CollidableObject* obj)
 
 void Host::shoot()
 {
+	Audio::instance()->playSound("blood fire 4", 0);
+	rand() % 2 == 1 ? Audio::instance()->playSound("boss lite roar 3") : Audio::instance()->playSound("boss lite roar 4");
 	PointF spawnPoint;
 	spawnPoint.x = _rect.pos.x + 0.3f;
 	spawnPoint.y = _rect.pos.y + 0.5f;

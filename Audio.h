@@ -32,6 +32,7 @@ class agp::Audio
 
 		int _volumeSfx;
 		int _volumeMusic;
+		bool _stop;
 
 		// constructor inaccesible due to singleton
 		Audio();

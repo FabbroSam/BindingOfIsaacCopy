@@ -8,6 +8,7 @@
 #include "Tear.h"
 #include "Fly.h"
 #include "StaticObject.h"
+#include "Audio.h"
 
 using namespace agp;
 
@@ -56,6 +57,7 @@ bool Heart::collision(CollidableObject* with, Direction fromDir)
     if (isaac && _collidable && hud->halfHearts() < 6)
     {
         hud->setHalfHearts(hud->halfHearts() + 2);
+        Audio::instance()->playSound("penny pickup 1");
         destroy(isaac);
         return true;
     }

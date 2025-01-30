@@ -186,6 +186,8 @@ void Isaac::die()
 	_x_dir = Direction::NONE;
 	_y_dir = _x_dir = Direction::NONE;
 
+	Audio::instance()->playSound("isaac dies new");
+
 	schedule("gameover", 0.5f, [this]() {
 
 		Game::instance()->gameover();

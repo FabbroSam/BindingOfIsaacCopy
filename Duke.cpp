@@ -10,6 +10,7 @@
 #include "Tear.h"
 #include "StaticObject.h"
 #include "Fly.h"
+#include "Audio.h"
 
 
 using namespace agp;
@@ -67,7 +68,7 @@ void Duke::spawnFly()
 
 	std::cout << "n fly " << _n_fly << std::endl << "to spawn " << _toSpawn << std::endl;
 
-
+	Audio::instance()->playSound("boss spit blob barf 3", 0);
 	for (int i = 0; i < _toSpawn; i++)
 	{
 		new Fly(_scene,{ _rect.pos.x + 0.3f * i, _rect.pos.y +0.3f * i }, 0, true);
@@ -98,6 +99,8 @@ void Duke::die()
 
 	_shadow->setVisible(false);
 	_sprite = _sprites["bloodExplotion"];
+
+	Audio::instance()->playSound("blood fire 4");
 
 	if (!isSchedule("dyingDukeAnimation"))
 		schedule("dyingDukeAnimation", 0.37f, [this]()
@@ -167,7 +170,6 @@ void Duke::wobble(float dt)
 			_wobbling = false;
 			_wobbleTakeVar = true;
 		}
-
 	}
 }
 
@@ -259,6 +261,7 @@ bool Duke::collision(CollidableObject* with, Direction fromDir)
 
 	if (with->to<StaticObject*>())
 	{
+
 		if (fromDir == Direction::LEFT || fromDir == Direction::RIGHT)
 			_x_dir = inverse(fromDir);
 

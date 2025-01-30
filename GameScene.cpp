@@ -199,6 +199,22 @@ void GameScene::update(float timeToSimulate)
 		_room->changeStateRoom();
 	if (_enemiesInRoom.empty() && _room->state() == RoomState::COMBAT)
 		_room->changeStateRoom();
+	for (auto& obj : objects(_view->rect()))
+	{
+		if (auto enemy = obj->to<Enemy*>())
+		{
+			if (!_view->rect().contains(enemy->rect().pos))
+			{
+				enemy->setFreezed(true);
+			}
+				
+			else
+				enemy->setFreezed(false);
+		}
+	}
+
+
+
 
 	Game::instance()->hud()->selectMinimapRoom(_isaac_x, _isaac_y);
 }

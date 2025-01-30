@@ -4,6 +4,7 @@
 #include "Isaac.h"
 #include "SpriteFactory.h"
 #include "Game.h"
+#include "Audio.h"
 
 using namespace agp;
 
@@ -61,6 +62,7 @@ bool Coin::collision(CollidableObject* with, Direction fromDir)
     if (isaac && _collidable)
     {   
         Game::instance()->hud()->addCoins();
+        Audio::instance()->playSound("key drop 2");
         destroy(isaac);
         return true;
     }

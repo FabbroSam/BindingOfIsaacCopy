@@ -33,6 +33,8 @@ Audio::Audio()
 	setVolumeMusic (2);
 	_volumeMusic = 2;
 
+	_stop = false;
+
 
 	auto soundFiles = getFilesInDirectory("../sounds");
 	for (auto& f : soundFiles)
