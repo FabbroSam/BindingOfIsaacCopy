@@ -37,12 +37,18 @@ Host::Host(Scene* scene, const PointF& pos, float spawnDelay)
 	_shadow->setVisible(false);
 
 	//logic
-	_accumulator = 0;
 	_canShoot = true;
 	_shooting = false;
 	_hitable = false;
+	_accumulator = 0;
 	_wobbling = false;
 	_trigger = true;
+	_bounceCycle = 1;
+	_acc = 0;
+	_wobbling = false;
+	_fix_pos_x = _rect.pos.x;
+	_fix_pos_y = _rect.pos.y;
+	_wobbleTakeVar = true;
 	//physics
 
 
@@ -67,6 +73,7 @@ void Host::update(float dt)
 		}
 		else if (_accumulator <= 3.2f)
 		{
+			trigger();
 			_sprite = _sprites["host_2"];
 		}
 		else if (_accumulator <= 4.8f)
@@ -100,6 +107,9 @@ void Host::update(float dt)
 		}
 		else
 			_accumulator = 0;
+
+		if (_wobbling)
+			wobble(dt);
 	}
 }
 
@@ -135,6 +145,68 @@ void Host::shoot()
 void Host::hit(float damage, Vec2Df _dir)
 {
 	Enemy::hit(damage);
+}
+
+void Host::trigger()
+{
+	_wobbling = true;
+	_trigger = true;
+}
+
+void Host::wobble(float dt)
+{
+	if (_wobbling)
+	{
+
+		if (_wobbleTakeVar)
+		{
+			_fix_pos_x = _rect.pos.x;
+			_fix_pos_y = _rect.pos.y;
+			_x_prev_dir = _x_dir;
+			_y_prev_dir = _y_dir;
+			_prev_vel = _vel;
+			_wobbleTakeVar = false;
+		}
+
+		if (!_wobbleTakeVar)
+		{
+			_vel = { 0,0 };
+			_x_dir = Direction::NONE;
+			_y_dir = Direction::NONE;
+		}
+		_acc += dt;
+
+		if (_acc <= 0.4f)
+		{
+			_rect.size.x =_acc + _fixSize.x;
+			_rect.pos.x = -0.5f * _acc + _fix_pos_x;
+			_rect.size.y =_acc + _fixSize.y;
+			_rect.pos.y = -0.5f * _acc + _fix_pos_y;
+		}
+		else if (_acc <= 1.2f)
+		{
+			_rect.size.x = 0.06f * std::sin(45.0f * (_acc - 0.5)) * std::exp(-(25.0f * (_acc - 0.5))) + _fixSize.x;
+			_rect.pos.x = -0.03f * std::sin(45.0f * (_acc - 0.5)) * std::exp(-(25.0f * (_acc - 0.5))) + _fix_pos_x;
+			_rect.size.y = -0.06f * std::sin(45.0f * (_acc - 0.5)) * std::exp(-(25.0f * (_acc - 0.5))) + _fixSize.y;
+			_rect.pos.y = 0.03f * std::sin(45.0f * (_acc - 0.5)) * std::exp(-(25.0f * (_acc - 0.5))) + _fix_pos_y;
+
+		}
+		else
+		{
+			std::cout << "_prev_vel: " << _prev_vel << std::endl;
+			_x_dir = _x_prev_dir;
+			_y_dir = _y_prev_dir;
+			_vel = _prev_vel;
+			_rect.size.x = _fixSize.x;
+			_rect.pos.x = _fix_pos_x;
+			_rect.size.y = _fixSize.y;
+			_rect.pos.y = _fix_pos_y;
+			_acc = 0;
+			_wobbling = false;
+			_wobbleTakeVar = true;
+		}
+
+	}
 }
 
 void Host::die()

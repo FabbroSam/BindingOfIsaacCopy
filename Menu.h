@@ -91,5 +91,4 @@ public:
 		static Menu* pauseMenu();
 		static Menu* startMenu();
 
-		
 };

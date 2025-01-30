@@ -17,13 +17,14 @@ protected:
 	float _accumulator;
 	float _wobbleAccumulator;
 	bool _wobbling;
+	bool _wobbleTakeVar;
+	float _fix_pos_x;
+	float _fix_pos_y;
+	float _acc;
 	int _n_fly;
 	int _max_flies;
 	float index[5]{ 0 };
-	float _acc;
-	float _fix_pos_x;
-	float _fix_pos_y;
-	bool _wobbleTakeVar;
+
 	RenderableObject* _blood;
 	RenderableObject* _blackglow;
 	Direction _x_prev_dir;
@@ -42,8 +43,8 @@ public:
 
 	//setter of scheduling parameters such as sawn delay, collidable flag ecc...
 	void wobble(float dt);
-	void spawnFly();
 	virtual void trigger() override;
+	void spawnFly();
 
 	virtual void update(float dt) override;
 	virtual bool collidableWith(CollidableObject* obj) override;

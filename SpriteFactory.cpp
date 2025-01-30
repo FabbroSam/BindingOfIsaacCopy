@@ -71,6 +71,7 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["menu_overlay"] = loadTexture(renderer, "../sprites/menu_overlay.png", { 147, 187, 236 });
 	_spriteSheets["menu_options"] = loadTexture(renderer, "../sprites/menu_options.png", { 147, 187, 236 });
 	_spriteSheets["menu_options_dark"] = loadTexture(renderer, "../sprites/menu_options_dark.png", { 147, 187, 236 });
+	_spriteSheets["gameover"] = loadTexture(renderer, "../sprites/death_portraits.png", { 147, 187, 236 });
 
 	// UI
 	_spriteSheets["hud_hearts"] = loadTexture(renderer, "../sprites/ui_hearts.png", { 147, 187, 236 });
@@ -680,6 +681,8 @@ Sprite* SpriteFactory::get(const std::string& id)
 		return new Sprite(_spriteSheets["host"], RectF(32, 0, 32, 44), "host");
 	else if (id == "host_2")
 		return new Sprite(_spriteSheets["host"], RectF(64, 0, 32, 44), "host");
+	else if (id == "gameover")
+		return new Sprite(_spriteSheets["gameover"], RectI(0, 0, 480, 270), "gameover");
 
 	
 	else

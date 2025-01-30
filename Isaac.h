@@ -81,6 +81,7 @@ class agp::Isaac : public DynamicObject
 
 		// scripted actions
 		virtual void die();
+		virtual bool died()const { return _dying; }
 		virtual void hurt();
 		void blink();
 

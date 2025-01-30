@@ -19,10 +19,15 @@ protected:
 	RenderableObject* _bones;
 	Direction _x_prev_dir;
 	Direction _y_prev_dir;
-	float _accumulator;
 	bool _canShoot;
 	bool _shooting;
 	bool _wobbling;
+	float _accumulator;
+	float _wobbleAccumulator;
+	bool _wobbleTakeVar;
+	float _fix_pos_x;
+	float _fix_pos_y;
+	float _acc;
 
 public:
 
@@ -37,8 +42,8 @@ public:
 	virtual void update(float dt) override;
 
 	void shoot();
-	void wobble() {};
-	virtual void trigger() override {};
+	void wobble(float dt);
+	virtual void trigger() override;
 
 	virtual bool collidableWith(CollidableObject* obj) override;
 	//virtual bool collision(CollidableObject* with, Direction fromDir) override;

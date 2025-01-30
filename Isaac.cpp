@@ -12,6 +12,7 @@
 #include "Audio.h"
 #include "AnimatedSprite.h"
 #include "Game.h"
+#include "GameScene.h"
 #include "Tear.h"
 #include "Scene.h"
 #include "Coin.h"
@@ -185,7 +186,12 @@ void Isaac::die()
 	_x_dir = Direction::NONE;
 	_y_dir = _x_dir = Direction::NONE;
 
-	Game::instance()->freeze(true);
+	schedule("gameover", 0.5f, [this]() {
+
+		Game::instance()->gameover();
+		Game::instance()->freeze(true);
+
+	});
 }
 
 void Isaac::hurt()

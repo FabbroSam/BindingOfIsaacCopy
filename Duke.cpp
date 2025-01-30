@@ -194,7 +194,7 @@ void Duke::update(float dt)
 			if (_sprite != _sprites["duke_1"])
 			{
 				std::cout << "duke1\n";
-
+				trigger();
 				_sprite = _sprites["duke_1"];
 			}
 		}
@@ -203,6 +203,7 @@ void Duke::update(float dt)
 			if (_sprite != _sprites["duke_2"])
 			{
 				std::cout << "duke2\n";
+				trigger();
 				_sprite = _sprites["duke_2"];
 			}
 		}
@@ -211,6 +212,7 @@ void Duke::update(float dt)
 			if (_sprite != _sprites["duke_3"])
 			{
 				std::cout << "duke3\n";
+				trigger();
 				_sprite = _sprites["duke_3"];
 			}
 		}

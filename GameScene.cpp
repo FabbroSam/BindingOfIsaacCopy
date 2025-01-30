@@ -266,6 +266,12 @@ void GameScene::event(SDL_Event& evt)
 
 	Scene::event(evt);
 
+	if (_isaac->died() == true)
+		if (evt.type == SDL_KEYDOWN && (evt.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
+			Game::instance()->quit();
+		else if (evt.type == SDL_KEYDOWN && (evt.key.keysym.scancode == SDL_SCANCODE_SPACE))
+			Game::instance()->reset();
+
 	if (evt.type == SDL_KEYDOWN && (evt.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
 		Game::instance()->pushScene(Menu::pauseMenu());
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_H)
