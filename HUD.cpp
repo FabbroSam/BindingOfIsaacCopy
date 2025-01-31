@@ -102,14 +102,12 @@ void HUD::setCoins(int newCoins)
 	_coinsText->setSprite(SpriteFactory::instance()->getNumber(_coins, 2));
 }
 
-void HUD::setBombs(int newBombs)
+void HUD::setBombs(int _newBomb)
 {
-	if (newBombs == _bombs)
-		return;
-
-	_bombs = newBombs;
-	_bombsText->setSprite(SpriteFactory::instance()->getNumber(_bombs, 2));
+	_bombs += _newBomb;
+	_bombsText->setSprite(SpriteFactory::instance()->getNumber(_bombs+1, 2));
 }
+
 
 void HUD::setHalfHearts(int newHalfHearts)
 {

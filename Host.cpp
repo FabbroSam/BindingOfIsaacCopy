@@ -12,6 +12,7 @@
 #include "Isaac.h"
 #include "Fly.h"
 #include "Audio.h"
+#include "Bomb.h"
 #include <math.h>
 #include <iostream>
 using namespace agp;
@@ -219,9 +220,12 @@ void Host::wobble(float dt)
 
 void Host::die()
 {
+	new Bomb(_scene, PointF(_rect.pos.x, _rect.pos.y), 6);
 	_dying = true;
 	_collidable = false;
 
+	//if(rand()%2==1)
+	
 	_shadow->setVisible(false);
 	_sprite = _sprites["bloodExplotion"];
 

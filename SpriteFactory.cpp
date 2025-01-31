@@ -78,7 +78,8 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["hud_items"] = loadTexture(renderer, "../sprites/ui_items.png", { 147, 187, 236 });
 	_spriteSheets["hud_minimap"] = loadTexture(renderer, "../sprites/ui_minimap.png", { 147, 187, 236 });
 	_spriteSheets["hud_minimap"] = loadTexture(renderer, "../sprites/ui_minimap.png", { 147, 187, 236 });
-
+	
+	_spriteSheets["item_bomb"] = loadTexture(renderer, "../sprites/bomb.png", { 147, 187, 236 });
 
 	//UI MONSTER
 	_spriteSheets["ui_boss"] = loadTexture(renderer, "../sprites/ui_boss.png", { 147, 187, 236 });
@@ -88,8 +89,6 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["ui_isaacname"] = loadTexture(renderer, "../sprites/ui_isaac_name.png", { 147, 187, 236 });
 	_spriteSheets["ui_vs"] = loadTexture(renderer, "../sprites/ui_vs.png", { 147, 187, 236 });
 	_spriteSheets["ui_font"] = loadTexture(renderer, "../sprites/ui_font.png", { 147, 187, 236 });
-
-
 
 	// MOBS
 	_spriteSheets["duke"] = loadTexture(renderer, "../sprites/duke.png", { 147, 187, 236 });
@@ -498,6 +497,8 @@ Sprite* SpriteFactory::get(const std::string& id)
 		return new Sprite(_spriteSheets["menu_options"], RectI(0, 476, 121, 46), "menu_options_vsync_off_2");
 
 	// ISAAC SPRITES
+	else if (id == "isaac_carry_bomb")
+		return new Sprite(_spriteSheets["isaac"], RectI(79, 217, 32, 32), "isaac_carry_bomb");
 	else if (id == "isaac_headFront")
 		return new Sprite(_spriteSheets["isaac"], RectI(0 * 32, 0, 32, 32), "isaac_headFront");
 	else if (id == "isaac_headBack")
@@ -683,8 +684,18 @@ Sprite* SpriteFactory::get(const std::string& id)
 		return new Sprite(_spriteSheets["host"], RectF(64, 0, 32, 44), "host");
 	else if (id == "gameover")
 		return new Sprite(_spriteSheets["gameover"], RectI(0, 0, 480, 270), "gameover");
-
-	
+	else if (id == "item_bomb")
+		return new Sprite(_spriteSheets["item_bomb"], RectF(0, 0, 31, 31), "bomb");
+	else if (id == "item_bomb_explotion")
+	{
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 4; j++) {
+				rects.push_back(RectI(j * 96, i * 96, 96, 96));
+			}
+		}
+		return new AnimatedSprite(_spriteSheets["bomb_explosion"], rects, 20, "bomb_explosion");
+	}
+		
 	else
 	{
 		std::cerr << "Cannot find sprite \"" << id << "\"\n";

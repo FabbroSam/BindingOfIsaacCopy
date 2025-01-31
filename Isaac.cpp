@@ -1,4 +1,4 @@
-// ----------------------------------------------------------------
+﻿// ----------------------------------------------------------------
 // From "Algorithms and Game Programming" in C++ by Alessandro Bria
 // Copyright (C) 2024 Alessandro Bria (a.bria@unicas.it). 
 // All rights reserved.
@@ -35,6 +35,7 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_sprites["walkRight"] = SpriteFactory::instance()->get("isaac_walkRight");
 	_sprites["shadow"] = SpriteFactory::instance()->get("shadow");
 	_sprites["hurt"] = SpriteFactory::instance()->get("isaac_hurt");
+	_sprites["isaac_carry_bomb"] = SpriteFactory::instance()->get("isaac_carry_bomb");
 	_sprite = _sprites["headFront"];
 
 	_body = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["bodyFront"], 8);
@@ -75,6 +76,7 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_shootingDirection = Direction::NONE;
 	_canShoot = true;
 	_isShootingAnimation = false;
+	_bombCarry = false;
 	_state = SDL_GetKeyboardState(0);
 
 	_shootAnimationTimer = 0.0f;
@@ -152,7 +154,12 @@ void Isaac::update(float dt)
 		}
 	}
 
-	setSprite();
+	//std::cout << _bombCarry << std::endl;
+
+	if(!_bombCarry)
+	{
+		setSprite();
+	}
 
 	_prev_x_dir = _x_dir;
 	_prev_y_dir = _y_dir;
@@ -186,7 +193,9 @@ void Isaac::die()
 	_x_dir = Direction::NONE;
 	_y_dir = _x_dir = Direction::NONE;
 
-	Audio::instance()->playSound("isaac dies new");
+	schedule("sound", 0.3f, [this]() {
+		Audio::instance()->playSound("isaac dies new");
+		});
 
 	schedule("gameover", 0.5f, [this]() {
 
@@ -261,13 +270,32 @@ void Isaac::shoot(Direction dir) {
 	}
 
 	// LAYER TEAR
-	int layerTear = 10;
+	int layerTear = 11;
 	if (dir == Direction::UP)
-		layerTear = 8;
+		layerTear = 7;
 
 	Tear* newTear = new Tear(_scene, spawnPoint, dir, _vel.x, _vel.y, false, layerTear);
 	// alternate between left and right eye
 	_isShootingRight = !_isShootingRight;
+}
+
+void Isaac::setBombCarry(bool on)
+{
+	std::cout << "_bombcarry: "<<_bombCarry<<"\nCarryBomb impostato a: " << on << std::endl;
+
+	_bombCarry = on;
+	if (_bombCarry)
+	{
+		_sprite = _sprites["isaac_carry_bomb"];
+		_body->setSprite(nullptr);
+	}
+	else
+	{
+		std::cout << "Isaac lascia la bomba, reset della sprite\n";
+		_sprite = _sprites["headFront"];
+		_body->setSprite(_sprites["bodyFront"]);
+		setSprite();
+	}
 }
 
 void Isaac::setSprite()
@@ -279,7 +307,7 @@ void Isaac::setSprite()
 		return;
 	}
 
-	if (_walking)
+	if (_walking && !_bombCarry)
 	{
 		if (_state[SDL_SCANCODE_D])
 		{
@@ -305,6 +333,7 @@ void Isaac::setSprite()
 			_sprite = _sprites["headBack"];
 			_body->setSprite(_sprites["walkDown"]);
 		}
+		
 	}
 
 	if (!_walking)
@@ -356,3 +385,5 @@ void Isaac::setSprite()
 		}
 	}
 }
+
+

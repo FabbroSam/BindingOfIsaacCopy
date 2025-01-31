@@ -49,7 +49,8 @@ class agp::HUD : public Scene
 		// getters/setters (to be completed)
 		void setCoins(int newCoins);
 		void addCoins() { setCoins(_coins + 1); }
-		void setBombs(int newBombs);
+		void addBomb();
+		void setBombs(int _num);
 		void setHalfHearts(int newHalfHearts);
 		void subHalfHearts() { setHalfHearts(_halfHearts - 1);}
 		void setHeartsCapacity(int newCapacity);

@@ -49,6 +49,7 @@ class agp::Isaac : public DynamicObject
 		float _shootAnimationTimer;
 		float _shootAnimationInterval;
 		bool _swapShootAnimation;
+		bool _bombCarry;
 
 		float _x_dec_rel;
 		float _y_dec_rel;
@@ -84,6 +85,7 @@ class agp::Isaac : public DynamicObject
 		virtual bool died()const { return _dying; }
 		virtual void hurt();
 		void blink();
+		void setBombCarry(bool on);
 
 		void shoot(Direction dir);
 

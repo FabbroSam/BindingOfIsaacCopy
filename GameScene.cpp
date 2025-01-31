@@ -203,19 +203,12 @@ void GameScene::update(float timeToSimulate)
 	{
 		if (auto enemy = obj->to<Enemy*>())
 		{
-			if (!_view->rect().contains(enemy->rect().pos))
+			if (!_view->rect().intersects(enemy->rect()))
 			{
-				enemy->setFreezed(true);
+				std::cout << "intersezione\n";	
 			}
-				
-			else
-				enemy->setFreezed(false);
 		}
 	}
-
-
-
-
 	Game::instance()->hud()->selectMinimapRoom(_isaac_x, _isaac_y);
 }
 

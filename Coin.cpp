@@ -49,14 +49,13 @@ void Coin::update(float dt)
     }
     else
     {
+        _vel.y += 100 * dt;
         _rect.pos.x += _vel.x * dt;
         _rect.pos.y += (50.0f * static_cast<float>(pow(dt, 2))) / 2.0f + _vel.y * dt;
-        _vel.y += 100 * dt;
     }
 }
 
 bool Coin::collision(CollidableObject* with, Direction fromDir)
-
 {
     Isaac* isaac = dynamic_cast<Isaac*>(with);
     if (isaac && _collidable)
