@@ -154,8 +154,6 @@ void Isaac::update(float dt)
 		}
 	}
 
-	//std::cout << _bombCarry << std::endl;
-
 	if(!_bombCarry)
 	{
 		setSprite();
@@ -163,8 +161,6 @@ void Isaac::update(float dt)
 
 	_prev_x_dir = _x_dir;
 	_prev_y_dir = _y_dir;
-
-	// game logics
 
 }
 void Isaac::move_x(Direction dir)
@@ -270,9 +266,9 @@ void Isaac::shoot(Direction dir) {
 	}
 
 	// LAYER TEAR
-	int layerTear = 11;
+	int layerTear = 12;
 	if (dir == Direction::UP)
-		layerTear = 7;
+		layerTear = 10;
 
 	Tear* newTear = new Tear(_scene, spawnPoint, dir, _vel.x, _vel.y, false, layerTear);
 	// alternate between left and right eye
@@ -281,8 +277,6 @@ void Isaac::shoot(Direction dir) {
 
 void Isaac::setBombCarry(bool on)
 {
-	std::cout << "_bombcarry: "<<_bombCarry<<"\nCarryBomb impostato a: " << on << std::endl;
-
 	_bombCarry = on;
 	if (_bombCarry)
 	{

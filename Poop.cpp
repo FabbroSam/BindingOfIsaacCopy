@@ -51,17 +51,17 @@ void Poop::destroy()
     std::string type = _type + std::to_string(_index);
     _sprite = _sprites[type];
     if (_index == 4 && _type == "poop_gold")
-        new Coin(_scene, PointF(_rect.pos.x, _rect.pos.y), 3);
+        new Coin(_scene, PointF(_rect.pos.x, _rect.pos.y), 8);
     else
-        new PoopGibs(_scene, PointF(_rect.pos.x, _rect.pos.y), _type, 3);
+        new PoopGibs(_scene, PointF(_rect.pos.x, _rect.pos.y), _type, 2);
 
 
     if (_index >= 4)
     {
         _collidable = false;
-        _explosion = new RenderableObject(_scene, RectF(_rect.pos.x - 0.8f, _rect.pos.y - 0.7f, 3.2f,3.2f), _sprites["poop_explosion"],2);
-        if(rand()%10 == 0)
-            new Heart(_scene, PointF(_rect.pos), 1);
+        _explosion = new RenderableObject(_scene, RectF(_rect.pos.x - 0.8f, _rect.pos.y - 0.7f, 3.2f, 3.2f), _sprites["poop_explosion"], 2);
+        if (rand() % 10 == 0)
+            new Heart(_scene, PointF(_rect.pos), 8);
     }
 }
 

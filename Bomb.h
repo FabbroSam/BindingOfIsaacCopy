@@ -11,17 +11,23 @@ namespace agp
 class agp::Bomb : public DynamicObject
 {
 private:
+    enum class BombState {
+        Inactive,
+        Attached,
+        Thrown,
+        Exploded
+    };
+    BombState _bombState;
     float _h;
     float _y;
     const Uint8* _state;
-    bool _attachedToIsaac;
-    bool _exploded;
     PointF _lastIsaacPos;
     std::map<std::string, Sprite*> _sprites;
 
 public:
     Bomb(Scene* scene, const PointF& pos, int layer = 0);
     void explode();
+    void damage(Scene& _scene);
     virtual ~Bomb() {};
 
     void update(float dt) override;

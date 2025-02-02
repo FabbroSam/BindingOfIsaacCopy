@@ -80,6 +80,7 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["hud_minimap"] = loadTexture(renderer, "../sprites/ui_minimap.png", { 147, 187, 236 });
 	
 	_spriteSheets["item_bomb"] = loadTexture(renderer, "../sprites/bomb.png", { 147, 187, 236 });
+	_spriteSheets["bomb_hole"] = loadTexture(renderer, "../sprites/effect_017_bombradius.png", { 147, 187, 236 });
 
 	//UI MONSTER
 	_spriteSheets["ui_boss"] = loadTexture(renderer, "../sprites/ui_boss.png", { 147, 187, 236 });
@@ -97,7 +98,7 @@ SpriteFactory::SpriteFactory()
 
 	//BLOOD EXPLOTION
 	_spriteSheets["bloodExplotion"] = loadTexture(renderer, "../sprites/bloodExplotion.png", { 147, 187, 236 });
-
+	_spriteSheets["item_bomb_explotion"] = loadTexture(renderer, "../sprites/item_bomb_explosion.png", { 147, 187, 236 });
 	// SHADOW______da fixare trasparenza
 	_spriteSheets["shadow"] = loadTexture(renderer, "../sprites/shadow.png", { 147, 187, 236});
 
@@ -693,8 +694,10 @@ Sprite* SpriteFactory::get(const std::string& id)
 				rects.push_back(RectI(j * 96, i * 96, 96, 96));
 			}
 		}
-		return new AnimatedSprite(_spriteSheets["bomb_explosion"], rects, 20, "bomb_explosion");
+		return new AnimatedSprite(_spriteSheets["item_bomb_explotion"], rects, 19, "bomb_explosion");
 	}
+	else if (id == "bomb_hole")
+		return new Sprite(_spriteSheets["bomb_hole"], RectF(0, 0, 96, 64), "bomb_hole");
 		
 	else
 	{
