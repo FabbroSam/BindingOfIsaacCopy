@@ -16,7 +16,7 @@
 using namespace agp;
 
 Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
-	:Enemy(scene, RectF(pos.x, pos.y, 77 / 16 * 0.8f, 66 / 16 * 0.8f), nullptr, spawnDelay, 5)
+	:Enemy(scene, RectF(pos.x, pos.y, 77 / 16 * 0.8f, 66 / 16 * 0.8f), nullptr, spawnDelay, 10)
 {
 
 	_collider.adjust(0.48f, 0.3f, -0.5f, 0.5f);
@@ -44,7 +44,7 @@ Duke::Duke(Scene* scene, const PointF& pos, float spawnDelay)
 	_y_dec_rel = 0;
 
 	//game parameters
-	_life = 14.0f;
+	_life = 16.0f;
 	_n_fly = 0;
 	_max_flies = 4;
 	_accumulator = 0;
@@ -65,8 +65,6 @@ void Duke::spawnFly()
 			_n_fly++;
 
 	int _toSpawn = _max_flies - _n_fly;
-
-	std::cout << "n fly " << _n_fly << std::endl << "to spawn " << _toSpawn << std::endl;
 
 	Audio::instance()->playSound("boss spit blob barf 3", 0);
 	for (int i = 0; i < _toSpawn; i++)
@@ -100,13 +98,16 @@ void Duke::die()
 	_shadow->setVisible(false);
 	_sprite = _sprites["bloodExplotion"];
 
+	for(int i = 0; i<3; i++)
+		new Fly(_scene, { _rect.pos.x + 0.3f * i, _rect.pos.y + 0.3f * i }, 0, false);
+
 	Audio::instance()->playSound("blood fire 4");
 
 	if (!isSchedule("dyingDukeAnimation"))
 		schedule("dyingDukeAnimation", 0.37f, [this]()
 			{
 				setVisible(false);
-				new RenderableObject(_scene, _rect, _sprites["blood"], 6);
+				new RenderableObject(_scene, _rect, _sprites["blood"], 1);
 				_scene->killObject(this);
 
 			}, 0, false);
@@ -133,12 +134,12 @@ void Duke::wobble(float dt)
 			_wobbleTakeVar = false;
 		}
 
-		if (!_wobbleTakeVar)
-		{
-			_vel = { 0,0 };
-			_x_dir = Direction::NONE;
-			_y_dir = Direction::NONE;
-		}
+		//if (!_wobbleTakeVar)
+		//{
+		//	_vel = { 0,0 };
+		//	_x_dir = Direction::NONE;
+		//	_y_dir = Direction::NONE;
+		//}
 		_acc += dt;
 
 		if (_acc <= 0.5f)
@@ -223,10 +224,6 @@ void Duke::update(float dt)
 			if (_sprite != _sprites["duke_2"] && !isSchedule("delay_sprite"))
 			{
 				trigger();
-				//schedule("spawn_fly", 0.f, [this]()
-				//	{
-				//		spawnFly();
-				//	}, 0, false);
 				spawnFly();
 				std::cout << "duke2.2\n";
 				schedule("delay_sprite", 0.01f, [this]()

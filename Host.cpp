@@ -233,7 +233,7 @@ void Host::die()
 		schedule("dyingHostAnimation", 0.37f, [this]()
 			{
 				setVisible(false);
-				new RenderableObject(_scene, _rect, _sprites["blood"], 6);
+				new RenderableObject(_scene, _rect, _sprites["blood"], 1);
 				_scene->killObject(this);
 
 			}, 0, false);

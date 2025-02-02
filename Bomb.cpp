@@ -105,6 +105,7 @@ void Bomb::explode()
 
         schedule("explotion", 1.5f, [this]() {
             _sprite = _sprites["item_bomb_explotion"];
+            Audio::instance()->playSound("Grenade pin pull then throw - sound effect-1");
             _rect.size = { 3 , 3 };
             _rect.pos.x -= (_rect.size.x) / 3;
             _rect.pos.y -= (_rect.size.y) / 2;
@@ -115,11 +116,11 @@ void Bomb::explode()
                 Vec2Df objPos = obj->rect().pos;
                 float dist = _rect.pos.distance(objPos);
 
-                if (dist < 2.0f)
+                if (dist < 2.5f)
                 {
                     if (auto enemy = obj->to<Enemy*>())
                     {
-                        enemy->hit(30.0f);
+                        enemy->hit(4.0f);
                     }
                     else if (auto poop = obj->to<Poop*>())
                     {

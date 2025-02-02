@@ -15,7 +15,7 @@
 using namespace agp;
 
 Fly::Fly(Scene* scene, const PointF& pos, float spawnDelay, bool duke_fly)
-	:Enemy(scene, RectF(pos.x, pos.y, 1.1f, 1.1f), nullptr, spawnDelay, 5)
+	:Enemy(scene, RectF(pos.x, pos.y, 1.1f, 1.1f), nullptr, spawnDelay, 10)
 {
 
 	_sprites["fly_black"] = SpriteFactory::instance()->get("fly_black");
@@ -50,18 +50,8 @@ Fly::Fly(Scene* scene, const PointF& pos, float spawnDelay, bool duke_fly)
 	}
 	else
 	{
-		_black = rand() % 2;
-		if (_black)
-		{
-			_sprite = _sprites["fly_black"];
-			_distFromIsaac = 2;
-		}
-
-		else
-		{
-			_sprite = _sprites["fly_red"];
-			_distFromIsaac = 16;
-		}
+		_sprite = _sprites["fly_red"];
+		_distFromIsaac = 16;
 	}
 
 }
@@ -98,6 +88,12 @@ void::Fly::update(float dt)
 
 void Fly::moveAroundDuke(Vec2Df pos, Vec2Df fly, float dt)
 {
+
+	if (!_movable)
+	{
+		return;
+	}
+
 	_x_acc = 45.0f;
 	_y_acc = 45.0f;
 
@@ -125,8 +121,8 @@ void Fly::moveAroundDuke(Vec2Df pos, Vec2Df fly, float dt)
 	}
 	else {
 
-		_x_acc = 40.0f;
-		_y_acc = 40.0f;
+		_x_acc = 35.0f;
+		_y_acc = 35.0f;
 
 		currentAngle += angleIncrement * dt;
 		
@@ -171,8 +167,10 @@ void Fly::followIsaac(Vec2Df pos)
 	}
 	else
 	{
-		_x_vel_max = 2.2f;
-		_y_vel_max = 2.2f;
+		_x_acc = 10;
+		_y_acc = 10;
+		_x_vel_max = 4.0f;
+		_y_vel_max = 4.0f;
 	}
 
 	Direction x_dir;
