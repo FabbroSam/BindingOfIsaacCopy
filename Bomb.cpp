@@ -17,6 +17,7 @@ Bomb::Bomb(Scene* scene, const PointF& pos, int layer)
     : DynamicObject(scene, RectF(pos.x, pos.y, 1.0f, 1.0f), nullptr, layer),
     _state(SDL_GetKeyboardState(0))
 {
+    _collider.adjust(0.9f, 0.9f, -0.7f, -0.7f);
     _scene = scene;
     _sprites["item_bomb"] = SpriteFactory::instance()->get("item_bomb");
     _sprites["item_bomb_explotion"] = SpriteFactory::instance()->get("item_bomb_explotion");
@@ -82,14 +83,9 @@ bool Bomb::collision(CollidableObject* with, Direction fromDir)
     Isaac* isaac = dynamic_cast<Isaac*>(with);
     if (isaac && _bombState == BombState::Inactive)
     {
+        Audio::instance()->playSound("plop");
         _bombState = BombState::Attached;
-        isaac->setBombCarry(true);
-
-        schedule("invisible", 3.0f, [this, isaac]() {
-            _visible = false;
-            isaac->setBombCarry(false);
-            });
-
+        _visible = false;
         Game::instance()->hud()->setBombs(1);
         return true;
     }
@@ -109,14 +105,16 @@ void Bomb::explode()
             _rect.size = { 3 , 3 };
             _rect.pos.x -= (_rect.size.x) / 3;
             _rect.pos.y -= (_rect.size.y) / 2;
-            new RenderableObject(_scene, _rect, SpriteFactory::instance()->get("bomb_hole"), 7);
+            RectF _newRect = _rect;
+            _newRect.pos.y += 1.0f;
+            new RenderableObject(_scene, _newRect, SpriteFactory::instance()->get("bomb_hole"), 7);
            
             for (auto& obj : _scene->objects())
             {
                 Vec2Df objPos = obj->rect().pos;
                 float dist = _rect.pos.distance(objPos);
 
-                if (dist < 2.5f)
+                if (dist < 2.0f)
                 {
                     if (auto enemy = obj->to<Enemy*>())
                     {

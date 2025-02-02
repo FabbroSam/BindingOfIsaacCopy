@@ -275,7 +275,9 @@ void Isaac::shoot(Direction dir) {
 	_isShootingRight = !_isShootingRight;
 }
 
-void Isaac::setBombCarry(bool on)
+
+//cambia sprite ad isaac quando raccoglie un item
+void Isaac::carryItem(bool on)
 {
 	_bombCarry = on;
 	if (_bombCarry)
@@ -285,7 +287,6 @@ void Isaac::setBombCarry(bool on)
 	}
 	else
 	{
-		std::cout << "Isaac lascia la bomba, reset della sprite\n";
 		_sprite = _sprites["headFront"];
 		_body->setSprite(_sprites["bodyFront"]);
 		setSprite();

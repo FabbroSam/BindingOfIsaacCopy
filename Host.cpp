@@ -220,7 +220,7 @@ void Host::wobble(float dt)
 
 void Host::die()
 {
-	if (rand() % 3 == 0)
+	if (rand() % 2 == 0)
 		new Bomb(_scene, PointF(_rect.pos.x, _rect.pos.y), 8);
 
 	_dying = true;
