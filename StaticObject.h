@@ -33,7 +33,7 @@ class agp::StaticObject : public CollidableObject
 
 		virtual std::string name() override {
 			if (_sprite)
-				return strprintf(_sprite->name());
+				return strprintf(_sprite->name());    
 			else
 				return strprintf("StaticObject[%d]", _id);
 		}

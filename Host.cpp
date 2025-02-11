@@ -140,13 +140,13 @@ void Host::shoot()
 		Vec2Df dir = (isaac->rect().center() - spawnPoint).norm();
 		float angle = atan2(dir.y, dir.x);
 		// Tear Center
-		new Tear(_scene, spawnPoint, dir, 0.1f, 0.1f, true, 5);
+		new Tear(_scene, spawnPoint, dir, 0.1f, 0.1f, true, false, 5);
 		// Tear Up
 		dir = Vec2Df(cos(angle + 0.3f), sin(angle + 0.3f));
-		new Tear(_scene, spawnPoint, dir, 0.1, 0.1, true, 5);
+		new Tear(_scene, spawnPoint, dir, 0.1, 0.1, true, false, 5);
 		// Tear Down
 		dir = Vec2Df(cos(angle - 0.3f), sin(angle - 0.3f));
-		new Tear(_scene, spawnPoint, dir, 0.1, 0.1, true, 5);
+		new Tear(_scene, spawnPoint, dir, 0.1, 0.1, true, false, 5);
 	}
 }
 

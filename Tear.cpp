@@ -13,6 +13,7 @@
 #include "Poop.h"
 #include "Coin.h"
 #include "Rock.h"
+#include "Gusher.h"
 #include "Host.h"
 #include "Door.h"
 using namespace agp;
@@ -77,7 +78,7 @@ Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, flo
         _sprite = _sprites["tear"];
 }
 
-Tear::Tear(Scene* scene, const PointF& pos, Vec2Df dir, float x_velIsaac, float y_velIsaac, bool red, int layer)
+Tear::Tear(Scene* scene, const PointF& pos, Vec2Df dir, float x_velIsaac, float y_velIsaac, bool red, bool parabolic, int layer)
     : DynamicObject(scene, RectF(pos.x, pos.y, 1.2f, 1.2f), nullptr, layer)
 {
     _sprites["tear"] = SpriteFactory::instance()->get("tear_default");
@@ -89,6 +90,7 @@ Tear::Tear(Scene* scene, const PointF& pos, Vec2Df dir, float x_velIsaac, float 
 
     _destroy = true;
     _red = red;
+    _parabolic = parabolic;
 
     _collider.adjust(0.43f, 0.37f, -0.4f, -0.4f);
 
@@ -136,15 +138,25 @@ void Tear::update(float dt)
     _shadow->setRect(RectF(_shadowPos.x, _shadowPos.y, _shadowSize.x, _shadowSize.y));
 
     //move tear
-    float x = _rect.pos.x + _vel.x * dt;
-    float y = _rect.pos.y + _vel.y * dt;
-    float norm = static_cast<float>(sqrt(pow(pos0.x - x, 2) + pow(pos0.y - y, 2)));
-    _rect.pos.x += _vel.x * dt;
-    
-    if (norm < _distance)
-        _rect.pos.y += static_cast<float>((10 * pow(dt,2)) / 2 + _vel.y * dt);
-    else
-        _rect.pos.y += static_cast<float>((500 * pow(dt, 2)) / 2 + _vel.y * dt);
+    if (_red && _parabolic)
+    {
+        _vel.y = 45;
+        _vel.x += 20 * dt;
+        _rect.pos.x += _vel.x * dt;
+        _rect.pos.y += static_cast<float>((10 * pow(dt, 2)) / 2 + _vel.x * dt);
+    }
+    else 
+    {
+        float x = _rect.pos.x + _vel.x * dt;
+        float y = _rect.pos.y + _vel.y * dt;
+        float norm = static_cast<float>(sqrt(pow(pos0.x - x, 2) + pow(pos0.y - y, 2)));
+        _rect.pos.x += _vel.x * dt;
+
+        if (norm < _distance)
+            _rect.pos.y += static_cast<float>((10 * pow(dt, 2)) / 2 + _vel.y * dt);
+        else
+            _rect.pos.y += static_cast<float>((500 * pow(dt, 2)) / 2 + _vel.y * dt);
+    }
  
 }
 
@@ -213,7 +225,7 @@ bool Tear::collidableWith(CollidableObject* obj)
 
     if (_red)
     {
-        if (obj->to<Host*>() || obj->to<Poop*>())
+        if (obj->to<Host*>() || obj->to<Poop*>() || obj->to<Gusher*>())
             return false;
     }
     else if(!_red)

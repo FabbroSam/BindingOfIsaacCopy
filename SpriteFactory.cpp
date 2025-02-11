@@ -95,8 +95,10 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["duke"] = loadTexture(renderer, "../sprites/duke.png", { 147, 187, 236 });
 	_spriteSheets["fly"] = loadTexture(renderer, "../sprites/fly.png", { 147, 187, 236 });
 	_spriteSheets["host"] = loadTexture(renderer, "../sprites/host.png", { 147, 187, 236 });
+	_spriteSheets["gusher"] = loadTexture(renderer, "../sprites/gusher.png", { 147, 187, 236 });
 
-	//BLOOD EXPLOTION
+
+	//BLOOD AND BOMB EXPLOTION
 	_spriteSheets["bloodExplotion"] = loadTexture(renderer, "../sprites/bloodExplotion.png", { 147, 187, 236 });
 	_spriteSheets["item_bomb_explotion"] = loadTexture(renderer, "../sprites/item_bomb_explosion.png", { 147, 187, 236 });
 	// SHADOW______da fixare trasparenza
@@ -690,15 +692,70 @@ Sprite* SpriteFactory::get(const std::string& id)
 	else if (id == "item_bomb_explotion")
 	{
 		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 4; j++) {
-				rects.push_back(RectI(j * 96, i * 96, 96, 96));
+			for (int j = 0; j < 2; j++) {
+				rects.push_back(RectI(j * 32, i * 32, 32, 32));
 			}
 		}
 		return new AnimatedSprite(_spriteSheets["item_bomb_explotion"], rects, 19, "bomb_explosion");
 	}
 	else if (id == "bomb_hole")
 		return new Sprite(_spriteSheets["bomb_hole"], RectF(0, 0, 96, 64), "bomb_hole");
-		
+	else if (id == "gusher_front")
+	{
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 0, 0, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 1, 0, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 2, 0, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 3, 0, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 0, 1, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 1, 1, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 2, 1, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 3, 1, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 0, 2, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 1, 2, 32, 32));
+		return new AnimatedSprite(_spriteSheets["gusher"], rects, 13, "gusher_walks_front");
+	}
+	else if (id == "gusher_back")
+	{
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 1, 2, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 0, 2, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 3, 1, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 2, 1, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 1, 1, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 0, 1, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 3, 0, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 2, 0, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 1, 0, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 0, 0, 32, 32));
+		return new AnimatedSprite(_spriteSheets["gusher"], rects, 13, "gusher_walks_back");
+	}
+	else if (id == "gusher_right")
+	{
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 2, 2, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 3, 2, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 0, 3, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 1, 3, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 2, 3, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 3, 3, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 0, 4, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 1, 4, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 2, 4, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 3, 4, 32, 32));
+		return new AnimatedSprite(_spriteSheets["gusher"], rects, 13, "gusher_walks_right");
+	}
+	else if (id=="blood")
+		return new Sprite(_spriteSheets["bloodExplotion"], RectF(70, 413, 32, 24), "blood");
+	else if (id == "blood_walking")
+	{
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 4, 0, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 5, 0, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 4, 1, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 5, 1, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 4, 2, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 5, 2, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 4, 3, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 5, 3, 32, 32));
+		return new AnimatedSprite(_spriteSheets["gusher"], rects, 13, "gusher_walks_right");
+	}
 	else
 	{
 		std::cerr << "Cannot find sprite \"" << id << "\"\n";

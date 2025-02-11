@@ -24,6 +24,7 @@
 #include "Duke.h"
 #include "Fly.h"
 #include "Host.h"
+#include "Gusher.h"
 #include <iostream>
 using namespace agp;
 
@@ -214,25 +215,16 @@ void GameScene::update(float timeToSimulate)
 
 void GameScene::spawnMobs()
 {
-	int _spawnIndex = 1;
-	_spawnIndex++;
-
 	if (_room->type() == RoomType::NORMAL && _room->state() == RoomState::ACTIVE)
 	{
-		if (false)//!_room->isEmpty() )
+		if (rand()%2 == 0)
 		{
+			new Gusher(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 1.5f);
 			int amount = rand() % 6;
 			if (amount)
 				_room->changeStateRoom();
 			else
 				_room->setState(RoomState::INACTIVE);
-
-			for (int i = 0; i < amount; i++)
-			{
-				float x = 4.0f + static_cast<float>(rand()) / RAND_MAX * (11.0f - 4.0f);
-				float y = 4.0f + static_cast<float>(rand()) / RAND_MAX * (7.0f - 4.0f);
-				new Fly(this, PointF(this->room()->rect().pos.x + x, this->room()->rect().pos.y + y), 1.5f, false);
-			}
 		}
 		else
 		{
@@ -265,10 +257,6 @@ void GameScene::spawnMobs()
 			}
 		}
 }
-
-
-
-
 
 void GameScene::event(SDL_Event& evt)
 {
