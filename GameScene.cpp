@@ -218,26 +218,54 @@ void GameScene::spawnMobs()
 {
 	if (_room->type() == RoomType::NORMAL && _room->state() == RoomState::ACTIVE)
 	{
-		if (_mobCount >= 1)
+		if(rand()%2==0)
 		{
-			new Gusher(this, PointF(this->room()->rect().center().x + 0.5f, this->room()->rect().center().y), 4.5f);
-			new Gusher(this, PointF(this->room()->rect().center().x -2.0f, this->room()->rect().center().y + 0.0f), 3.5f);
-			new Gusher(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 5.6f);
-			new Gusher(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y -1.5f), 6.6f);
-			new Gusher(this, PointF(this->room()->rect().center().x - 0.5f, this->room()->rect().center().y), 1.5f);
-			_mobCount = 0;
-			int amount = rand() % 6;
-			if (amount)
-				_room->changeStateRoom();
+			if (_mobCount >= 1)
+			{
+				new Gusher(this, PointF(this->room()->rect().center().x + 0.5f, this->room()->rect().center().y), 4.5f);
+				new Gusher(this, PointF(this->room()->rect().center().x - 2.0f, this->room()->rect().center().y + 0.0f), 3.5f);
+				new Gusher(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 5.6f);
+				new Gusher(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y - 1.5f), 6.6f);
+				new Gusher(this, PointF(this->room()->rect().center().x - 0.5f, this->room()->rect().center().y), 1.5f);
+				_mobCount = 0;
+				int amount = rand() % 6;
+				if (amount)
+					_room->changeStateRoom();
+				else
+					_room->setState(RoomState::INACTIVE);
+			}
 			else
-				_room->setState(RoomState::INACTIVE);
+			{
+				_mobCount++;
+				Host* newHost = new Host(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 1.5f);
+
+				_room->changeStateRoom();
+			}
 		}
 		else
 		{
-			_mobCount++;
-			Host* newHost = new Host(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 1.5f);
+			if (_mobCount >= 1)
+			{
+				_mobCount++;
+				Host* newHost = new Host(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 1.5f);
+				
+				int amount = rand() % 6;
+				if (amount)
+					_room->changeStateRoom();
+				else
+					_room->setState(RoomState::INACTIVE);
+			}
+			else
+			{
+				new Gusher(this, PointF(this->room()->rect().center().x + 0.5f, this->room()->rect().center().y), 7.5f);
+				new Gusher(this, PointF(this->room()->rect().center().x - 2.0f, this->room()->rect().center().y + 0.0f), 3.5f);
+				new Gusher(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 5.6f);
+				new Gusher(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y - 1.5f), 6.6f);
+				new Gusher(this, PointF(this->room()->rect().center().x - 0.5f, this->room()->rect().center().y), 1.5f);
+				_mobCount = 0;
 
-			_room->changeStateRoom();
+				_room->changeStateRoom();
+			}
 		}
 		}
 		else if (_room->type() == RoomType::TREASURE && _room->state() == RoomState::ACTIVE)

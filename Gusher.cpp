@@ -46,13 +46,12 @@ Gusher::Gusher(Scene* scene, const PointF& pos, float spawnDelay)
 		new RenderableObject(_scene, _rect * Vec2Df(0.2f , 0.2f) + Vec2Df (0.8f, 0.2f), _sprites["blood"], 1);
 		},-1);
 
-
-	_x_vel_max = 0.7f;
-	_y_vel_max = 0.7f;
+	_x_vel_max = 1.0f;
+	_y_vel_max = 1.0f;
 	_x_dir = rand() % 10 > 5 ? Direction::LEFT : Direction::RIGHT;
 	_y_dir = rand() % 10 > 5 ? Direction::UP : Direction::DOWN;
-	_x_acc = 15.0f;
-	_y_acc = 15.0f;
+	_x_acc = 19.0f;
+	_y_acc = 19.0f;
 	_x_dec_rel = 0;
 	_y_dec_rel = 0;
 
@@ -60,7 +59,6 @@ Gusher::Gusher(Scene* scene, const PointF& pos, float spawnDelay)
 	_life = 3.0f;
 	_accumulator = 0;
 	_blood = false;
-	
 }
 
 void Gusher::update(float dt)
@@ -70,7 +68,7 @@ void Gusher::update(float dt)
 	if(!_dying)
 	{
 		_accumulator += dt;
-		_shadow->setRect(_rect * Vec2Df(0.3f, 0.08f) + Vec2Df(0.42f, 1.0f));
+		_shadow->setRect(_rect * Vec2Df(0.3f, 0.08f) + Vec2Df(0.42f, 0.9f));
 
 		_blood_walk->setRect(_rect);
 
@@ -166,3 +164,4 @@ void Gusher::die()
 
 			}, 0, false);
 }
+

@@ -32,8 +32,6 @@ public:
 	virtual void update(float dt) override;
 
 	void shoot();
-	void wobble(float dt) {};
-	virtual void trigger() override {};
 
 	virtual bool collision(CollidableObject* with, Direction fromDir) override;
 	virtual bool collidableWith(CollidableObject* obj) override;
