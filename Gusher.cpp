@@ -133,6 +133,7 @@ void Gusher::move()
 
 void Gusher::shoot()
 {
+	Audio::instance()->playSound("boss gurgle lite");
 	PointF spawnPoint;
 	spawnPoint.x = _rect.pos.x + 0.3f;
 	spawnPoint.y = _rect.pos.y;

@@ -55,6 +55,8 @@ class agp::GameScene : public Scene
 
 		bool _vsMonster;
 
+		int _mobCount;
+
 		Room* _room;
 		Basement* _mapRooms;
 

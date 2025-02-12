@@ -114,7 +114,7 @@ void Bomb::explode()
                 Vec2Df objPos = obj->rect().pos;
                 float dist = _rect.pos.distance(objPos);
 
-                if (dist < 2.0f)
+                if (dist < 2.5f)
                 {
                     if (auto enemy = obj->to<Enemy*>())
                     {

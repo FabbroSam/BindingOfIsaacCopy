@@ -57,6 +57,7 @@ GameScene::GameScene(const RectF& r, float dt)
 	_mapRooms = nullptr;
 	//logic
 	int _occ = 0;
+	_mobCount = 0;
 
 	// setup view (specific for super isaac bros)
 	_view = new View(this, _rect);
@@ -217,13 +218,14 @@ void GameScene::spawnMobs()
 {
 	if (_room->type() == RoomType::NORMAL && _room->state() == RoomState::ACTIVE)
 	{
-		if (rand()%2 == 0)
+		if (rand()%2 == 0 || _mobCount > 1)
 		{
 			new Gusher(this, PointF(this->room()->rect().center().x + 0.5f, this->room()->rect().center().y), 4.5f);
 			new Gusher(this, PointF(this->room()->rect().center().x -2.0f, this->room()->rect().center().y + 0.0f), 3.5f);
 			new Gusher(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 5.6f);
 			new Gusher(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y -1.5f), 6.6f);
 			new Gusher(this, PointF(this->room()->rect().center().x - 0.5f, this->room()->rect().center().y), 1.5f);
+			_mobCount = 0;
 			int amount = rand() % 6;
 			if (amount)
 				_room->changeStateRoom();
@@ -232,6 +234,7 @@ void GameScene::spawnMobs()
 		}
 		else
 		{
+			_mobCount++;
 			Host* newHost = new Host(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 1.5f);
 
 			_room->changeStateRoom();
