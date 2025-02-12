@@ -134,7 +134,7 @@ void Bomb::explode()
                 }
             }
            
-            schedule("bomb_kill", 0.5f, [this]() {
+            schedule("bomb_kill", 0.34f, [this]() {
                 setVisible(false);
                 kill();
                 }, 0, false);

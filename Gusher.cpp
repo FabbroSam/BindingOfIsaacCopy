@@ -7,6 +7,7 @@
 #include "Room.h"
 #include "Isaac.h"
 #include "Host.h"
+#include "Bomb.h"
 #include "Tear.h"
 #include "StaticObject.h"
 #include "Audio.h"
@@ -146,6 +147,8 @@ void Gusher::hit(float damage, Vec2Df _dir)
 
 void Gusher::die()
 {
+	if (rand() % 5 == 0)
+		new Bomb(_scene, PointF(_rect.pos.x, _rect.pos.y), 8);
 	_blood_walk->setVisible(false);
 	_shadow->setVisible(false);
 	_dying = true;

@@ -693,10 +693,10 @@ Sprite* SpriteFactory::get(const std::string& id)
 	{
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
-				rects.push_back(RectI(j * 32, i * 32, 32, 32));
+				rects.push_back(RectI(j * 96, i * 96, 96, 96));
 			}
 		}
-		return new AnimatedSprite(_spriteSheets["item_bomb_explotion"], rects, 19, "bomb_explosion");
+		return new AnimatedSprite(_spriteSheets["item_bomb_explotion"], rects, 16, "bomb_explosion");
 	}
 	else if (id == "bomb_hole")
 		return new Sprite(_spriteSheets["bomb_hole"], RectF(0, 0, 96, 64), "bomb_hole");
