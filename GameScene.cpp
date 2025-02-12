@@ -218,7 +218,7 @@ void GameScene::spawnMobs()
 {
 	if (_room->type() == RoomType::NORMAL && _room->state() == RoomState::ACTIVE)
 	{
-		if (rand()%2 == 0 || _mobCount > 1)
+		if (_mobCount >= 1)
 		{
 			new Gusher(this, PointF(this->room()->rect().center().x + 0.5f, this->room()->rect().center().y), 4.5f);
 			new Gusher(this, PointF(this->room()->rect().center().x -2.0f, this->room()->rect().center().y + 0.0f), 3.5f);
