@@ -94,9 +94,15 @@ Tear::Tear(Scene* scene, const PointF& pos, Vec2Df dir, float x_velIsaac, float 
 
     _collider.adjust(0.43f, 0.37f, -0.4f, -0.4f);
 
+    _dir = dir;
+
     //fisica
     pos0 = _rect.pos;
-    _absVel = 6.0f;
+    if(_parabolic)
+        _absVel = 2.0f;
+    else
+        _absVel = 6.0f;
+
     _vel = { 0.0f, 0.0f };
     _x_dec_rel = 0;
     _y_dec_rel = 0;
@@ -107,7 +113,6 @@ Tear::Tear(Scene* scene, const PointF& pos, Vec2Df dir, float x_velIsaac, float 
     _distance = distanceMax;
     _vel = _absVel * dir;
 
-    //_shadow = new ShadowTear(scene, pos + PointF({ 0.34f,1 }), _vel, 5);
     _shadow = new RenderableObject(scene, RectF(pos.x + 0.34f, pos.y + 1.3f, 0.37f, 0.23f), _sprites["shadow"], 5);
 
     if (_red)
@@ -123,8 +128,6 @@ void Tear::update(float dt)
     if (isSchedule("explosion") || isSchedule("die"))
         return;
 
-    //resolveCollisions(dt);
-
     //control tear level respect shadow
     if (_rect.pos.y > _shadow->rect().pos.y - 0.5f)
     {
@@ -138,14 +141,21 @@ void Tear::update(float dt)
     _shadow->setRect(RectF(_shadowPos.x, _shadowPos.y, _shadowSize.x, _shadowSize.y));
 
     //move tear
-    if (_red && _parabolic)
+    if (_parabolic)
     {
-        _vel.y = 45;
-        _vel.x += 20 * dt;
+        _vel.x += _dir.x * dt;
+        _vel.y += _dir.y * 5 * dt;
+        float x = _rect.pos.x + _vel.x * dt;
+        float y = _rect.pos.y + _vel.y * dt;
+        float norm = static_cast<float>(sqrt(pow(pos0.x - x, 2) + pow(pos0.y - y, 2)));
         _rect.pos.x += _vel.x * dt;
-        _rect.pos.y += static_cast<float>((10 * pow(dt, 2)) / 2 + _vel.x * dt);
+
+        if (norm <= 1.0f)
+            _rect.pos.y += static_cast<float>((30 * pow(dt, 2)) / 2 + _vel.y * dt);
+        else
+            _rect.pos.y += static_cast<float>((300 * pow(dt, 2)) / 2 + _vel.y * dt);
     }
-    else 
+    else
     {
         float x = _rect.pos.x + _vel.x * dt;
         float y = _rect.pos.y + _vel.y * dt;

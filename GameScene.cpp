@@ -219,7 +219,7 @@ void GameScene::spawnMobs()
 	{
 		if (rand()%2 == 0)
 		{
-			new Gusher(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 1.5f);
+			new Gusher(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 2.5f);
 			int amount = rand() % 6;
 			if (amount)
 				_room->changeStateRoom();

@@ -18,8 +18,6 @@ protected:
 	float _accumulator;
 	bool _blood;
 	RenderableObject* _blood_walk;
-	Direction _x_prev_dir;
-	Direction _y_prev_dir;
 
 public:
 
@@ -28,8 +26,8 @@ public:
 	//basic enemy actions
 	virtual void spawn() {};
 	virtual void move();
-	virtual void hit(float damage, Vec2Df _dir) {};
-	virtual void die() {};
+	virtual void hit(float damage, Vec2Df _dir);
+	virtual void die();
 
 	virtual void update(float dt) override;
 

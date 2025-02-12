@@ -20,6 +20,7 @@ private:
     float _y_velIsaac;
     bool _red;
     bool _parabolic;
+    Vec2Df _dir;
     std::map<std::string, Sprite*> _sprites;
 
 public:

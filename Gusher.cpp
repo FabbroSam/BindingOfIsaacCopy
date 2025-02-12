@@ -18,7 +18,7 @@ Gusher::Gusher(Scene* scene, const PointF& pos, float spawnDelay)
 	:Enemy(scene, RectF(pos.x, pos.y, 1.4f, 1.4f), nullptr, spawnDelay, 10)
 {
 
-	_visible = true;
+	_visible = false;
 	_collidable = true;
 	_compenetrable = false;
 
@@ -28,13 +28,24 @@ Gusher::Gusher(Scene* scene, const PointF& pos, float spawnDelay)
 	_sprites["gusher_right"] = SpriteFactory::instance()->get("gusher_right");
 	_sprites["blood"] = SpriteFactory::instance()->get("blood");
 	_sprites["blood_walking"] = SpriteFactory::instance()->get("blood_walking");
+	_sprites["bloodExplotion"] = SpriteFactory::instance()->get("bloodExplotion");
+
+	_shadow->setVisible(false);
 
 	_blood_walk = new RenderableObject(_scene, _rect + Vec2Df({ 0.3f, -0.4f }), _sprites["blood_walking"], 12);
+	_blood_walk->setVisible(false);
+
+	schedule("blood_walk_on", 1.5f, [this]() {
+		_blood_walk->setVisible(true);
+		});
+
 	schedule("blood", 0.7f, [this]() {
 		if(rand()%2 == 0)
 			new RenderableObject(_scene, _rect * Vec2Df(0.2f, 0.2f) + Vec2Df(0.5f, 0.7f), _sprites["blood"], 1);
 		new RenderableObject(_scene, _rect * Vec2Df(0.2f , 0.2f) + Vec2Df (0.8f, 0.2f), _sprites["blood"], 1);
 		},-1);
+
+
 	_x_vel_max = 0.7f;
 	_y_vel_max = 0.7f;
 	_x_dir = rand() % 10 > 5 ? Direction::LEFT : Direction::RIGHT;
@@ -55,39 +66,35 @@ void Gusher::update(float dt)
 {
 	Enemy::update(dt);
 
-	_accumulator += dt;
-	_shadow->setVisible(true);
-	_shadow->setRect(_rect * Vec2Df(0.3f, 0.08f) + Vec2Df(0.42f, 1.0f));
-	
-	_blood_walk->setRect(_rect);
-	
-	if (_accumulator >= 1 && _blood)
+	if(!_dying)
 	{
-		//new RenderableObject(_scene, RectF(_rect.pos.x + 1.0f, _rect.pos.y + 1.0f, (rand() % 20 + 10) / 100.0f, (rand() % 20 + 10) / 100.0f), _sprites["blood"], 2);
-		_blood = false;
-		if (_accumulator >= 2.0f)
+		_accumulator += dt;
+		_shadow->setRect(_rect * Vec2Df(0.3f, 0.08f) + Vec2Df(0.42f, 1.0f));
+
+		_blood_walk->setRect(_rect);
+
+		if (_accumulator >= 1.5f)
 		{
-			//shoot();
+			shoot();
 			move();
 			_accumulator = 0;
-			/*_blood = true;*/
 		}
-	}
 
-	if (_x_dir == Direction::RIGHT &&  _y_dir == Direction::DOWN)
-	{
-		setFlip(SDL_FLIP_NONE);
-		_sprite = _sprites["gusher_right"];
-	}
-	else if (_x_dir == Direction::LEFT && _y_dir == Direction::DOWN)
-	{
-		setFlip(SDL_FLIP_HORIZONTAL);
-		_sprite = _sprites["gusher_right"];
-	}
-	else if (_y_dir == Direction::UP)
-	{
-		setFlip(SDL_FLIP_NONE);
-		_sprite = _sprites["gusher_back"];
+		if (_x_dir == Direction::RIGHT && _y_dir == Direction::DOWN)
+		{
+			setFlip(SDL_FLIP_NONE);
+			_sprite = _sprites["gusher_right"];
+		}
+		else if (_x_dir == Direction::LEFT && _y_dir == Direction::DOWN)
+		{
+			setFlip(SDL_FLIP_HORIZONTAL);
+			_sprite = _sprites["gusher_right"];
+		}
+		else if (_y_dir == Direction::UP)
+		{
+			setFlip(SDL_FLIP_NONE);
+			_sprite = _sprites["gusher_back"];
+		}
 	}
 }
 
@@ -127,8 +134,31 @@ void Gusher::shoot()
 {
 	PointF spawnPoint;
 	spawnPoint.x = _rect.pos.x + 0.3f;
-	spawnPoint.y = _rect.pos.y + 0.5f;
+	spawnPoint.y = _rect.pos.y;
 	Vec2Df dir = dir2vec(_x_dir) + dir2vec(_y_dir);             
-	new Tear(_scene, spawnPoint, dir, 0.05f, 0.05f, true, true, 8);
+	new Tear(_scene, spawnPoint, dir, 5, 5, true, true, 11);
+}
 
+void Gusher::hit(float damage, Vec2Df _dir)
+{
+	Enemy::hit(damage);
+}
+
+void Gusher::die()
+{
+	_blood_walk->setVisible(false);
+	_shadow->setVisible(false);
+	_dying = true;
+	_collidable = false;
+	_movable = false;
+	_sprite = _sprites["bloodExplotion"];
+
+	if (!isSchedule("dyingGusherAnimation"))
+		schedule("dyingGusherAnimation", 0.37f, [this]()
+			{
+				setVisible(false);
+				new RenderableObject(_scene, _rect, _sprites["blood"], 1);
+				_scene->killObject(this);
+
+			}, 0, false);
 }
