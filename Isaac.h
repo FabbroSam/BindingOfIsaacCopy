@@ -59,6 +59,9 @@ class agp::Isaac : public DynamicObject
 		double _x_vel_last_nonzero;	// last nonzero horizontal velocity
 		double _y_vel_last_nonzero;	// last nonzero horizontal velocity
 
+		bool _itemBone;
+		bool _itemBoneSprite;
+
 		std::map<std::string, Sprite*> _sprites;
 
 	public:
@@ -86,6 +89,7 @@ class agp::Isaac : public DynamicObject
 		virtual void hurt();
 		void blink();
 		void carryItem(bool on);
+		void selectItemBone() { _itemBone = true; _itemBoneSprite = true; }
 
 		void shoot(Direction dir);
 

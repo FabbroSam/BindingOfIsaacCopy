@@ -46,6 +46,8 @@ SpriteFactory::SpriteFactory()
 	_spriteSheets["item_coin_effect"] = loadTexture(renderer, "../sprites/item_coin.png", { 147, 187, 236 });
 	_spriteSheets["item_heart"] = loadTexture(renderer, "../sprites/item_heart.png", { 147, 187, 236 });
 	_spriteSheets["item_poison"] = loadTexture(renderer, "../sprites/item_poison.png");
+	_spriteSheets["shopper"] = loadTexture(renderer, "../sprites/shopper.png");
+	_spriteSheets["bone_projectile"] = loadTexture(renderer, "../sprites/bone_projectile.png");
 
 	// BASEMENT
 	_spriteSheets["basement"] = loadTexture(renderer, "../sprites/basement.png", { 0, 114, 188 });
@@ -162,7 +164,17 @@ Sprite* SpriteFactory::get(const std::string& id)
 		return new Sprite(_spriteSheets["controls"], RectI(0, 0, 325, 85), "controls");
 	else if (id == "shading")
 		return new Sprite(_spriteSheets["shading"], RectI(0, 0, 442, 286), "shading");
-	else if (id == "fireplace_blue")
+	else if (id == "bone_item")
+		return new Sprite(_spriteSheets["bone_projectile"], RectI(32, 0, 32, 32), "bone_item");
+	else if (id == "bone_projectile")
+	{
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 0, 0, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 1, 0, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 2, 0, 32, 32));
+		rects.push_back(moveBy(RectF(0, 0, 32, 32), 3, 0, 32, 32));
+		return new AnimatedSprite(_spriteSheets["bone_projectile"], rects, 10, "bone_projectile");
+	}
+	if (id == "fireplace_blue")
 	{
 		rects.push_back(moveBy(RectF(0, 0, 32, 32), 0, 0, 31, 32));
 		rects.push_back(moveBy(RectF(0, 0, 32, 32), 1, 0, 31, 32));
@@ -186,6 +198,18 @@ Sprite* SpriteFactory::get(const std::string& id)
 		int srcPosx = 32 * x;
 		//int srcPosy = 32 * y;
 		return new Sprite(_spriteSheets["rocks"], RectF(float(srcPosx), 0, 32, 32), "rock");
+	}
+	else if (id == "shopper")
+	{
+		return new Sprite(_spriteSheets["shopper"], RectF(0, 0, 48, 48), "shopper");
+	}
+	else if (id == "shopper_use")
+	{
+		rects.push_back(moveBy(RectF(0, 0, 48, 48), 0, 0, 48, 48, 0, 0));
+		rects.push_back(moveBy(RectF(0, 0, 48, 48), 1, 0, 48, 48, 0, 0));
+		rects.push_back(moveBy(RectF(0, 0, 48, 48), 0, 1, 48, 48, 0, 0));
+		rects.push_back(moveBy(RectF(0, 0, 48, 48), 1, 0, 48, 48, 0, 0));
+		return new AnimatedSprite(_spriteSheets["shopper"], rects, 6, "shopper_use", false);
 	}
 	else if (id == "poop")
 		return new Sprite(_spriteSheets["poop"], RectF(0, 0, 32, 32), "poop");
@@ -538,6 +562,7 @@ Sprite* SpriteFactory::get(const std::string& id)
 	}
 	else if (id == "isaac_hurt")
 		return new Sprite(_spriteSheets["isaac"], RectI(146, 215, 32, 32), "isaac_hurt");
+
 	// ITEM SPRITES
 	else if (id == "tear_default")
 		return new Sprite(_spriteSheets["tears"], RectI(192, 0, 32, 32), "tear_default");
@@ -656,7 +681,7 @@ Sprite* SpriteFactory::get(const std::string& id)
 	else if (id == "debug")
 		return nullptr;
 
-	else if (id == "blackglow")
+	if (id == "blackglow")
 		return new Sprite(_spriteSheets["blackglow"], RectF(0, 0, 112, 112), "blackglow", SDL_FLIP_NONE, 75);
 
 	if (id == "tear_red")

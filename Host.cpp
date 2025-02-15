@@ -32,7 +32,6 @@ Host::Host(Scene* scene, const PointF& pos, float spawnDelay)
 	_rect = _rect - Vec2Df({ 0.65f, 1.1f });
 	setCollider(RectF(0.2f, 0.95f, 0.9f, 0.6f)); // collider abbassato
 	// setCollider(RectF(0.4f, 0.95f, 0.5f, 0.6f)); // collider alzato
-	std::cout << _collider << std::endl;
 	_visible = false;
 	_collidable = true;
 	_compenetrable = false;
@@ -201,7 +200,6 @@ void Host::wobble(float dt)
 		}
 		else
 		{
-			std::cout << "_prev_vel: " << _prev_vel << std::endl;
 			_x_dir = _x_prev_dir;
 			_y_dir = _y_prev_dir;
 			_vel = _prev_vel;

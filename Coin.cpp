@@ -30,7 +30,6 @@ Coin::Coin(Scene* scene, const PointF& pos, int layer)
     float alpha = -60;
     float d = static_cast<float>(rand()) / RAND_MAX * 1.5f;
 
-    //std::cout << "_vel.x: " << _vel.x << " alpha: " << alpha << " d " << d << std::endl;
     float u_x = static_cast<float>(cos(alpha * PI / 360));
     float u_y = -static_cast<float>(sin(alpha * PI / 360));
     float x = _rect.pos.x + d * u_x;

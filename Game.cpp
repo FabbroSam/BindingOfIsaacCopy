@@ -52,7 +52,7 @@ void Game::init()
 	std::cout << "KEY V : mostra bordi di tutti i RenderableObject" << std::endl;
 	std::cout << "KEY O : apri/chiudi porte" << std::endl;
 	std::cout << "KEY L : mostra tutte le stanze dellaminimappa" << std::endl;
-	std::cout << "KEY L : attiva/disattiva movimento ampio view" << std::endl;
+	std::cout << "KEY P : attiva/disattiva movimento ampio view" << std::endl;
 	std::cout << "MOUSE WHEEL: se KEY P attivo -> zoom" << std::endl;
 	std::cout << "**************************************************************" << std::endl;
 	std::cout << "**************************************************************" << std::endl;

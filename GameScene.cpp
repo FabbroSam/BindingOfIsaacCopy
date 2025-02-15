@@ -25,6 +25,8 @@
 #include "Fly.h"
 #include "Host.h"
 #include "Gusher.h"
+#include "Shopper.h"
+#include "Bone.h"
 #include <iostream>
 using namespace agp;
 
@@ -201,16 +203,6 @@ void GameScene::update(float timeToSimulate)
 		_room->changeStateRoom();
 	if (_enemiesInRoom.empty() && _room->state() == RoomState::COMBAT)
 		_room->changeStateRoom();
-	for (auto& obj : objects(_view->rect()))
-	{
-		if (auto enemy = obj->to<Enemy*>())
-		{
-			if (!_view->rect().intersects(enemy->rect()))
-			{
-				std::cout << "intersezione\n";	
-			}
-		}
-	}
 	Game::instance()->hud()->selectMinimapRoom(_isaac_x, _isaac_y);
 }
 
@@ -218,79 +210,61 @@ void GameScene::spawnMobs()
 {
 	if (_room->type() == RoomType::NORMAL && _room->state() == RoomState::ACTIVE)
 	{
-		if(rand()%2==0)
+		if (!_room->isEmpty())
 		{
-			if (_mobCount >= 1)
-			{
-				new Gusher(this, PointF(this->room()->rect().center().x + 0.5f, this->room()->rect().center().y), 4.5f);
-				new Gusher(this, PointF(this->room()->rect().center().x - 2.0f, this->room()->rect().center().y + 0.0f), 3.5f);
-				new Gusher(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 5.6f);
-				new Gusher(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y - 1.5f), 6.6f);
-				new Gusher(this, PointF(this->room()->rect().center().x - 0.5f, this->room()->rect().center().y), 1.5f);
-				_mobCount = 0;
-				int amount = rand() % 6;
-				if (amount)
+			int mobChoice = rand() % 3;
+			std::cout << "mobChoice: " << mobChoice << std::endl;
+			switch (mobChoice) {
+				case 0:
 					_room->changeStateRoom();
-				else
+					new Gusher(this, PointF(this->room()->rect().center().x + 0.5f, this->room()->rect().center().y), 4.5f);
+					new Gusher(this, PointF(this->room()->rect().center().x - 2.0f, this->room()->rect().center().y + 0.0f), 3.5f);
+					new Gusher(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 5.6f);
+					new Gusher(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y - 1.5f), 6.6f);
+					new Gusher(this, PointF(this->room()->rect().center().x - 0.5f, this->room()->rect().center().y), 1.5f);
+					break;
+				case 1:
+					_room->changeStateRoom();
+					for (int i = 0; i < 5; i++)
+					{
+						float x = 4.0f + static_cast<float>(rand()) / RAND_MAX * (11.0f - 4.0f);
+						float y = 4.0f + static_cast<float>(rand()) / RAND_MAX * (7.0f - 4.0f);
+						new Fly(this, PointF(this->room()->rect().pos.x + x, this->room()->rect().pos.y + y), 1.5f, false);
+					}
+					break;
+				case 2:
 					_room->setState(RoomState::INACTIVE);
-			}
-			else
-			{
-				_mobCount++;
-				Host* newHost = new Host(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 1.5f);
-
-				_room->changeStateRoom();
 			}
 		}
 		else
 		{
-			if (_mobCount >= 1)
-			{
-				_mobCount++;
-				Host* newHost = new Host(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 1.5f);
-				
-				int amount = rand() % 6;
-				if (amount)
+			Host* newHost = new Host(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 1.5f);
+			_room->changeStateRoom();
+		}
+	}
+	else if (_room->type() == RoomType::TREASURE && _room->state() == RoomState::ACTIVE)
+	{
+		new Bone(this, PointF(this->room()->rect().center().x - 1, this->room()->rect().center().y - 1));
+	}
+	else if (_room->type() == RoomType::SHOP)
+	{
+		
+	}
+	else if (_room->type() == RoomType::BOSS && _room->state() == RoomState::ACTIVE)
+	{
+		if (_vsMonster)
+		{
+			Game::instance()->uiMonster()->setActiveUIMonster();
+			_vsMonster = false;
+
+			_schedule = new Scheduler(1.8f, [this]()
+				{
 					_room->changeStateRoom();
-				else
-					_room->setState(RoomState::INACTIVE);
-			}
-			else
-			{
-				new Gusher(this, PointF(this->room()->rect().center().x + 0.5f, this->room()->rect().center().y), 7.5f);
-				new Gusher(this, PointF(this->room()->rect().center().x - 2.0f, this->room()->rect().center().y + 0.0f), 3.5f);
-				new Gusher(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y), 5.6f);
-				new Gusher(this, PointF(this->room()->rect().center().x, this->room()->rect().center().y - 1.5f), 6.6f);
-				new Gusher(this, PointF(this->room()->rect().center().x - 0.5f, this->room()->rect().center().y), 1.5f);
-				_mobCount = 0;
-
-				_room->changeStateRoom();
-			}
+					//_room->offLightDoor(); non funge
+					_duke = new Duke(this, PointF(this->room()->rect().center().x - 1, this->room()->rect().center().y - 1), 6.5f);
+				});
 		}
-		}
-		else if (_room->type() == RoomType::TREASURE && _room->state() == RoomState::ACTIVE)
-		{
-
-		}
-		else if (_room->type() == RoomType::SHOP)
-		{
-			new Heart(this, PointF(this->room()->rect().pos.x + 8 - 1.4f / 2, this->room()->rect().pos.y + 6.0f), 1);
-		}
-		else if (_room->type() == RoomType::BOSS && _room->state() == RoomState::ACTIVE)
-		{
-			if (_vsMonster)
-			{
-				Game::instance()->uiMonster()->setActiveUIMonster();
-				_vsMonster = false;
-
-				_schedule = new Scheduler(1.8f, [this]()
-					{
-						_room->changeStateRoom();
-						//_room->offLightDoor(); non funge
-						_duke = new Duke(this, PointF(this->room()->rect().center().x - 1, this->room()->rect().center().y - 1), 6.5f);
-					});
-			}
-		}
+	}
 }
 
 void GameScene::event(SDL_Event& evt)
@@ -322,7 +296,6 @@ void GameScene::event(SDL_Event& evt)
 			for (auto& obj : objects(_view->rect()))
 				if (obj->contains(mousePoint))
 				{
-					std::cout << obj->name() << std::endl;
 					killObject(obj);
 				}
 		}
@@ -331,14 +304,13 @@ void GameScene::event(SDL_Event& evt)
 			for (auto& obj : objects(_view->rect()))
 				if (obj->contains(mousePoint))
 				{
-					std::cout << obj->name() << " " << obj->layer() << std::endl;
 				}
 		}
 	}
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_I)
 	{
 		_isaac->setInvincible();
-		std::cout << "invincible\n";
+		std::cout << "Invincible activated\n";
 	}
 	else if (evt.type == SDL_KEYDOWN && evt.key.keysym.scancode == SDL_SCANCODE_O)
 	{

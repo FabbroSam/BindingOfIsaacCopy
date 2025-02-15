@@ -16,7 +16,7 @@
 using namespace agp;
 
 Gusher::Gusher(Scene* scene, const PointF& pos, float spawnDelay)
-	:Enemy(scene, RectF(pos.x, pos.y, 1.4f, 1.4f), nullptr, spawnDelay, 10)
+	:Enemy(scene, RectF(pos.x, pos.y, 1.4f, 1.4f), nullptr, spawnDelay, 5)
 {
 
 	_visible = false;

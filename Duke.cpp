@@ -158,7 +158,6 @@ void Duke::wobble(float dt)
 		}
 		else
 		{
-			std::cout << "_prev_vel: " << _prev_vel << std::endl;
 			_x_dir = _x_prev_dir;
 			_y_dir = _y_prev_dir;
 			_vel = _prev_vel;
@@ -195,7 +194,6 @@ void Duke::update(float dt)
 		{
 			if (_sprite != _sprites["duke_1"])
 			{
-				std::cout << "duke1\n";
 				trigger();
 				_sprite = _sprites["duke_1"];
 			}
@@ -204,7 +202,6 @@ void Duke::update(float dt)
 		{
 			if (_sprite != _sprites["duke_2"])
 			{
-				std::cout << "duke2\n";
 				trigger();
 				_sprite = _sprites["duke_2"];
 			}
@@ -213,7 +210,6 @@ void Duke::update(float dt)
 		{
 			if (_sprite != _sprites["duke_3"])
 			{
-				std::cout << "duke3\n";
 				trigger();
 				_sprite = _sprites["duke_3"];
 			}
@@ -224,7 +220,6 @@ void Duke::update(float dt)
 			{
 				trigger();
 				spawnFly();
-				std::cout << "duke2.2\n";
 				schedule("delay_sprite", 0.01f, [this]()
 					{
 						_sprite = _sprites["duke_2"];

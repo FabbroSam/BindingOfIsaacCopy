@@ -16,6 +16,7 @@
 #include "Tear.h"
 #include "Scene.h"
 #include "Coin.h"
+#include "Bone.h"
 #include <iostream>
 #include <cstdlib>
 
@@ -36,6 +37,7 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_sprites["shadow"] = SpriteFactory::instance()->get("shadow");
 	_sprites["hurt"] = SpriteFactory::instance()->get("isaac_hurt");
 	_sprites["isaac_carry_bomb"] = SpriteFactory::instance()->get("isaac_carry_bomb");
+	_sprites["new_item"] = SpriteFactory::instance()->get("isaac_new_item");
 	_sprite = _sprites["headFront"];
 
 	_body = new RenderableObject(_scene, RectF(0, 0, 0, 0), _sprites["bodyFront"], 8);
@@ -82,6 +84,9 @@ Isaac::Isaac(Scene* scene, const PointF& pos)
 	_shootAnimationTimer = 0.0f;
 	_shootAnimationInterval = 0.4f;
 	_swapShootAnimation = false;
+
+	_itemBone = false;
+	_itemBoneSprite = false;
 }
 
 void Isaac::update(float dt) 
@@ -270,7 +275,11 @@ void Isaac::shoot(Direction dir) {
 	if (dir == Direction::UP)
 		layerTear = 10;
 
-	Tear* newTear = new Tear(_scene, spawnPoint, dir, _vel.x, _vel.y, false, layerTear);
+	if(_itemBone)
+		Bone* newTear = new Bone(_scene, spawnPoint, dir, _vel.x, _vel.y, layerTear);
+	else
+		Tear* newTear = new Tear(_scene, spawnPoint, dir, _vel.x, _vel.y, false, layerTear);
+	
 	// alternate between left and right eye
 	_isShootingRight = !_isShootingRight;
 }
@@ -299,6 +308,19 @@ void Isaac::setSprite()
 	{	
 		_sprite = _sprites["hurt"];
 		_body->setSprite(nullptr);
+		return;
+	}
+
+	if (_itemBoneSprite)
+	{
+		_sprite = _sprites["isaac_carry_bomb"];
+		_body->setSprite(nullptr);
+		Audio::instance()->playSound("holy!");
+		schedule("isaac_item_bone", 1.0f, [this]() {
+			_itemBoneSprite = false;
+			_sprite = _sprites["headFront"];
+			_body->setSprite(_sprites["bodyFront"]);
+			}, 0, false);
 		return;
 	}
 

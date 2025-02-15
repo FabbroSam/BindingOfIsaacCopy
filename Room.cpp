@@ -17,6 +17,7 @@
 #include "Poop.h"
 #include "Fly.h"
 #include "Item.h"
+#include "Shopper.h"
 using namespace agp;
 
 Room::Room(Scene* scene,
@@ -238,6 +239,10 @@ void Room::Draw()
 
 		// OVERLAY
 		new RenderableObject(_scene, RectF(_x, _y, 16, 12), spriteLoader->get("basement_overlay"), 3);
+	}
+	else if (_roomType == RoomType::SHOP)
+	{
+		new Shopper(_scene, PointF(_x, _y));
 	}
 
 	//SHADING

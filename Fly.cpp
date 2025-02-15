@@ -60,13 +60,13 @@ void::Fly::update(float dt)
 	Enemy::update(dt);
 
 	_shadow->setRect(_rect * Vec2Df(0.35f, 0.15f) + Vec2Df(0.4f, 1.1f));
-
-	Duke* duke = static_cast<GameScene*>(_scene)->duke();
-	Vec2Df centerDuke = duke->rect().center();
-	Vec2Df centerFly = _rect.center();
 	
+	Vec2Df centerFly = _rect.center();
+
 	if (_duke_fly)
 	{
+		Duke* duke = static_cast<GameScene*>(_scene)->duke();
+		Vec2Df centerDuke = duke->rect().center();
 		moveAroundDuke(centerDuke, centerFly, dt);
 	}
 	else
@@ -79,8 +79,6 @@ void::Fly::update(float dt)
 		float dist = centerFly.distance(centerIsaac);
 		if (dist < _distFromIsaac)
 			followIsaac(centerIsaac);
-		else
-			move();
 	}
 }
 
@@ -156,21 +154,10 @@ void Fly::followIsaac(Vec2Df pos)
 		return;
 	}
 
-	_x_acc = 5;
-	_y_acc = 5;
-
-	if (_black)
-	{
-		_x_vel_max = 1.3f;
-		_y_vel_max = 1.3f;
-	}
-	else
-	{
-		_x_acc = 10;
-		_y_acc = 10;
-		_x_vel_max = 4.0f;
-		_y_vel_max = 4.0f;
-	}
+	_x_acc = 8;
+	_y_acc = 8;
+	_x_vel_max = 3.0f;
+	_y_vel_max = 3.0f;
 
 	Direction x_dir;
 	Direction y_dir;
@@ -189,6 +176,11 @@ void Fly::followIsaac(Vec2Df pos)
 	else
 		y_dir = Direction::DOWN;
 
+	int randMove = rand() % 10000;
+	if (randMove < 200)
+	{
+		move();
+	}
 	schedule("dirchange", 0.05f,[this,x_dir,y_dir]() {
 		if (x_dir != _x_dir)
 		{

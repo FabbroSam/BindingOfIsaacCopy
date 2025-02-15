@@ -48,6 +48,7 @@ class agp::HUD : public Scene
 		void setEvent() { _event = true; }
 		// getters/setters (to be completed)
 		void setCoins(int newCoins);
+		void decreaseCoins() { if (_coins>0) setCoins(_coins - 1); }
 		void addCoins() { setCoins(_coins + 1); }
 		void addBomb();
 		void setBombs(int _num);

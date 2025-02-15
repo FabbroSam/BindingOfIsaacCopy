@@ -30,22 +30,25 @@ Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, flo
     _sprites["tear_wet"] = SpriteFactory::instance()->get("tear_wet");
     _sprites["shadow"] = SpriteFactory::instance()->get("shadow");
 
+
     _destroy = true;
     _red = red;
 
     _collider.adjust(0.43f, 0.37f, -0.4f, -0.4f);
 
+	_parabolic = false;
+
     //fisica
     pos0 = _rect.pos;
-    _absVel = 7.0f;
+    _absVel = 7.5f;
     _vel = { 0.0f, 0.0f };
     _x_dec_rel = 0;
     _y_dec_rel = 0;
     _x_velIsaac = x_velIsaac * 0.6f;
     _y_velIsaac = y_velIsaac * 0.6f;
 
-    float distanceMax = 8.5f;
-    float distanceMin = 5.0f;
+    float distanceMax = 8.0f;
+    float distanceMin = 5.5f;
 
     switch (dir) {
     case Direction::LEFT:
@@ -57,11 +60,11 @@ Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, flo
         _distance = _x_velIsaac > 0 ? distanceMax : distanceMin;
         break;
     case Direction::UP:
-        _vel = { _x_velIsaac, -_absVel + (_x_velIsaac < 0 ? _x_velIsaac : 0) };
+        _vel = { _x_velIsaac, -_absVel + (_y_velIsaac < 0 ? _y_velIsaac : 0) };
         _distance = _y_velIsaac < 0 ? distanceMax : distanceMin;
         break;
     case Direction::DOWN:
-        _vel = { _x_velIsaac, _absVel + (_x_velIsaac > 0 ? _x_velIsaac : 0) };
+        _vel = { _x_velIsaac, _absVel + (_y_velIsaac > 0 ? _y_velIsaac : 0) };
         _distance = _y_velIsaac > 0 ? distanceMax : distanceMin;
         break;
     default:
@@ -76,6 +79,7 @@ Tear::Tear(Scene* scene, const PointF& pos, Direction dir, float x_velIsaac, flo
         _sprite = _sprites["tear_red"];
     else
         _sprite = _sprites["tear"];
+
 }
 
 Tear::Tear(Scene* scene, const PointF& pos, Vec2Df dir, float x_velIsaac, float y_velIsaac, bool red, bool parabolic, int layer)

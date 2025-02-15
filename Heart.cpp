@@ -29,10 +29,11 @@ Heart::Heart(Scene* scene, const PointF& pos, int layer)
     _y_vel_max = 4.0f;
     _x_dec_rel = 6.0f;
     _y_dec_rel = 6.0f;
-    _x_acc = 6.0f;
-    _y_acc = 6.0f;
+    _x_acc = 2.0f;
+    _y_acc = 2.0f;
     _vel = { 0.0f, 0.0f };
-
+	_x_dir = Direction::NONE;
+	_y_dir = Direction::NONE;
     //_coinsText = new RenderableObject(_scene, RectF(_rect + Vec2Df(0.4f,1.3f)), nullptr, 5);
    // _coinsText->setSprite(SpriteFactory::instance()->getNumber(1, 1));
 }
@@ -40,12 +41,7 @@ Heart::Heart(Scene* scene, const PointF& pos, int layer)
 void Heart::update(float dt)
 {
     DynamicObject::update(dt);
-    
-    if (_colliding) {
-        _x_dir = Direction::NONE;
-        _y_dir = Direction::NONE;
-        _colliding = false;
-    }
+
 
 }
 
@@ -60,30 +56,6 @@ bool Heart::collision(CollidableObject* with, Direction fromDir)
         Audio::instance()->playSound("penny pickup 1");
         destroy(isaac);
         return true;
-    }
-    else
-    {
-        _colliding = true;
-        if (fromDir == Direction::LEFT)
-        {
-            _x_dir = Direction::RIGHT;
-            velAdd({ 1.0f, 0.0f });
-        }
-        if (fromDir == Direction::RIGHT)
-        {
-            _x_dir = Direction::LEFT;
-            velAdd({ -1.0f, 0.0f });
-        }
-        if (fromDir == Direction::DOWN)
-        {
-            _y_dir = Direction::UP;
-            velAdd({ 0.0f, -1.0f });
-        }
-        if (fromDir == Direction::UP)
-        {
-            _y_dir = Direction::DOWN;
-            velAdd({ 0.0f, 1.0f });
-        }
     }
 
     return false;
